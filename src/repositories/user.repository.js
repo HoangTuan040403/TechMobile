@@ -10,6 +10,10 @@ class UserRepository extends BaseRepository {
     return await this.model.findOne({ email });
   }
 
+  async findByEmailWithPassword(email) {
+    return await this.model.findOne({ email }).select("+password");
+  }
+
 }
 
 module.exports = new UserRepository();

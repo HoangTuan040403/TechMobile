@@ -6,9 +6,9 @@ const register = async (req, res) => {
     return res.status(201).json({ status: "OK", data: user });
   } catch (error) {
     console.error(error);
-    return res.status(error.statusCode || 500).json({
-      status: "ERR",
-      message: error.message
+    return res.status(error.statusCode || 500).json({ 
+      status: "ERR", 
+      message: error.message 
     });
   }
 };
@@ -19,9 +19,9 @@ const login = async (req, res) => {
     return res.status(200).json({ status: "OK", data: result });
   } catch (error) {
     console.error(error);
-    return res.status(error.statusCode || 500).json({
-      status: "ERR",
-      message: error.message
+    return res.status(error.statusCode || 500).json({ 
+      status: "ERR", 
+      message: error.message 
     });
   }
 };

@@ -14,6 +14,9 @@ class UserRepository extends BaseRepository {
     return await this.model.findOne({ email }).select("+password");
   }
 
+  async saveRefreshToken(userId, refreshToken) {
+    return await this.model.findByIdAndUpdate(userId, { refreshToken }, { new: true });
+  }
 }
 
 module.exports = new UserRepository();

@@ -1,3 +1,4 @@
+const jwt = require("jsonwebtoken");
 const userRepository = require("../repositories/user.repository");
 const roleRepository = require("../repositories/role.repository");
 const MESSAGES = require("../constants/messages");
@@ -20,4 +21,28 @@ const register = async (userData) => {
   return { _id: user._id, name: user.name, email: user.email };
 };
 
-module.exports = { register };
+const login = async ({ email, password }) => {
+  const userWithPassword = await userRepository.findByEmailWithPassword(email);
+  if (!userWithPassword) throw createError(MESSAGES.AUTH.INVALID_CREDENTIALS, 401);
+
+  if (!userWithPassword.isActive) throw createError(MESSAGES.AUTH.ACCOUNT_INACTIVE, 403);
+
+  const isMatch = await userWithPassword.comparePassword(password);
+  if (!isMatch) throw createError(MESSAGES.AUTH.INVALID_CREDENTIALS, 401);
+
+  const token = jwt.sign(
+    { _id: userWithPassword._id, role: userWithPassword.role },
+    process.env.JWT_SECRET,
+    { expiresIn: process.env.JWT_EXPIRES_IN || "7d" }
+  );
+
+  return {
+    _id: userWithPassword._id,
+    name: userWithPassword.name,
+    email: userWithPassword.email,
+    role: userWithPassword.role,
+    token
+  };
+};
+
+module.exports = { register, login };

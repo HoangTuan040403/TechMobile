@@ -3,6 +3,7 @@ const router = express.Router();
 const AuthController = require("../controllers/auth.controller");
 const { registerValidator, loginValidator } = require("../validator/auth.validator");
 const { validate } = require("../middlewares/validate.middleware");
+const { authenticate } = require("../middlewares/auth.middleware");
 
 /**
  * @swagger
@@ -142,7 +143,9 @@ router.post("/register", registerValidator, validate, AuthController.register);
  *                       type: string
  *                     role:
  *                       type: string
- *                     token:
+ *                     accessToken:
+ *                       type: string
+ *                     refreshToken:
  *                       type: string
  *       401:
  *         description: Invalid credentials
@@ -152,5 +155,39 @@ router.post("/register", registerValidator, validate, AuthController.register);
  *         description: Validation error
  */
 router.post("/login", loginValidator, validate, AuthController.login);
+
+/**
+ * @swagger
+ * /api/auth/logout:
+ *   post:
+ *     summary: Logout
+ *     tags: [Auth]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Logged out successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   example: OK
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     message:
+ *                       type: string
+ *                       example: Logged out successfully
+ *       401:
+ *         description: Unauthorized
+ *       404:
+ *         description: User not found
+ *       500:
+ *         description: Internal server error
+ */
+router.post("/logout", authenticate, AuthController.logout);
 
 module.exports = router;

@@ -2,8 +2,10 @@ module.exports = {
   AUTH: {
     EMAIL_ALREADY_IN_USE: "Email already in use",
     DEFAULT_ROLE_NOT_FOUND: "Default role not found",
-    INVALID_CREDENTIALS: "Invalid email or password", 
+    INVALID_CREDENTIALS: "Invalid email or password",
     ACCOUNT_INACTIVE: "Account has been deactivated",
+    LOGOUT_SUCCESS: "Logged out successfully",
+    USER_NOT_FOUND: "User not found",
   },
   VALIDATION: {
     NAME_REQUIRED: "Name is required",

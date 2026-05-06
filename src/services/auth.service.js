@@ -51,4 +51,13 @@ const login = async ({ email, password }) => {
   };
 };
 
-module.exports = { register, login };
+const logout = async (userId) => {
+  const user = await userRepository.findById(userId);
+  if (!user) throw createError(MESSAGES.AUTH.USER_NOT_FOUND, 404);
+
+  await userRepository.clearRefreshToken(userId);
+
+  return { message: MESSAGES.AUTH.LOGOUT_SUCCESS };
+};
+
+module.exports = { register, login, logout };

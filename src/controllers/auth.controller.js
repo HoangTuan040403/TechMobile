@@ -45,4 +45,10 @@ const forgotPassword = asyncHandler(async (req, res) => {
   return res.status(200).json({ status: "OK", data: result });
 });
 
-module.exports = { register, login, logout, refreshToken, getMe, forgotPassword };
+const resetPassword = asyncHandler(async (req, res) => {
+  const { token, newPassword } = req.body;
+  const result = await AuthService.resetPassword(token, newPassword);
+  return res.status(200).json({ status: "OK", data: result });
+});
+
+module.exports = { register, login, logout, refreshToken, getMe, forgotPassword, resetPassword };

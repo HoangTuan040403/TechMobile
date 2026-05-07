@@ -40,4 +40,9 @@ const getMe = asyncHandler(async (req, res) => {
   return res.status(200).json({ status: "OK", data: result });
 });
 
-module.exports = { register, login, logout, refreshToken, getMe };
+const forgotPassword = asyncHandler(async (req, res) => {
+  const result = await AuthService.forgotPassword(req.body.email);
+  return res.status(200).json({ status: "OK", data: result });
+});
+
+module.exports = { register, login, logout, refreshToken, getMe, forgotPassword };

@@ -105,4 +105,19 @@ const refreshToken = async (token) => {
   };
 };
 
-module.exports = { register, login, logout, refreshToken };
+const getMe = async (userId) => {
+  const user = await userRepository.findById(userId);
+  if (!user) throw createError(MESSAGES.AUTH.USER_NOT_FOUND, 404);
+
+  return {
+    _id: user._id,
+    name: user.name,
+    email: user.email,
+    role: user.role,
+    phone: user.phone,
+    address: user.address,
+    isActive: user.isActive
+  };
+};
+
+module.exports = { register, login, logout, refreshToken, getMe };

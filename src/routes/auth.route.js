@@ -123,7 +123,12 @@ router.post("/register", registerValidator, validate, AuthController.register);
  *                 example: "123456"
  *     responses:
  *       200:
- *         description: Login successful
+ *         description: Login successful (refresh token is set in httpOnly cookie)
+ *         headers:
+ *           Set-Cookie:
+ *             description: Refresh token stored in httpOnly cookie
+ *             schema:
+ *               type: string
  *         content:
  *           application/json:
  *             schema:
@@ -144,8 +149,6 @@ router.post("/register", registerValidator, validate, AuthController.register);
  *                     role:
  *                       type: string
  *                     accessToken:
- *                       type: string
- *                     refreshToken:
  *                       type: string
  *       401:
  *         description: Invalid credentials
@@ -189,5 +192,41 @@ router.post("/login", loginValidator, validate, AuthController.login);
  *         description: Internal server error
  */
 router.post("/logout", authenticate, AuthController.logout);
+
+/**
+ * @swagger
+ * /api/auth/refresh-token:
+ *   post:
+ *     summary: Refresh access token
+ *     tags: [Auth]
+ *     description: Refresh token is automatically read from httpOnly cookie, no request body required
+ *     responses:
+ *       200:
+ *         description: Token refreshed successfully
+ *         headers:
+ *           Set-Cookie:
+ *             description: New refresh token stored in httpOnly cookie
+ *             schema:
+ *               type: string
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   example: OK
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     accessToken:
+ *                       type: string
+ *                       example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+ *       401:
+ *         description: Refresh token invalid or expired
+ *       403:
+ *         description: Refresh token reuse detected
+ */
+router.post("/refresh-token", AuthController.refreshToken);
 
 module.exports = router;

@@ -6,6 +6,10 @@ module.exports = {
     ACCOUNT_INACTIVE: "Account has been deactivated",
     LOGOUT_SUCCESS: "Logged out successfully",
     USER_NOT_FOUND: "User not found",
+    REFRESH_TOKEN_REQUIRED: "Refresh token is required",
+    REFRESH_TOKEN_INVALID: "Refresh token is invalid or expired",
+    REFRESH_TOKEN_REUSE_DETECTED: "Refresh token reuse detected",
+    UNAUTHORIZED: "Unauthorized"
   },
   VALIDATION: {
     NAME_REQUIRED: "Name is required",

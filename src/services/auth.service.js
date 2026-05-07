@@ -3,6 +3,9 @@ const roleRepository = require("../repositories/role.repository");
 const MESSAGES = require("../constants/messages");
 const { createError } = require("../utils/error.util");
 const { generateAccessToken, generateRefreshToken, verifyRefreshToken } = require("../utils/token.util");
+const crypto = require("crypto");
+const { parseExpiry } = require("../utils/time.util");
+const { sendResetPasswordEmail } = require("../utils/email.util");
 
 const register = async (userData) => {
   const { name, email, password, phone, address } = userData;
@@ -120,4 +123,19 @@ const getMe = async (userId) => {
   };
 };
 
-module.exports = { register, login, logout, refreshToken, getMe };
+const forgotPassword = async (email) => {
+  const user = await userRepository.findByEmail(email);
+  if (!user) throw createError(MESSAGES.AUTH.USER_NOT_FOUND, 404);
+
+  const resetToken = crypto.randomBytes(32).toString("hex");
+  const expires = new Date(Date.now() + parseExpiry(process.env.RESET_TOKEN_EXPIRES_IN));
+
+  await userRepository.saveResetToken(user._id, resetToken, expires);
+
+  const resetLink = `${process.env.CLIENT_URL}/reset-password?token=${resetToken}`;
+  await sendResetPasswordEmail(user.email, resetLink);
+
+  return { message: MESSAGES.AUTH.RESET_PASSWORD_EMAIL_SENT };
+};
+
+module.exports = { register, login, logout, refreshToken, getMe, forgotPassword };

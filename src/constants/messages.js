@@ -9,7 +9,8 @@ module.exports = {
     REFRESH_TOKEN_REQUIRED: "Refresh token is required",
     REFRESH_TOKEN_INVALID: "Refresh token is invalid or expired",
     REFRESH_TOKEN_REUSE_DETECTED: "Refresh token reuse detected",
-    UNAUTHORIZED: "Unauthorized"
+    UNAUTHORIZED: "Unauthorized",
+    RESET_PASSWORD_EMAIL_SENT: "Reset password email sent"
   },
   VALIDATION: {
     NAME_REQUIRED: "Name is required",

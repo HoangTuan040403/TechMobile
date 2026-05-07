@@ -35,4 +35,9 @@ const refreshToken = asyncHandler(async (req, res) => {
   return res.status(200).json({ status: "OK", data });
 });
 
-module.exports = { register, login, logout, refreshToken };
+const getMe = asyncHandler(async (req, res) => {
+  const result = await AuthService.getMe(req.user._id);
+  return res.status(200).json({ status: "OK", data: result });
+});
+
+module.exports = { register, login, logout, refreshToken, getMe };

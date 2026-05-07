@@ -229,4 +229,22 @@ router.post("/logout", authenticate, AuthController.logout);
  */
 router.post("/refresh-token", AuthController.refreshToken);
 
+/**
+ * @swagger
+ * /api/auth/me:
+ *   get:
+ *     summary: Get current user info
+ *     tags: [Auth]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: User info retrieved successfully
+ *       401:
+ *         description: Unauthorized
+ *       404:
+ *         description: User not found
+ */
+router.get("/me", authenticate, AuthController.getMe);
+
 module.exports = router;

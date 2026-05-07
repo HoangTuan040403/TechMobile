@@ -138,4 +138,16 @@ const forgotPassword = async (email) => {
   return { message: MESSAGES.AUTH.RESET_PASSWORD_EMAIL_SENT };
 };
 
-module.exports = { register, login, logout, refreshToken, getMe, forgotPassword };
+const resetPassword = async (token, newPassword) => {
+  const user = await userRepository.findByResetToken(token);
+  if (!user) throw createError(MESSAGES.AUTH.RESET_TOKEN_INVALID, 400);
+
+  user.password = newPassword;
+  await user.save();
+
+  await userRepository.clearResetToken(user._id);
+
+  return { message: MESSAGES.AUTH.RESET_PASSWORD_SUCCESS };
+};
+
+module.exports = { register, login, logout, refreshToken, getMe, forgotPassword, resetPassword };

@@ -300,4 +300,61 @@ router.get("/me", authenticate, AuthController.getMe);
  */
 router.post("/forgot-password", AuthController.forgotPassword);
 
+/**
+ * @swagger
+ * /api/auth/reset-password:
+ *   post:
+ *     summary: Reset password
+ *     tags: [Auth]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - token
+ *               - newPassword
+ *             properties:
+ *               token:
+ *                 type: string
+ *                 example: "a1b2c3d4e5f6..."
+ *               newPassword:
+ *                 type: string
+ *                 example: "newpassword123"
+ *     responses:
+ *       200:
+ *         description: Password reset successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   example: OK
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     message:
+ *                       type: string
+ *                       example: Password reset successfully
+ *       400:
+ *         description: Reset token is invalid or expired
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   example: ERR
+ *                 message:
+ *                   type: string
+ *                   example: Reset token is invalid or expired
+ *       500:
+ *         description: Internal server error
+ */
+router.post("/reset-password", AuthController.resetPassword);
+
 module.exports = router;

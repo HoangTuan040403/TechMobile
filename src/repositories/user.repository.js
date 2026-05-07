@@ -21,6 +21,10 @@ class UserRepository extends BaseRepository {
   async clearRefreshToken(userId) {
     return await this.model.findByIdAndUpdate(userId, { refreshToken: null }, { new: true });
   }
+
+  async findByRefreshToken(refreshToken) {
+    return await this.model.findOne({ refreshToken });
+  }
 }
 
 module.exports = new UserRepository();

@@ -2,7 +2,7 @@ const userRepository = require("../repositories/user.repository");
 const roleRepository = require("../repositories/role.repository");
 const MESSAGES = require("../constants/messages");
 const { createError } = require("../utils/error.util");
-const { generateAccessToken, generateRefreshToken } = require("../utils/token.util");
+const { generateAccessToken, generateRefreshToken, verifyRefreshToken } = require("../utils/token.util");
 
 const register = async (userData) => {
   const { name, email, password, phone, address } = userData;
@@ -60,4 +60,49 @@ const logout = async (userId) => {
   return { message: MESSAGES.AUTH.LOGOUT_SUCCESS };
 };
 
-module.exports = { register, login, logout };
+const refreshToken = async (token) => {
+  if (!token) {
+    throw createError(MESSAGES.AUTH.REFRESH_TOKEN_REQUIRED, 401);
+  }
+
+  let decoded;
+  try {
+    decoded = verifyRefreshToken(token);
+  } catch (err) {
+    throw createError(MESSAGES.AUTH.REFRESH_TOKEN_INVALID, 401);
+  }
+
+  const user = await userRepository.findByRefreshToken(token);
+
+  if (!user) {
+    await userRepository.clearRefreshToken(decoded._id);
+
+    throw createError(MESSAGES.AUTH.REFRESH_TOKEN_REUSE_DETECTED, 403);
+  }
+
+  if (!user.isActive) {
+    throw createError(MESSAGES.AUTH.ACCOUNT_INACTIVE, 403);
+  }
+
+  if (user._id.toString() !== decoded._id) {
+    throw createError(MESSAGES.AUTH.REFRESH_TOKEN_INVALID, 401);
+  }
+
+  const newAccessToken = generateAccessToken({
+    _id: user._id,
+    role: user.role
+  });
+
+  const newRefreshToken = generateRefreshToken({
+    _id: user._id
+  });
+
+  await userRepository.saveRefreshToken(user._id, newRefreshToken);
+
+  return {
+    accessToken: newAccessToken,
+    refreshToken: newRefreshToken
+  };
+};
+
+module.exports = { register, login, logout, refreshToken };

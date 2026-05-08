@@ -5,7 +5,7 @@ const { createError } = require("../utils/error.util");
 const { generateAccessToken, generateRefreshToken, verifyRefreshToken } = require("../utils/token.util");
 const crypto = require("crypto");
 const { parseExpiry } = require("../utils/time.util");
-const { sendResetPasswordEmail } = require("../utils/email.util");
+const { sendResetPasswordEmail, sendVerifyEmail } = require("../utils/email.util");
 
 const register = async (userData) => {
   const { name, email, password, phone, address } = userData;
@@ -21,6 +21,13 @@ const register = async (userData) => {
     role: defaultRole._id
   });
 
+  const verifyToken = crypto.randomBytes(32).toString("hex");
+  const expires = new Date(Date.now() + parseExpiry(process.env.VERIFY_EMAIL_EXPIRES_IN));
+  await userRepository.saveVerifyEmailToken(user._id, verifyToken, expires);
+
+  const verifyLink = `${process.env.CLIENT_URL}/verify-email?token=${verifyToken}`;
+  await sendVerifyEmail(user.email, verifyLink);
+
   return { _id: user._id, name: user.name, email: user.email };
 };
 
@@ -32,6 +39,8 @@ const login = async ({ email, password }) => {
   if (!isMatch) throw createError(MESSAGES.AUTH.INVALID_CREDENTIALS, 401);
 
   if (!userWithPassword.isActive) throw createError(MESSAGES.AUTH.ACCOUNT_INACTIVE, 403);
+  
+  if (!userWithPassword.isVerified) throw createError(MESSAGES.AUTH.EMAIL_NOT_VERIFIED, 403);
 
   const accessToken = generateAccessToken({
     _id: userWithPassword._id,
@@ -150,4 +159,15 @@ const resetPassword = async (token, newPassword) => {
   return { message: MESSAGES.AUTH.RESET_PASSWORD_SUCCESS };
 };
 
-module.exports = { register, login, logout, refreshToken, getMe, forgotPassword, resetPassword };
+const verifyEmail = async (token) => {
+  const user = await userRepository.findByVerifyEmailToken(token);
+  if (!user) throw createError(MESSAGES.AUTH.VERIFY_TOKEN_INVALID, 400);
+
+  if (user.isVerified) throw createError(MESSAGES.AUTH.EMAIL_ALREADY_VERIFIED, 400);
+
+  await userRepository.clearVerifyEmailToken(user._id);
+
+  return { message: MESSAGES.AUTH.VERIFY_EMAIL_SUCCESS };
+};
+
+module.exports = { register, login, logout, refreshToken, getMe, forgotPassword, resetPassword, verifyEmail };

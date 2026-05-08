@@ -46,7 +46,7 @@ const { authenticate } = require("../middlewares/auth.middleware");
  *                 example: "123 Nguyen Hue, HCM"
  *     responses:
  *       201:
- *         description: User registered successfully
+ *         description: User registered successfully. A verification email has been sent.
  *         content:
  *           application/json:
  *             schema:
@@ -153,7 +153,7 @@ router.post("/register", registerValidator, validate, AuthController.register);
  *       401:
  *         description: Invalid credentials
  *       403:
- *         description: Account inactive
+ *         description: Account inactive or email not verified
  *       422:
  *         description: Validation error
  */
@@ -356,5 +356,25 @@ router.post("/forgot-password", AuthController.forgotPassword);
  *         description: Internal server error
  */
 router.post("/reset-password", AuthController.resetPassword);
+
+/**
+ * @swagger
+ * /api/auth/verify-email:
+ *   get:
+ *     summary: Verify email
+ *     tags: [Auth]
+ *     parameters:
+ *       - in: query
+ *         name: token
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Email verified successfully
+ *       400:
+ *         description: Token invalid or expired / Email already verified
+ */
+router.get("/verify-email", AuthController.verifyEmail);
 
 module.exports = router;

@@ -48,6 +48,29 @@ class UserRepository extends BaseRepository {
       { new: true }
     );
   }
+
+  async saveVerifyEmailToken(userId, token, expires) {
+    return await this.model.findByIdAndUpdate(
+      userId,
+      { verifyEmailToken: token, verifyEmailExpires: expires },
+      { new: true }
+    );
+  }
+
+  async findByVerifyEmailToken(token) {
+    return await this.model.findOne({
+      verifyEmailToken: token,
+      verifyEmailExpires: { $gt: Date.now() }
+    });
+  }
+
+  async clearVerifyEmailToken(userId) {
+    return await this.model.findByIdAndUpdate(
+      userId,
+      { verifyEmailToken: null, verifyEmailExpires: null, isVerified: true },
+      { new: true }
+    );
+  }
 }
 
 module.exports = new UserRepository();

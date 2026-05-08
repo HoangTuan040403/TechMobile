@@ -12,7 +12,11 @@ module.exports = {
     UNAUTHORIZED: "Unauthorized",
     RESET_PASSWORD_EMAIL_SENT: "Reset password email sent",
     RESET_TOKEN_INVALID: "Reset token is invalid or expired",
-    RESET_PASSWORD_SUCCESS: "Password reset successfully"
+    RESET_PASSWORD_SUCCESS: "Password reset successfully",
+    VERIFY_EMAIL_SENT: "Verification email sent",
+    EMAIL_ALREADY_VERIFIED: "Email already verified",
+    VERIFY_TOKEN_INVALID: "Verify token is invalid or expired",
+    VERIFY_EMAIL_SUCCESS: "Email verified successfully",
   },
   VALIDATION: {
     NAME_REQUIRED: "Name is required",

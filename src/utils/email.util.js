@@ -22,4 +22,18 @@ const sendResetPasswordEmail = async (email, resetLink) => {
   });
 };
 
-module.exports = { sendResetPasswordEmail };
+const sendVerifyEmail = async (email, verifyLink) => {
+  await transporter.sendMail({
+    from: process.env.EMAIL_FROM,
+    to: email,
+    subject: "Xác thực tài khoản của bạn",
+    html: `
+      <p>Cảm ơn bạn đã đăng ký tài khoản.</p>
+      <p>Click link bên dưới để xác thực email. Link có hiệu lực trong 24 giờ.</p>
+      <a href="${verifyLink}">Xác thực email</a>
+      <p>Nếu bạn không đăng ký, hãy bỏ qua email này.</p>
+    `
+  });
+};
+
+module.exports = { sendResetPasswordEmail, sendVerifyEmail };

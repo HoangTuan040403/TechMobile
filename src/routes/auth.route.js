@@ -377,4 +377,32 @@ router.post("/reset-password", AuthController.resetPassword);
  */
 router.get("/verify-email", AuthController.verifyEmail);
 
+/**
+ * @swagger
+ * /api/auth/resend-verify-email:
+ *   post:
+ *     summary: Resend verification email
+ *     tags: [Auth]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - email
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 example: nguyenvana@gmail.com
+ *     responses:
+ *       200:
+ *         description: Verification email sent
+ *       400:
+ *         description: Email already verified
+ *       404:
+ *         description: User not found
+ */
+router.post("/resend-verify-email", AuthController.resendVerifyEmail);
+
 module.exports = router;

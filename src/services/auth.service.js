@@ -170,4 +170,20 @@ const verifyEmail = async (token) => {
   return { message: MESSAGES.AUTH.VERIFY_EMAIL_SUCCESS };
 };
 
-module.exports = { register, login, logout, refreshToken, getMe, forgotPassword, resetPassword, verifyEmail };
+const resendVerifyEmail = async (email) => {
+  const user = await userRepository.findByEmail(email);
+  if (!user) throw createError(MESSAGES.AUTH.USER_NOT_FOUND, 404);
+
+  if (user.isVerified) throw createError(MESSAGES.AUTH.EMAIL_ALREADY_VERIFIED, 400);
+
+  const verifyToken = crypto.randomBytes(32).toString("hex");
+  const expires = new Date(Date.now() + parseExpiry(process.env.VERIFY_EMAIL_EXPIRES_IN));
+  await userRepository.saveVerifyEmailToken(user._id, verifyToken, expires);
+
+  const verifyLink = `${process.env.CLIENT_URL}/verify-email?token=${verifyToken}`;
+  await sendVerifyEmail(user.email, verifyLink);
+
+  return { message: MESSAGES.AUTH.VERIFY_EMAIL_SENT };
+};
+
+module.exports = { register, login, logout, refreshToken, getMe, forgotPassword, resetPassword, verifyEmail, resendVerifyEmail };

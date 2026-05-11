@@ -15,4 +15,22 @@ const updateMeValidator = [
     .notEmpty().withMessage(MESSAGES.VALIDATION.ADDRESS_INVALID),
 ];
 
-module.exports = { updateMeValidator };
+const changePasswordValidator = [
+  body("currentPassword")
+    .notEmpty().withMessage(MESSAGES.VALIDATION.CURRENT_PASSWORD_REQUIRED),
+
+  body("newPassword")
+    .notEmpty().withMessage(MESSAGES.VALIDATION.NEW_PASSWORD_REQUIRED)
+    .isLength({ min: 6 }).withMessage(MESSAGES.VALIDATION.PASSWORD_MIN_LENGTH),
+
+  body("confirmPassword")
+    .notEmpty().withMessage(MESSAGES.VALIDATION.CONFIRM_PASSWORD_REQUIRED)
+    .custom((value, { req }) => {
+      if (value !== req.body.newPassword) {
+        throw new Error(MESSAGES.VALIDATION.PASSWORDS_NOT_MATCH);
+      }
+      return true;
+    }),
+];
+
+module.exports = { updateMeValidator, changePasswordValidator };

@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const UserController = require("../controllers/user.controller");
-const { updateMeValidator } = require("../validator/user.validator");
+const { updateMeValidator, changePasswordValidator } = require("../validator/user.validator");
 const { validate } = require("../middlewares/validate.middleware");
 const { authenticate } = require("../middlewares/auth.middleware");
 
@@ -92,5 +92,45 @@ const { authenticate } = require("../middlewares/auth.middleware");
  *         description: Internal server error
  */
 router.put("/me", authenticate, updateMeValidator, validate, UserController.updateMe);
+
+/**
+ * @swagger
+ * /api/users/me/change-password:
+ *   put:
+ *     summary: Change current user password
+ *     tags: [User]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - currentPassword
+ *               - newPassword
+ *               - confirmPassword
+ *             properties:
+ *               currentPassword:
+ *                 type: string
+ *                 example: "oldpass123"
+ *               newPassword:
+ *                 type: string
+ *                 example: "newpass456"
+ *               confirmPassword:
+ *                 type: string
+ *                 example: "newpass456"
+ *     responses:
+ *       200:
+ *         description: Password changed successfully
+ *       400:
+ *         description: Wrong current password
+ *       401:
+ *         description: Unauthorized
+ *       422:
+ *         description: Validation error
+ */
+router.put("/me/change-password", authenticate, changePasswordValidator, validate, UserController.changePassword);
 
 module.exports = router;

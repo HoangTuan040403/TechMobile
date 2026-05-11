@@ -17,6 +17,8 @@ module.exports = {
     EMAIL_ALREADY_VERIFIED: "Email already verified",
     VERIFY_TOKEN_INVALID: "Verify token is invalid or expired",
     VERIFY_EMAIL_SUCCESS: "Email verified successfully",
+    WRONG_PASSWORD: "Current password is incorrect",
+    CHANGE_PASSWORD_SUCCESS: "Password changed successfully",
   },
   VALIDATION: {
     NAME_REQUIRED: "Name is required",
@@ -25,5 +27,10 @@ module.exports = {
     PASSWORD_REQUIRED: "Password is required",
     PASSWORD_MIN_LENGTH: "Password must be at least 6 characters",
     PHONE_INVALID: "Invalid phone number",
+    CURRENT_PASSWORD_REQUIRED: "Current password is required",
+    NEW_PASSWORD_REQUIRED: "New password is required",
+    PASSWORD_MIN_LENGTH: "Password must be at least 6 characters",
+    CONFIRM_PASSWORD_REQUIRED: "Confirm password is required",
+    PASSWORDS_NOT_MATCH: "Passwords do not match",
   },
 };

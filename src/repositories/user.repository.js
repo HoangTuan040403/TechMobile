@@ -71,6 +71,10 @@ class UserRepository extends BaseRepository {
       { new: true }
     );
   }
+
+  async findByIdWithPassword(userId) {
+    return await this.model.findById(userId).select("+password");
+  }
 }
 
 module.exports = new UserRepository();

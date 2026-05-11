@@ -4,6 +4,7 @@ const specs = require("./docs/swagger");
 const authRoute = require("./routes/auth.route");
 const cookieParser = require("cookie-parser");
 const errorHandler = require("./middlewares/errorHandler.middleware");
+const userRoute = require("./routes/user.route");
 
 const app = express();
 
@@ -13,6 +14,7 @@ app.use(cookieParser());
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(specs));
 
 app.use("/api/auth", authRoute);
+app.use("/api/users", userRoute);
 
 app.get("/", (req, res) => {
   res.send("Hello World!");

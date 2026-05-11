@@ -12,7 +12,7 @@ class BaseRepository {
   }
 
   async findOne(filter) {
-    
+
     return await this.model.findOne(filter);
   }
 
@@ -20,8 +20,8 @@ class BaseRepository {
     return await this.model.create(data);
   }
 
-  async updateById(id, data) {
-    return await this.model.findByIdAndUpdate(id, data, { new: true });
+  async updateById(id, data, options = {}) {
+    return await this.model.findByIdAndUpdate(id, data, { new: true, runValidators: true, ...options });
   }
 
   async deleteById(id) {

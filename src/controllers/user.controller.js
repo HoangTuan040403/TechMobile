@@ -11,4 +11,9 @@ const changePassword = asyncHandler(async (req, res) => {
   return res.status(200).json({ status: "OK", message: result.message });
 });
 
-module.exports = { updateMe, changePassword };
+const getUsers = asyncHandler(async (req, res) => {
+  const result = await UserService.getUsers(req.query);
+  return res.status(200).json({ status: "OK", data: result });
+});
+
+module.exports = { updateMe, changePassword, getUsers };

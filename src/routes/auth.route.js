@@ -142,13 +142,25 @@ router.post("/register", registerValidator, validate, AuthController.register);
  *                   properties:
  *                     _id:
  *                       type: string
+ *                       example: 6640f1f2a8b4c9d123456789
  *                     name:
  *                       type: string
+ *                       example: Nguyen Van A
  *                     email:
  *                       type: string
+ *                       example: nguyenvana@gmail.com
  *                     role:
- *                       type: string
+ *                       type: object
+ *                       properties:
+ *                         _id:
+ *                           type: string
+ *                           example: 6640f1f2a8b4c9d123456780
+ *                         name:
+ *                           type: string
+ *                           example: admin
  *                     accessToken:
+ *                       type: string
+ *                     refreshToken:
  *                       type: string
  *       401:
  *         description: Invalid credentials

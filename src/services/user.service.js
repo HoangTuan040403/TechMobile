@@ -30,7 +30,7 @@ const changePassword = async (userId, { currentPassword, newPassword }) => {
   if (!user) throw createError(MESSAGES.AUTH.USER_NOT_FOUND, 404);
 
   const isMatch = await user.comparePassword(currentPassword);
-  if (!isMatch) throw createError(MESSAGES.AUTH.WRONG_PASSWORD, 400); 
+  if (!isMatch) throw createError(MESSAGES.AUTH.WRONG_PASSWORD, 400);
 
   user.password = newPassword;
   await user.save();
@@ -38,4 +38,34 @@ const changePassword = async (userId, { currentPassword, newPassword }) => {
   return { message: MESSAGES.AUTH.RESET_PASSWORD_SUCCESS };
 }
 
-module.exports = { updateMe, changePassword };
+const getUsers = async (query) => {
+  const page = parseInt(query.page) || 1;
+  const limit = parseInt(query.limit) || 10;
+  const search = query.search || "";
+  const isActive = query.isActive !== undefined
+    ? query.isActive === "true"
+    : undefined;
+
+  const { users, total } = await userRepository.findAllUsers({ page, limit, search, isActive });
+
+  return {
+    users: users.map((u) => ({
+      _id: u._id,
+      name: u.name,
+      email: u.email,
+      phone: u.phone,
+      address: u.address,
+      role: u.role,
+      isActive: u.isActive,
+      createdAt: u.createdAt
+    })),
+    pagination: {
+      total,
+      page,
+      limit,
+      totalPages: Math.ceil(total / limit)
+    }
+  };
+};
+
+module.exports = { updateMe, changePassword, getUsers };

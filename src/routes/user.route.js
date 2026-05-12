@@ -174,4 +174,33 @@ router.put("/me/change-password", authenticate, changePasswordValidator, validat
  */
 router.get("/", authenticate, authorize("admin"), UserController.getUsers);
 
+/**
+ * @swagger
+ * /api/users/{id}:
+ *   get:
+ *     summary: Get user by ID (Admin only)
+ *     tags: [User]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *           example: 64f1b2c3d4e5f6a7b8c9d0e1
+ *     responses:
+ *       200:
+ *         description: Get user successfully
+ *       401:
+ *         description: Unauthorized
+ *       403:
+ *         description: Forbidden - Admins only
+ *       404:
+ *         description: User not found
+ *       500:
+ *         description: Internal server error
+ */
+router.get("/:id", authenticate, authorize("admin"), UserController.getUserById);
+
 module.exports = router;

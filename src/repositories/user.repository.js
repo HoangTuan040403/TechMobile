@@ -75,6 +75,30 @@ class UserRepository extends BaseRepository {
   async findByIdWithPassword(userId) {
     return await this.model.findById(userId).select("+password");
   }
+
+  async findAllUsers({ page = 1, limit = 10, search = "", isActive }) {
+    const query = {};
+
+    if (search) {
+      query.$or = [
+        { name: { $regex: search, $options: "i" } },
+        { email: { $regex: search, $options: "i" } }
+      ];
+    }
+
+    if (isActive !== undefined) {
+      query.isActive = isActive;
+    }
+
+    const skip = (page - 1) * limit;
+
+    const [users, total] = await Promise.all([
+      this.model.find(query).populate("role", "name").skip(skip).limit(limit).sort({ createdAt: -1 }),
+      this.model.countDocuments(query)
+    ]);
+
+    return { users, total };
+  }
 }
 
 module.exports = new UserRepository();

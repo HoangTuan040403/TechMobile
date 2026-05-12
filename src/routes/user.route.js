@@ -3,7 +3,7 @@ const router = express.Router();
 const UserController = require("../controllers/user.controller");
 const { updateMeValidator, changePasswordValidator } = require("../validator/user.validator");
 const { validate } = require("../middlewares/validate.middleware");
-const { authenticate } = require("../middlewares/auth.middleware");
+const { authenticate, authorize } = require("../middlewares/auth.middleware");
 
 /**
  * @swagger
@@ -132,5 +132,46 @@ router.put("/me", authenticate, updateMeValidator, validate, UserController.upda
  *         description: Validation error
  */
 router.put("/me/change-password", authenticate, changePasswordValidator, validate, UserController.changePassword);
+
+/**
+ * @swagger
+ * /api/users:
+ *   get:
+ *     summary: Get all users (Admin only)
+ *     tags: [User]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *           example: 1
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *           example: 10
+ *       - in: query
+ *         name: search
+ *         schema:
+ *           type: string
+ *           example: "nguyen"
+ *       - in: query
+ *         name: isActive
+ *         schema:
+ *           type: boolean
+ *           example: true
+ *     responses:
+ *       200:
+ *         description: Get users successfully
+ *       401:
+ *         description: Unauthorized
+ *       403:
+ *         description: Forbidden - Admins only
+ *       500:
+ *         description: Internal server error
+ */
+router.get("/", authenticate, authorize("admin"), UserController.getUsers);
 
 module.exports = router;

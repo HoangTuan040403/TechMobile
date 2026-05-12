@@ -10,6 +10,7 @@ module.exports = {
     REFRESH_TOKEN_INVALID: "Refresh token is invalid or expired",
     REFRESH_TOKEN_REUSE_DETECTED: "Refresh token reuse detected",
     UNAUTHORIZED: "Unauthorized",
+    FORBIDDEN: "Access denied. Admins only",
     RESET_PASSWORD_EMAIL_SENT: "Reset password email sent",
     RESET_TOKEN_INVALID: "Reset token is invalid or expired",
     RESET_PASSWORD_SUCCESS: "Password reset successfully",

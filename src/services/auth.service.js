@@ -39,12 +39,14 @@ const login = async ({ email, password }) => {
   if (!isMatch) throw createError(MESSAGES.AUTH.INVALID_CREDENTIALS, 401);
 
   if (!userWithPassword.isActive) throw createError(MESSAGES.AUTH.ACCOUNT_INACTIVE, 403);
-  
+
   if (!userWithPassword.isVerified) throw createError(MESSAGES.AUTH.EMAIL_NOT_VERIFIED, 403);
+
+  await userWithPassword.populate("role", "name");
 
   const accessToken = generateAccessToken({
     _id: userWithPassword._id,
-    role: userWithPassword.role
+    role: userWithPassword.role.name
   });
 
   const refreshToken = generateRefreshToken({
@@ -100,9 +102,11 @@ const refreshToken = async (token) => {
     throw createError(MESSAGES.AUTH.REFRESH_TOKEN_INVALID, 401);
   }
 
+  await user.populate("role", "name");
+
   const newAccessToken = generateAccessToken({
     _id: user._id,
-    role: user.role
+    role: user.role.name
   });
 
   const newRefreshToken = generateRefreshToken({

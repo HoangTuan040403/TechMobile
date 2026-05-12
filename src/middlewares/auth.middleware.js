@@ -25,4 +25,16 @@ const authenticate = (req, res, next) => {
   }
 };
 
-module.exports = { authenticate };
+const authorize = (...allowedRoles) => {
+  return (req, res, next) => {
+    if (!req.user || !allowedRoles.includes(req.user.role)) {
+      return res.status(403).json({
+        status: "ERR",
+        message: MESSAGES.AUTH.FORBIDDEN
+      });
+    }
+    next();
+  };
+};
+
+module.exports = { authenticate, authorize };

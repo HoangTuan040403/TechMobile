@@ -68,4 +68,20 @@ const getUsers = async (query) => {
   };
 };
 
-module.exports = { updateMe, changePassword, getUsers };
+const getUserById = async (id) => {
+  const user = await userRepository.findByIdWithRole(id);
+  if (!user) throw createError(MESSAGES.AUTH.USER_NOT_FOUND, 404);
+
+  return {
+    _id: user._id,
+    name: user.name,
+    email: user.email,
+    phone: user.phone,
+    address: user.address,
+    role: user.role,
+    isActive: user.isActive,
+    createdAt: user.createdAt
+  };
+};
+
+module.exports = { updateMe, changePassword, getUsers, getUserById };

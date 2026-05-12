@@ -99,6 +99,10 @@ class UserRepository extends BaseRepository {
 
     return { users, total };
   }
+
+  async findByIdWithRole(id) {
+    return await this.model.findById(id).populate("role", "name");
+  }
 }
 
 module.exports = new UserRepository();

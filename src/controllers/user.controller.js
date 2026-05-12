@@ -16,4 +16,9 @@ const getUsers = asyncHandler(async (req, res) => {
   return res.status(200).json({ status: "OK", data: result });
 });
 
-module.exports = { updateMe, changePassword, getUsers };
+const getUserById = asyncHandler(async (req, res) => {
+  const result = await UserService.getUserById(req.params.id);
+  return res.status(200).json({ status: "OK", data: result });
+});
+
+module.exports = { updateMe, changePassword, getUsers, getUserById };

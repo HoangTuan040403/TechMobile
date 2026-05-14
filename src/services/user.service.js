@@ -84,4 +84,18 @@ const getUserById = async (id) => {
   };
 };
 
-module.exports = { updateMe, changePassword, getUsers, getUserById };
+const toggleUserStatus = async (id) => {
+  const user = await userRepository.findById(id);
+  if (!user) throw createError(MESSAGES.AUTH.USER_NOT_FOUND, 404);
+
+  const updated = await userRepository.updateById(id, { isActive: !user.isActive });
+
+  return {
+    _id: updated._id,
+    name: updated.name,
+    email: updated.email,
+    isActive: updated.isActive
+  };
+};
+
+module.exports = { updateMe, changePassword, getUsers, getUserById, toggleUserStatus };

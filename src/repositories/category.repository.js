@@ -17,6 +17,13 @@ class CategoryRepository extends BaseRepository {
   async findByIdWithAncestors(id) {
     return await this.model.findById(id).populate("ancestors", "name slug");
   }
+
+  async findAll() {
+    return await this.model
+      .find()
+      .select("_id name slug parent_id ancestors")
+      .lean();
+  }
 }
 
 module.exports = new CategoryRepository();

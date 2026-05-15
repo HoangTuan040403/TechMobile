@@ -6,4 +6,9 @@ const createCategory = asyncHandler(async (req, res) => {
   return res.status(201).json({ status: "OK", data: result });
 });
 
-module.exports = { createCategory };
+const getCategories = asyncHandler(async (req, res) => {
+  const result = await CategoryService.getCategories();
+  return res.status(200).json({ status: "OK", data: result });
+});
+
+module.exports = { createCategory, getCategories };

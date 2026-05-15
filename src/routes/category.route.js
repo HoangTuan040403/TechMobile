@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const CategoryController = require("../controllers/category.controller");
-const { createCategoryValidator } = require("../validator/category.validator");
+const { createCategoryValidator, getCategoryByIdValidator } = require("../validator/category.validator");
 const { validate } = require("../middlewares/validate.middleware");
 const { authenticate, authorize } = require("../middlewares/auth.middleware");
 
@@ -125,5 +125,54 @@ router.post("/", authenticate, authorize("admin"), createCategoryValidator, vali
  *         description: Internal server error
  */
 router.get("/", CategoryController.getCategories);
+
+/**
+ * @swagger
+ * /api/categories/{id}:
+ *   get:
+ *     summary: Get a category by ID
+ *     tags: [Category]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Category ID
+ *     responses:
+ *       200:
+ *         description: Category retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   example: OK
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     _id:
+ *                       type: string
+ *                     name:
+ *                       type: string
+ *                     slug:
+ *                       type: string
+ *                     parent_id:
+ *                       type: string
+ *                       nullable: true
+ *                     ancestors:
+ *                       type: array
+ *                       items:
+ *                         type: string
+ *       400:
+ *         description: Invalid ID format
+ *       404:
+ *         description: Category not found
+ *       500:
+ *         description: Internal server error
+ */
+router.get("/:id", getCategoryByIdValidator, validate, CategoryController.getCategoryById);
 
 module.exports = router;

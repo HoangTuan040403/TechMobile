@@ -1,4 +1,4 @@
-const { body } = require("express-validator");
+const { body, param } = require("express-validator");
 const MESSAGES = require("../constants/messages");
 
 const createCategoryValidator = [
@@ -18,4 +18,10 @@ const createCategoryValidator = [
     .isMongoId().withMessage(MESSAGES.VALIDATION.CATEGORY_PARENT_ID_INVALID)
 ];
 
-module.exports = { createCategoryValidator };
+const getCategoryByIdValidator = [
+  param("id")
+    .notEmpty().withMessage(MESSAGES.VALIDATION.CATEGORY_ID_REQUIRED)
+    .isMongoId().withMessage(MESSAGES.VALIDATION.CATEGORY_ID_INVALID),
+];
+
+module.exports = { createCategoryValidator, getCategoryByIdValidator };

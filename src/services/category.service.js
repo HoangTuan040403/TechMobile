@@ -41,4 +41,10 @@ const getCategories = async () => {
   return await categoryRepository.findAll();
 };
 
-module.exports = { createCategory, getCategories };
+const getCategoryById = async (id) => {
+  const category = await categoryRepository.findById(id);
+  if (!category) throw createError(MESSAGES.CATEGORY.NOT_FOUND, 404);
+  return category;
+};
+
+module.exports = { createCategory, getCategories, getCategoryById };

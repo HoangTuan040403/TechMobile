@@ -30,8 +30,19 @@ module.exports = {
     PHONE_INVALID: "Invalid phone number",
     CURRENT_PASSWORD_REQUIRED: "Current password is required",
     NEW_PASSWORD_REQUIRED: "New password is required",
-    PASSWORD_MIN_LENGTH: "Password must be at least 6 characters",
     CONFIRM_PASSWORD_REQUIRED: "Confirm password is required",
     PASSWORDS_NOT_MATCH: "Passwords do not match",
+
+    // Category
+    CATEGORY_NAME_REQUIRED: "Name is required",
+    CATEGORY_NAME_MUST_BE_STRING: "Name must be a string",
+    CATEGORY_SLUG_MUST_BE_STRING: "Slug must be a string",
+    CATEGORY_SLUG_INVALID: "Slug must be a valid slug (lowercase, hyphens only)",
+    CATEGORY_PARENT_ID_INVALID: "parent_id must be a valid MongoDB ObjectId",
+  },
+  CATEGORY: {
+    NAME_ALREADY_EXISTS: "Category name already exists",
+    SLUG_ALREADY_EXISTS: "Slug already exists",
+    PARENT_NOT_FOUND: "Parent category not found",
   },
 };

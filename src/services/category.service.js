@@ -37,4 +37,8 @@ const createCategory = async ({ name, slug, parent_id }) => {
   };
 };
 
-module.exports = { createCategory };
+const getCategories = async () => {
+  return await categoryRepository.findAll();
+};
+
+module.exports = { createCategory, getCategories };

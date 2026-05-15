@@ -84,4 +84,46 @@ const { authenticate, authorize } = require("../middlewares/auth.middleware");
  */
 router.post("/", authenticate, authorize("admin"), createCategoryValidator, validate, CategoryController.createCategory);
 
+/**
+ * @swagger
+ * /api/categories:
+ *   get:
+ *     summary: Get all categories
+ *     tags: [Category]
+ *     responses:
+ *       200:
+ *         description: Categories retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   example: OK
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       _id:
+ *                         type: string
+ *                       name:
+ *                         type: string
+ *                         example: "Điện thoại"
+ *                       slug:
+ *                         type: string
+ *                         example: "dien-thoai"
+ *                       parent_id:
+ *                         type: string
+ *                         nullable: true
+ *                       ancestors:
+ *                         type: array
+ *                         items:
+ *                           type: string
+ *       500:
+ *         description: Internal server error
+ */
+router.get("/", CategoryController.getCategories);
+
 module.exports = router;

@@ -39,13 +39,16 @@ module.exports = {
     CATEGORY_SLUG_MUST_BE_STRING: "Slug must be a string",
     CATEGORY_SLUG_INVALID: "Slug must be a valid slug (lowercase, hyphens only)",
     CATEGORY_PARENT_ID_INVALID: "parent_id must be a valid MongoDB ObjectId",
-    CATEGORY_ID_REQUIRED: "Category ID is required", 
+    CATEGORY_ID_REQUIRED: "Category ID is required",
     CATEGORY_ID_INVALID: "Invalid category ID format",
+    CATEGORY_AT_LEAST_ONE_FIELD: "At least one field must be provided",
   },
   CATEGORY: {
     NAME_ALREADY_EXISTS: "Category name already exists",
     SLUG_ALREADY_EXISTS: "Slug already exists",
     PARENT_NOT_FOUND: "Parent category not found",
     NOT_FOUND: "Category not found",
+    CANNOT_BE_OWN_PARENT: "Category cannot be its own parent",
+    CIRCULAR_REFERENCE: "Circular reference: parent cannot be a descendant of this category",
   },
 };

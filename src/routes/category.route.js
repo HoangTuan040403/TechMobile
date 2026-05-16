@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const CategoryController = require("../controllers/category.controller");
-const { createCategoryValidator, getCategoryByIdValidator } = require("../validator/category.validator");
+const { createCategoryValidator, getCategoryByIdValidator, updateCategoryValidator } = require("../validator/category.validator");
 const { validate } = require("../middlewares/validate.middleware");
 const { authenticate, authorize } = require("../middlewares/auth.middleware");
 
@@ -174,5 +174,84 @@ router.get("/", CategoryController.getCategories);
  *         description: Internal server error
  */
 router.get("/:id", getCategoryByIdValidator, validate, CategoryController.getCategoryById);
+
+/**
+ * @swagger
+ * /api/categories/{id}:
+ *   patch:
+ *     summary: Update a category by ID (Admin only)
+ *     tags: [Category]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Category ID
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *                 example: "Điện thoại"
+ *               slug:
+ *                 type: string
+ *                 example: "dien-thoai"
+ *               parent_id:
+ *                 type: string
+ *                 nullable: true
+ *                 example: "64f1b2c3d4e5f6a7b8c9d0e1"
+ *     responses:
+ *       200:
+ *         description: Category updated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   example: OK
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     _id:
+ *                       type: string
+ *                     name:
+ *                       type: string
+ *                     slug:
+ *                       type: string
+ *                     parent_id:
+ *                       type: string
+ *                       nullable: true
+ *                     ancestors:
+ *                       type: array
+ *                       items:
+ *                         type: string
+ *                     updatedAt:
+ *                       type: string
+ *                       format: date-time
+ *       400:
+ *         description: Invalid ID / circular reference / self-parent
+ *       401:
+ *         description: Unauthorized
+ *       403:
+ *         description: Forbidden - Admins only
+ *       404:
+ *         description: Category not found
+ *       409:
+ *         description: Name or slug already exists
+ *       422:
+ *         description: Validation error
+ *       500:
+ *         description: Internal server error
+ */
+router.patch("/:id", authenticate, authorize("admin"), updateCategoryValidator, validate, CategoryController.updateCategory);
 
 module.exports = router;

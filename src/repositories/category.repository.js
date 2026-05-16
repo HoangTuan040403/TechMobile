@@ -15,7 +15,9 @@ class CategoryRepository extends BaseRepository {
   }
 
   async findByIdWithAncestors(id) {
-    return await this.model.findById(id).populate("ancestors", "name slug");
+    return await this.model
+      .findById(id)
+      .populate("ancestors", "_id name slug");
   }
 
   async findAll() {
@@ -29,6 +31,25 @@ class CategoryRepository extends BaseRepository {
     return await this.model
       .findById(id)
       .select("_id name slug parent_id ancestors")
+      .lean();
+  }
+
+  async findByNameExcludeId(name, excludeId) {
+    return await this.model.findOne({ name, _id: { $ne: excludeId } });
+  }
+
+  async findBySlugExcludeId(slug, excludeId) {
+    return await this.model.findOne({ slug, _id: { $ne: excludeId } });
+  }
+
+  async updateByIdAndReturn(id, data) {
+    return await this.model
+      .findOneAndUpdate(
+        { _id: id, deletedAt: null },
+        data,
+        { new: true, runValidators: true }
+      )
+      .select("_id name slug parent_id ancestors updatedAt")
       .lean();
   }
 }

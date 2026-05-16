@@ -24,4 +24,34 @@ const getCategoryByIdValidator = [
     .isMongoId().withMessage(MESSAGES.VALIDATION.CATEGORY_ID_INVALID),
 ];
 
-module.exports = { createCategoryValidator, getCategoryByIdValidator };
+const updateCategoryValidator = [
+  param("id")
+    .notEmpty().withMessage(MESSAGES.VALIDATION.CATEGORY_ID_REQUIRED)
+    .isMongoId().withMessage(MESSAGES.VALIDATION.CATEGORY_ID_INVALID),
+
+  body("name")
+    .optional()
+    .isString().withMessage(MESSAGES.VALIDATION.CATEGORY_NAME_MUST_BE_STRING)
+    .notEmpty().withMessage(MESSAGES.VALIDATION.CATEGORY_NAME_REQUIRED)
+    .trim(),
+
+  body("slug")
+    .optional()
+    .isString().withMessage(MESSAGES.VALIDATION.CATEGORY_SLUG_MUST_BE_STRING)
+    .isSlug().withMessage(MESSAGES.VALIDATION.CATEGORY_SLUG_INVALID)
+    .trim(),
+
+  body("parent_id")
+    .optional({ nullable: true })
+    .isMongoId().withMessage(MESSAGES.VALIDATION.CATEGORY_PARENT_ID_INVALID),
+
+  body()
+    .custom((_, { req }) => {
+      const allowed = ["name", "slug", "parent_id"];
+      const hasField = allowed.some((key) => key in req.body);
+      if (!hasField) throw new Error(MESSAGES.VALIDATION.CATEGORY_AT_LEAST_ONE_FIELD);
+      return true;
+    })
+];
+
+module.exports = { createCategoryValidator, getCategoryByIdValidator, updateCategoryValidator };

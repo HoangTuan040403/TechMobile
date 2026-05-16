@@ -16,4 +16,9 @@ const getCategoryById = asyncHandler(async (req, res) => {
   return res.status(200).json({ status: "OK", data: result });
 });
 
-module.exports = { createCategory, getCategories, getCategoryById };
+const updateCategory = asyncHandler(async (req, res) => {
+  const result = await CategoryService.updateCategory(req.params.id, req.body);
+  return res.status(200).json({ status: "OK", data: result });
+});
+
+module.exports = { createCategory, getCategories, getCategoryById, updateCategory };

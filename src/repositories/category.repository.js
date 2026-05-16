@@ -23,14 +23,14 @@ class CategoryRepository extends BaseRepository {
   async findAll() {
     return await this.model
       .find()
-      .select("_id name slug parent_id ancestors")
+      .select("_id name slug parent_id ancestors image")
       .lean();
   }
 
   async findById(id) {
     return await this.model
       .findById(id)
-      .select("_id name slug parent_id ancestors")
+      .select("_id name slug parent_id ancestors image")
       .lean();
   }
 

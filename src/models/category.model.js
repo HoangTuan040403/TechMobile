@@ -8,12 +8,23 @@ const categorySchema = new mongoose.Schema(
       trim: true,
       unique: true
     },
-    
+
     slug: {
       type: String,
       unique: true,
       lowercase: true,
       trim: true
+    },
+
+    image: {
+      url: {
+        type: String,
+        default: null
+      },
+      public_id: {
+        type: String,
+        default: null
+      }
     },
 
     parent_id: {

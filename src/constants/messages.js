@@ -43,6 +43,10 @@ module.exports = {
     CATEGORY_ID_INVALID: "Invalid category ID format",
     CATEGORY_AT_LEAST_ONE_FIELD: "At least one field must be provided",
   },
+  UPLOAD: {
+    INVALID_FILE_TYPE: "Only jpeg, png, webp image files are accepted",
+    FILE_TOO_LARGE: "File size must not exceed 5MB"
+  },
   CATEGORY: {
     NAME_ALREADY_EXISTS: "Category name already exists",
     SLUG_ALREADY_EXISTS: "Slug already exists",

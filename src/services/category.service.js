@@ -2,8 +2,9 @@ const categoryRepository = require("../repositories/category.repository");
 const MESSAGES = require("../constants/messages");
 const { createError } = require("../utils/error.util");
 const { generateSlug } = require("../utils/slug.util");
+const { uploadToCloudinary } = require("../utils/cloudinary.util");
 
-const createCategory = async ({ name, slug, parent_id }) => {
+const createCategory = async ({ name, slug, parent_id }, file) => {
   const existingName = await categoryRepository.findByName(name);
   if (existingName) throw createError(MESSAGES.CATEGORY.NAME_ALREADY_EXISTS, 409);
 
@@ -19,11 +20,17 @@ const createCategory = async ({ name, slug, parent_id }) => {
     ancestors = [...parent.ancestors.map((a) => a._id), parent._id];
   }
 
+  let image = { url: null, public_id: null };
+  if (file) {
+    image = await uploadToCloudinary(file, "categories");
+  }
+
   const category = await categoryRepository.create({
     name,
     slug: finalSlug,
     parent_id: parent_id || null,
-    ancestors
+    ancestors,
+    image
   });
 
   return {
@@ -32,6 +39,7 @@ const createCategory = async ({ name, slug, parent_id }) => {
     slug: category.slug,
     parent_id: category.parent_id,
     ancestors: category.ancestors,
+    image: category.image,
     createdAt: category.createdAt
   };
 };

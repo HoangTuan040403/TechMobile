@@ -17,7 +17,7 @@ const getCategoryById = asyncHandler(async (req, res) => {
 });
 
 const updateCategory = asyncHandler(async (req, res) => {
-  const result = await CategoryService.updateCategory(req.params.id, req.body);
+  const result = await CategoryService.updateCategory(req.params.id, req.body, req.file);
   return res.status(200).json({ status: "OK", data: result });
 });
 

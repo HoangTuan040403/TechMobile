@@ -1,0 +1,25 @@
+const roleRepository = require("../repositories/role.repository");
+const MESSAGES = require("../constants/messages");
+const { createError } = require("../utils/error.util");
+
+const createRole = async ({ name, description, permissions }) => {
+  const existingName = await roleRepository.findByName(name);
+  if (existingName) throw createError(MESSAGES.ROLE.NAME_ALREADY_EXISTS, 409);
+
+  const role = await roleRepository.create({
+    name,
+    description,
+    permissions: permissions || []
+  });
+
+  return {
+    _id: role._id,
+    name: role.name,
+    description: role.description,
+    permissions: role.permissions,
+    isActive: role.isActive,
+    createdAt: role.createdAt
+  };
+};
+
+module.exports = { createRole };

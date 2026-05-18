@@ -42,6 +42,13 @@ module.exports = {
     CATEGORY_ID_REQUIRED: "Category ID is required",
     CATEGORY_ID_INVALID: "Invalid category ID format",
     CATEGORY_AT_LEAST_ONE_FIELD: "At least one field must be provided",
+
+    // Role
+    ROLE_NAME_REQUIRED: "Name is required",
+    ROLE_NAME_MUST_BE_STRING: "Name must be a string",
+    ROLE_DESCRIPTION_MUST_BE_STRING: "Description must be a string",
+    ROLE_PERMISSIONS_MUST_BE_ARRAY: "Permissions must be an array",
+    ROLE_PERMISSION_ID_INVALID: "Each permission must be a valid ObjectId",
   },
   UPLOAD: {
     INVALID_FILE_TYPE: "Only jpeg, png, webp image files are accepted",
@@ -57,4 +64,9 @@ module.exports = {
     DELETED_SUCCESS: "Category deleted successfully",
     HAS_CHILDREN: "Category has children, cannot delete"
   },
+  ROLE: {
+    NAME_ALREADY_EXISTS: "Role name already exists",
+    NOT_FOUND: "Role not found",
+    CREATED_SUCCESS: "Role created successfully"
+  }
 };

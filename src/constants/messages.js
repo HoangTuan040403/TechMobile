@@ -42,6 +42,14 @@ module.exports = {
     CATEGORY_ID_REQUIRED: "Category ID is required",
     CATEGORY_ID_INVALID: "Invalid category ID format",
     CATEGORY_AT_LEAST_ONE_FIELD: "At least one field must be provided",
+
+    // Permission
+    PERMISSION_NAME_REQUIRED: "Name is required",
+    PERMISSION_NAME_MUST_BE_STRING: "Name must be a string",
+    PERMISSION_DESCRIPTION_MUST_BE_STRING: "Description must be a string",
+    PERMISSION_MODULE_REQUIRED: "Module is required",
+    PERMISSION_MODULE_MUST_BE_STRING: "Module must be a string",
+    PERMISSION_ID_INVALID: "Invalid ID format",
   },
   UPLOAD: {
     INVALID_FILE_TYPE: "Only jpeg, png, webp image files are accepted",
@@ -57,4 +65,9 @@ module.exports = {
     DELETED_SUCCESS: "Category deleted successfully",
     HAS_CHILDREN: "Category has children, cannot delete"
   },
+  PERMISSION: {
+    NAME_ALREADY_EXISTS: "Permission name already exists",
+    NOT_FOUND: "Permission not found",
+    DELETED_SUCCESS: "Permission deleted successfully"
+  }
 };

@@ -1,5 +1,6 @@
 const BaseRepository = require("./base.repository");
 const User = require("../models/user.model");
+const paginate = require("../utils/paginate.util");
 
 class UserRepository extends BaseRepository {
   constructor() {
@@ -76,7 +77,7 @@ class UserRepository extends BaseRepository {
     return await this.model.findById(userId).select("+password");
   }
 
-  async findAllUsers({ page = 1, limit = 10, search = "", isActive }) {
+  async findAllUsers({ page, limit, search, isActive }) {
     const query = {};
 
     if (search) {
@@ -86,18 +87,15 @@ class UserRepository extends BaseRepository {
       ];
     }
 
-    if (isActive !== undefined) {
-      query.isActive = isActive;
-    }
+    if (isActive !== undefined) query.isActive = isActive;
 
-    const skip = (page - 1) * limit;
-
-    const [users, total] = await Promise.all([
-      this.model.find(query).populate("role", "name").skip(skip).limit(limit).sort({ createdAt: -1 }),
-      this.model.countDocuments(query)
-    ]);
-
-    return { users, total };
+    return await paginate({
+      model: this.model,
+      query,
+      page,
+      limit,
+      populate: { path: "role", select: "name" }
+    });
   }
 
   async findByIdWithRole(id) {

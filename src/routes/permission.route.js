@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const PermissionController = require("../controllers/permission.controller");
-const { createPermissionValidator } = require("../validator/permission.validator");
+const { createPermissionValidator, getPermissionByIdValidator } = require("../validator/permission.validator");
 const { validate } = require("../middlewares/validate.middleware");
 const { authenticate, authorize } = require("../middlewares/auth.middleware");
 
@@ -171,5 +171,64 @@ router.post("/", authenticate, authorize("admin"), createPermissionValidator, va
  *         description: Internal server error
  */
 router.get("/", authenticate, authorize("admin"), PermissionController.getPermissions);
+
+/**
+ * @swagger
+ * /api/permissions/{id}:
+ *   get:
+ *     summary: Get a permission by ID (Admin only)
+ *     tags: [Permission]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Permission ID
+ *     responses:
+ *       200:
+ *         description: Permission retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   example: OK
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     _id:
+ *                       type: string
+ *                     name:
+ *                       type: string
+ *                       example: "category:create"
+ *                     description:
+ *                       type: string
+ *                       example: "Create category"
+ *                     module:
+ *                       type: string
+ *                       example: "category"
+ *                     isActive:
+ *                       type: boolean
+ *                       example: true
+ *                     createdAt:
+ *                       type: string
+ *                       format: date-time
+ *       400:
+ *         description: Invalid ID format
+ *       401:
+ *         description: Unauthorized
+ *       403:
+ *         description: Forbidden - Admins only
+ *       404:
+ *         description: Permission not found
+ *       500:
+ *         description: Internal server error
+ */
+router.get("/:id", authenticate, authorize("admin"), getPermissionByIdValidator, validate, PermissionController.getPermissionById);
 
 module.exports = router;

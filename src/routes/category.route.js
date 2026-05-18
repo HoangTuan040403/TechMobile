@@ -135,6 +135,17 @@ router.post("/", authenticate, authorize("admin"), upload.single("image"), creat
  *                         type: array
  *                         items:
  *                           type: string
+ *                       image:
+ *                         type: object
+ *                         properties:
+ *                           url:
+ *                             type: string
+ *                             nullable: true
+ *                             example: "https://res.cloudinary.com/..."
+ *                           public_id:
+ *                             type: string
+ *                             nullable: true
+ *                             example: "categories/abc123"
  *       500:
  *         description: Internal server error
  */
@@ -180,6 +191,17 @@ router.get("/", CategoryController.getCategories);
  *                       type: array
  *                       items:
  *                         type: string
+ *                     image:
+ *                       type: object
+ *                       properties:
+ *                         url:
+ *                           type: string
+ *                           nullable: true
+ *                           example: "https://res.cloudinary.com/..."
+ *                         public_id:
+ *                           type: string
+ *                           nullable: true
+ *                           example: "categories/abc123"
  *       400:
  *         description: Invalid ID format
  *       404:

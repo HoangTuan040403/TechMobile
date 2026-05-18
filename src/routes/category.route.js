@@ -207,20 +207,24 @@ router.get("/:id", getCategoryByIdValidator, validate, CategoryController.getCat
  *     requestBody:
  *       required: true
  *       content:
- *         application/json:
+ *         multipart/form-data:
  *           schema:
  *             type: object
  *             properties:
  *               name:
  *                 type: string
- *                 example: "Điện thoại"
+ *                 example: "Phone"
  *               slug:
  *                 type: string
- *                 example: "dien-thoai"
+ *                 example: "phone"
  *               parent_id:
  *                 type: string
  *                 nullable: true
  *                 example: "64f1b2c3d4e5f6a7b8c9d0e1"
+ *               image:
+ *                 type: string
+ *                 format: binary
+ *                 description: Image file (jpeg, png, webp - max 5MB)
  *     responses:
  *       200:
  *         description: Category updated successfully
@@ -248,6 +252,15 @@ router.get("/:id", getCategoryByIdValidator, validate, CategoryController.getCat
  *                       type: array
  *                       items:
  *                         type: string
+ *                     image:
+ *                       type: object
+ *                       properties:
+ *                         url:
+ *                           type: string
+ *                           example: "https://res.cloudinary.com/..."
+ *                         public_id:
+ *                           type: string
+ *                           example: "categories/abc123"
  *                     updatedAt:
  *                       type: string
  *                       format: date-time
@@ -266,6 +279,6 @@ router.get("/:id", getCategoryByIdValidator, validate, CategoryController.getCat
  *       500:
  *         description: Internal server error
  */
-router.patch("/:id", authenticate, authorize("admin"), updateCategoryValidator, validate, CategoryController.updateCategory);
+router.patch("/:id", authenticate, authorize("admin"), upload.single("image"), updateCategoryValidator, validate, CategoryController.updateCategory);
 
 module.exports = router;

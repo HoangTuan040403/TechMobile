@@ -2,7 +2,7 @@ const categoryRepository = require("../repositories/category.repository");
 const MESSAGES = require("../constants/messages");
 const { createError } = require("../utils/error.util");
 const { generateSlug } = require("../utils/slug.util");
-const { uploadToCloudinary } = require("../utils/cloudinary.util");
+const { uploadToCloudinary, deleteFromCloudinary } = require("../utils/cloudinary.util");
 
 const createCategory = async ({ name, slug, parent_id }, file) => {
   const existingName = await categoryRepository.findByName(name);
@@ -54,7 +54,7 @@ const getCategoryById = async (id) => {
   return category;
 };
 
-const updateCategory = async (id, { name, slug, parent_id }) => {
+const updateCategory = async (id, { name, slug, parent_id }, file) => {
   const existing = await categoryRepository.findById(id);
   if (!existing) throw createError(MESSAGES.CATEGORY.NOT_FOUND, 404);
 
@@ -105,6 +105,13 @@ const updateCategory = async (id, { name, slug, parent_id }) => {
   if (parent_id !== undefined) {
     updatePayload.parent_id = parent_id || null;
     if (newAncestors !== undefined) updatePayload.ancestors = newAncestors;
+  }
+
+  if (file) {
+    if (existing.image?.public_id) {
+      await deleteFromCloudinary(existing.image.public_id);
+    }
+    updatePayload.image = await uploadToCloudinary(file, "categories");
   }
 
   const updated = await categoryRepository.updateByIdAndReturn(id, updatePayload);

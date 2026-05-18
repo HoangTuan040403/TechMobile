@@ -49,7 +49,7 @@ class CategoryRepository extends BaseRepository {
         data,
         { new: true, runValidators: true }
       )
-      .select("_id name slug parent_id ancestors updatedAt")
+      .select("_id name slug parent_id ancestors image updatedAt")
       .lean();
   }
 }

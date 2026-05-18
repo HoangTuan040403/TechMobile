@@ -33,4 +33,10 @@ const getPermissions = async (query) => {
   return { permissions: data, pagination };
 };
 
-module.exports = { createPermission, getPermissions };
+const getPermissionById = async (id) => {
+  const permission = await permissionRepository.findById(id);
+  if (!permission) throw createError(MESSAGES.PERMISSION.NOT_FOUND, 404);
+  return permission;
+};
+
+module.exports = { createPermission, getPermissions, getPermissionById };

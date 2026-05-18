@@ -120,4 +120,14 @@ const updateCategory = async (id, { name, slug, parent_id }, file) => {
   return updated;
 };
 
-module.exports = { createCategory, getCategories, getCategoryById, updateCategory };
+const deleteCategory = async (id) => {
+  const category = await categoryRepository.findById(id);
+  if (!category) throw createError(MESSAGES.CATEGORY.NOT_FOUND, 404);
+
+  const hasChildren = await categoryRepository.findOne({ parent_id: id });
+  if (hasChildren) throw createError(MESSAGES.CATEGORY.HAS_CHILDREN, 400);
+
+  await categoryRepository.softDeleteById(id);
+};
+
+module.exports = { createCategory, getCategories, getCategoryById, updateCategory, deleteCategory };

@@ -303,4 +303,46 @@ router.get("/:id", getCategoryByIdValidator, validate, CategoryController.getCat
  */
 router.patch("/:id", authenticate, authorize("admin"), upload.single("image"), updateCategoryValidator, validate, CategoryController.updateCategory);
 
+/**
+ * @swagger
+ * /api/categories/{id}:
+ *   delete:
+ *     summary: Delete a category by ID (Admin only)
+ *     tags: [Category]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Category ID
+ *     responses:
+ *       200:
+ *         description: Category deleted successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   example: OK
+ *                 message:
+ *                   type: string
+ *                   example: "Category deleted successfully"
+ *       400:
+ *         description: Invalid ID format
+ *       401:
+ *         description: Unauthorized
+ *       403:
+ *         description: Forbidden - Admins only
+ *       404:
+ *         description: Category not found
+ *       500:
+ *         description: Internal server error
+ */
+router.delete("/:id", authenticate, authorize("admin"), getCategoryByIdValidator, validate, CategoryController.deleteCategory);
+
 module.exports = router;

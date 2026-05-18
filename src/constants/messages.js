@@ -54,5 +54,7 @@ module.exports = {
     NOT_FOUND: "Category not found",
     CANNOT_BE_OWN_PARENT: "Category cannot be its own parent",
     CIRCULAR_REFERENCE: "Circular reference: parent cannot be a descendant of this category",
+    DELETED_SUCCESS: "Category deleted successfully",
+    HAS_CHILDREN: "Category has children, cannot delete"
   },
 };

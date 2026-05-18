@@ -22,4 +22,15 @@ const createPermission = async ({ name, description, module }) => {
   };
 };
 
-module.exports = { createPermission };
+const getPermissions = async (query) => {
+  const page = parseInt(query.page) || 1;
+  const limit = parseInt(query.limit) || 10;
+  const search = query.search || "";
+  const module = query.module || undefined;
+
+  const { data, pagination } = await permissionRepository.findAllPermissions({ page, limit, search, module });
+
+  return { permissions: data, pagination };
+};
+
+module.exports = { createPermission, getPermissions };

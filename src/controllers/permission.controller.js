@@ -6,4 +6,9 @@ const createPermission = asyncHandler(async (req, res) => {
   return res.status(201).json({ status: "OK", data: result });
 });
 
-module.exports = { createPermission };
+const getPermissions = asyncHandler(async (req, res) => {
+  const result = await PermissionService.getPermissions(req.query);
+  return res.status(200).json({ status: "OK", data: result });
+});
+
+module.exports = { createPermission, getPermissions };

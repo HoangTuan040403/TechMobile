@@ -42,14 +42,14 @@ const getUsers = async (query) => {
   const page = parseInt(query.page) || 1;
   const limit = parseInt(query.limit) || 10;
   const search = query.search || "";
-  const isActive = query.isActive !== undefined
-    ? query.isActive === "true"
+  const isActive = query.isActive !== undefined 
+    ? query.isActive === "true" 
     : undefined;
 
-  const { users, total } = await userRepository.findAllUsers({ page, limit, search, isActive });
+  const { data, pagination } = await userRepository.findAllUsers({ page, limit, search, isActive });
 
   return {
-    users: users.map((u) => ({
+    users: data.map((u) => ({
       _id: u._id,
       name: u.name,
       email: u.email,
@@ -59,12 +59,7 @@ const getUsers = async (query) => {
       isActive: u.isActive,
       createdAt: u.createdAt
     })),
-    pagination: {
-      total,
-      page,
-      limit,
-      totalPages: Math.ceil(total / limit)
-    }
+    pagination
   };
 };
 

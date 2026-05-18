@@ -1,5 +1,6 @@
 const asyncHandler = require("../utils/asyncHandler.util");
 const CategoryService = require("../services/category.service");
+const MESSAGES = require("../constants/messages");
 
 const createCategory = asyncHandler(async (req, res) => {
   const result = await CategoryService.createCategory(req.body, req.file);
@@ -21,4 +22,9 @@ const updateCategory = asyncHandler(async (req, res) => {
   return res.status(200).json({ status: "OK", data: result });
 });
 
-module.exports = { createCategory, getCategories, getCategoryById, updateCategory };
+const deleteCategory = asyncHandler(async (req, res) => {
+  await CategoryService.deleteCategory(req.params.id);
+  return res.status(200).json({ status: "OK", message: MESSAGES.CATEGORY.DELETED_SUCCESS });
+});
+
+module.exports = { createCategory, getCategories, getCategoryById, updateCategory, deleteCategory };

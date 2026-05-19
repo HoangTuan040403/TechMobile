@@ -39,4 +39,22 @@ const getPermissionById = async (id) => {
   return permission;
 };
 
-module.exports = { createPermission, getPermissions, getPermissionById };
+const updatePermission = async (id, { name, description, module, isActive }) => {
+  const existing = await permissionRepository.findById(id);
+  if (!existing) throw createError(MESSAGES.PERMISSION.NOT_FOUND, 404);
+
+  if (name !== undefined && name !== existing.name) {
+    const duplicateName = await permissionRepository.findByNameExcludeId(name, id);
+    if (duplicateName) throw createError(MESSAGES.PERMISSION.NAME_ALREADY_EXISTS, 409);
+  }
+
+  const updatePayload = {};
+  if (name !== undefined) updatePayload.name = name;
+  if (description !== undefined) updatePayload.description = description;
+  if (module !== undefined) updatePayload.module = module;
+  if (isActive !== undefined) updatePayload.isActive = isActive;
+
+  return await permissionRepository.updateByIdAndReturn(id, updatePayload);
+};
+
+module.exports = { createPermission, getPermissions, getPermissionById, updatePermission };

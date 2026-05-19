@@ -50,6 +50,7 @@ module.exports = {
     PERMISSION_MODULE_REQUIRED: "Module is required",
     PERMISSION_MODULE_MUST_BE_STRING: "Module must be a string",
     PERMISSION_ID_INVALID: "Invalid ID format",
+    PERMISSION_IS_ACTIVE_MUST_BE_BOOLEAN: "isActive must be a boolean",
   },
   UPLOAD: {
     INVALID_FILE_TYPE: "Only jpeg, png, webp image files are accepted",

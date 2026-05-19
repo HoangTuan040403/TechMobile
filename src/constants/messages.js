@@ -43,6 +43,15 @@ module.exports = {
     CATEGORY_ID_INVALID: "Invalid category ID format",
     CATEGORY_AT_LEAST_ONE_FIELD: "At least one field must be provided",
 
+    // Permission
+    PERMISSION_NAME_REQUIRED: "Name is required",
+    PERMISSION_NAME_MUST_BE_STRING: "Name must be a string",
+    PERMISSION_DESCRIPTION_MUST_BE_STRING: "Description must be a string",
+    PERMISSION_MODULE_REQUIRED: "Module is required",
+    PERMISSION_MODULE_MUST_BE_STRING: "Module must be a string",
+    PERMISSION_ID_INVALID: "Invalid ID format",
+    PERMISSION_IS_ACTIVE_MUST_BE_BOOLEAN: "isActive must be a boolean",
+
     // Role
     ROLE_NAME_REQUIRED: "Name is required",
     ROLE_NAME_MUST_BE_STRING: "Name must be a string",
@@ -63,6 +72,11 @@ module.exports = {
     CIRCULAR_REFERENCE: "Circular reference: parent cannot be a descendant of this category",
     DELETED_SUCCESS: "Category deleted successfully",
     HAS_CHILDREN: "Category has children, cannot delete"
+  },
+  PERMISSION: {
+    NAME_ALREADY_EXISTS: "Permission name already exists",
+    NOT_FOUND: "Permission not found",
+    DELETED_SUCCESS: "Permission deleted successfully"
   },
   ROLE: {
     NAME_ALREADY_EXISTS: "Role name already exists",

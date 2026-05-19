@@ -1,4 +1,4 @@
-const { body } = require("express-validator");
+const { body, param } = require("express-validator");
 const MESSAGES = require("../constants/messages");
 const mongoose = require("mongoose");
 
@@ -18,4 +18,10 @@ const createRoleValidator = [
     .withMessage(MESSAGES.VALIDATION.ROLE_PERMISSION_ID_INVALID)
 ];
 
-module.exports = { createRoleValidator };
+const getRoleByIdValidator = [
+  param("id")
+    .custom((value) => mongoose.Types.ObjectId.isValid(value))
+    .withMessage(MESSAGES.VALIDATION.ROLE_ID_INVALID)
+];
+
+module.exports = { createRoleValidator, getRoleByIdValidator };

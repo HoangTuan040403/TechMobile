@@ -40,4 +40,10 @@ const getRoles = async (query) => {
   return { roles: data, pagination };
 };
 
-module.exports = { createRole, getRoles };
+const getRoleById = async (id) => {
+  const role = await roleRepository.findById(id);
+  if (!role) throw createError(MESSAGES.ROLE.NOT_FOUND, 404);
+  return role;
+};
+
+module.exports = { createRole, getRoles, getRoleById };

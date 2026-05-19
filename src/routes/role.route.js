@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const RoleController = require("../controllers/role.controller");
-const { createRoleValidator } = require("../validator/role.validator");
+const { createRoleValidator, getRoleByIdValidator } = require("../validator/role.validator");
 const { validate } = require("../middlewares/validate.middleware");
 const { authenticate, authorize } = require("../middlewares/auth.middleware");
 
@@ -169,5 +169,65 @@ router.post("/", authenticate, authorize("admin"), createRoleValidator, validate
  *         description: Internal server error
  */
 router.get("/", authenticate, authorize("admin"), RoleController.getRoles);
+
+/**
+ * @swagger
+ * /api/roles/{id}:
+ *   get:
+ *     summary: Get a role by ID (Admin only)
+ *     tags: [Role]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Role ID
+ *     responses:
+ *       200:
+ *         description: Role retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   example: OK
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     _id:
+ *                       type: string
+ *                     name:
+ *                       type: string
+ *                       example: "admin"
+ *                     description:
+ *                       type: string
+ *                       example: "Admin role"
+ *                     permissions:
+ *                       type: array
+ *                       items:
+ *                         type: string
+ *                     isActive:
+ *                       type: boolean
+ *                       example: true
+ *                     createdAt:
+ *                       type: string
+ *                       format: date-time
+ *       400:
+ *         description: Invalid ID format
+ *       401:
+ *         description: Unauthorized
+ *       403:
+ *         description: Forbidden - Admins only
+ *       404:
+ *         description: Role not found
+ *       500:
+ *         description: Internal server error
+ */
+router.get("/:id", authenticate, authorize("admin"), getRoleByIdValidator, validate, RoleController.getRoleById);
 
 module.exports = router;

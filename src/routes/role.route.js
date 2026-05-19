@@ -315,4 +315,46 @@ router.get("/:id", authenticate, authorize("admin"), getRoleByIdValidator, valid
  */
 router.patch("/:id", authenticate, authorize("admin"), updateRoleValidator, validate, RoleController.updateRole);
 
+/**
+ * @swagger
+ * /api/roles/{id}:
+ *   delete:
+ *     summary: Delete a role by ID (Admin only)
+ *     tags: [Role]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Role ID
+ *     responses:
+ *       200:
+ *         description: Role deleted successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   example: OK
+ *                 message:
+ *                   type: string
+ *                   example: "Role deleted successfully"
+ *       400:
+ *         description: Role has users, cannot delete
+ *       401:
+ *         description: Unauthorized
+ *       403:
+ *         description: Forbidden - Admins only
+ *       404:
+ *         description: Role not found
+ *       500:
+ *         description: Internal server error
+ */
+router.delete("/:id", authenticate, authorize("admin"), getRoleByIdValidator, validate, RoleController.deleteRole);
+
 module.exports = router;

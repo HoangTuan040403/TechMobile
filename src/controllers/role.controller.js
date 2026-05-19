@@ -16,4 +16,9 @@ const getRoleById = asyncHandler(async (req, res) => {
   return res.status(200).json({ status: "OK", data: result });
 });
 
-module.exports = { createRole, getRoles, getRoleById };
+const updateRole = asyncHandler(async (req, res) => {
+  const result = await RoleService.updateRole(req.params.id, req.body);
+  return res.status(200).json({ status: "OK", data: result });
+});
+
+module.exports = { createRole, getRoles, getRoleById, updateRole };

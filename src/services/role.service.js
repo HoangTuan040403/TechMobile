@@ -46,4 +46,29 @@ const getRoleById = async (id) => {
   return role;
 };
 
-module.exports = { createRole, getRoles, getRoleById };
+const updateRole = async (id, { name, description, permissions, isActive }) => {
+  const existing = await roleRepository.findById(id);
+  if (!existing) throw createError(MESSAGES.ROLE.NOT_FOUND, 404);
+
+  if (name !== undefined && name !== existing.name) {
+    const duplicateName = await roleRepository.findByNameExcludeId(name, id);
+    if (duplicateName) throw createError(MESSAGES.ROLE.NAME_ALREADY_EXISTS, 409);
+  }
+
+  if (permissions && permissions.length > 0) {
+    const validPermissions = await permissionRepository.findByIds(permissions);
+    if (validPermissions.length !== permissions.length) {
+      throw createError(MESSAGES.PERMISSION.INVALID_IDS, 404);
+    }
+  }
+
+  const updatePayload = {};
+  if (name !== undefined) updatePayload.name = name;
+  if (description !== undefined) updatePayload.description = description;
+  if (permissions !== undefined) updatePayload.permissions = permissions;
+  if (isActive !== undefined) updatePayload.isActive = isActive;
+
+  return await roleRepository.updateByIdAndReturn(id, updatePayload);
+};
+
+module.exports = { createRole, getRoles, getRoleById, updateRole };

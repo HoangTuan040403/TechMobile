@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const RoleController = require("../controllers/role.controller");
-const { createRoleValidator, getRoleByIdValidator } = require("../validator/role.validator");
+const { createRoleValidator, getRoleByIdValidator, updateRoleValidator } = require("../validator/role.validator");
 const { validate } = require("../middlewares/validate.middleware");
 const { authenticate, authorize } = require("../middlewares/auth.middleware");
 
@@ -229,5 +229,90 @@ router.get("/", authenticate, authorize("admin"), RoleController.getRoles);
  *         description: Internal server error
  */
 router.get("/:id", authenticate, authorize("admin"), getRoleByIdValidator, validate, RoleController.getRoleById);
+
+/**
+ * @swagger
+ * /api/roles/{id}:
+ *   patch:
+ *     summary: Update a role by ID (Admin only)
+ *     tags: [Role]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Role ID
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *                 example: "manager"
+ *               description:
+ *                 type: string
+ *                 example: "Manager role"
+ *               permissions:
+ *                 type: array
+ *                 items:
+ *                   type: string
+ *                 example: ["64f1b2c3d4e5f6a7b8c9d0e1"]
+ *               isActive:
+ *                 type: boolean
+ *                 example: true
+ *     responses:
+ *       200:
+ *         description: Role updated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   example: OK
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     _id:
+ *                       type: string
+ *                     name:
+ *                       type: string
+ *                       example: "manager"
+ *                     description:
+ *                       type: string
+ *                       example: "Manager role"
+ *                     permissions:
+ *                       type: array
+ *                       items:
+ *                         type: string
+ *                     isActive:
+ *                       type: boolean
+ *                       example: true
+ *                     updatedAt:
+ *                       type: string
+ *                       format: date-time
+ *       400:
+ *         description: Invalid ID format
+ *       401:
+ *         description: Unauthorized
+ *       403:
+ *         description: Forbidden - Admins only
+ *       404:
+ *         description: Role not found
+ *       409:
+ *         description: Role name already exists
+ *       422:
+ *         description: Validation error
+ *       500:
+ *         description: Internal server error
+ */
+router.patch("/:id", authenticate, authorize("admin"), updateRoleValidator, validate, RoleController.updateRole);
 
 module.exports = router;

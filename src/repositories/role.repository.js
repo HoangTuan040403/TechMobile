@@ -29,6 +29,21 @@ class RoleRepository extends BaseRepository {
       select: "_id name description permissions isActive createdAt"
     });
   }
+
+  async findByNameExcludeId(name, excludeId) {
+    return await this.model.findOne({ name, _id: { $ne: excludeId } });
+  }
+
+  async updateByIdAndReturn(id, data) {
+    return await this.model
+      .findOneAndUpdate(
+        { _id: id, deletedAt: null },
+        data,
+        { new: true, runValidators: true }
+      )
+      .select("_id name description permissions isActive updatedAt")
+      .lean();
+  }
 }
 
 module.exports = new RoleRepository();

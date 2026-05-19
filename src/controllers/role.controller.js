@@ -6,4 +6,9 @@ const createRole = asyncHandler(async (req, res) => {
   return res.status(201).json({ status: "OK", data: result });
 });
 
-module.exports = { createRole };
+const getRoles = asyncHandler(async (req, res) => {
+  const result = await RoleService.getRoles(req.query);
+  return res.status(200).json({ status: "OK", data: result });
+});
+
+module.exports = { createRole, getRoles };

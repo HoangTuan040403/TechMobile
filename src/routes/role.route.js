@@ -85,4 +85,89 @@ const { authenticate, authorize } = require("../middlewares/auth.middleware");
  */
 router.post("/", authenticate, authorize("admin"), createRoleValidator, validate, RoleController.createRole);
 
+/**
+ * @swagger
+ * /api/roles:
+ *   get:
+ *     summary: Get all roles (Admin only)
+ *     tags: [Role]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *           default: 1
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *           default: 10
+ *       - in: query
+ *         name: search
+ *         schema:
+ *           type: string
+ *         description: Search by name or description
+ *     responses:
+ *       200:
+ *         description: Roles retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   example: OK
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     roles:
+ *                       type: array
+ *                       items:
+ *                         type: object
+ *                         properties:
+ *                           _id:
+ *                             type: string
+ *                           name:
+ *                             type: string
+ *                             example: "admin"
+ *                           description:
+ *                             type: string
+ *                             example: "Admin role"
+ *                           permissions:
+ *                             type: array
+ *                             items:
+ *                               type: string
+ *                           isActive:
+ *                             type: boolean
+ *                             example: true
+ *                           createdAt:
+ *                             type: string
+ *                             format: date-time
+ *                     pagination:
+ *                       type: object
+ *                       properties:
+ *                         total:
+ *                           type: integer
+ *                           example: 2
+ *                         page:
+ *                           type: integer
+ *                           example: 1
+ *                         limit:
+ *                           type: integer
+ *                           example: 10
+ *                         totalPages:
+ *                           type: integer
+ *                           example: 1
+ *       401:
+ *         description: Unauthorized
+ *       403:
+ *         description: Forbidden - Admins only
+ *       500:
+ *         description: Internal server error
+ */
+router.get("/", authenticate, authorize("admin"), RoleController.getRoles);
+
 module.exports = router;

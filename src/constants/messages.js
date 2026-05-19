@@ -58,6 +58,7 @@ module.exports = {
     ROLE_DESCRIPTION_MUST_BE_STRING: "Description must be a string",
     ROLE_PERMISSIONS_MUST_BE_ARRAY: "Permissions must be an array",
     ROLE_PERMISSION_ID_INVALID: "Each permission must be a valid ObjectId",
+    ROLE_ID_INVALID: "Invalid ID format",
   },
   UPLOAD: {
     INVALID_FILE_TYPE: "Only jpeg, png, webp image files are accepted",

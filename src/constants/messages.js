@@ -76,7 +76,8 @@ module.exports = {
   PERMISSION: {
     NAME_ALREADY_EXISTS: "Permission name already exists",
     NOT_FOUND: "Permission not found",
-    DELETED_SUCCESS: "Permission deleted successfully"
+    DELETED_SUCCESS: "Permission deleted successfully",
+    INVALID_IDS: "One or more permission IDs are invalid"
   },
   ROLE: {
     NAME_ALREADY_EXISTS: "Role name already exists",

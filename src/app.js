@@ -7,6 +7,7 @@ const errorHandler = require("./middlewares/errorHandler.middleware");
 const userRoute = require("./routes/user.route");
 const categoryRoute = require("./routes/category.route");
 const permissionRoute = require("./routes/permission.route");
+const roleRoute = require("./routes/role.route");
 
 const app = express();
 
@@ -19,6 +20,7 @@ app.use("/api/auth", authRoute);
 app.use("/api/users", userRoute);
 app.use("/api/categories", categoryRoute);
 app.use("/api/permissions", permissionRoute);
+app.use("/api/roles", roleRoute);
 
 app.get("/", (req, res) => {
   res.send("Hello World!");

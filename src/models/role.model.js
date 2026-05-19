@@ -25,9 +25,19 @@ const roleSchema = new mongoose.Schema(
     isActive: {
       type: Boolean,
       default: true
+    },
+
+    deletedAt: {
+      type: Date,
+      default: null
     }
   },
   { timestamps: true }
 );
+
+roleSchema.pre(/^find/, function (next) {
+  this.where({ deletedAt: null });
+  next();
+});
 
 module.exports = mongoose.model("Role", roleSchema);

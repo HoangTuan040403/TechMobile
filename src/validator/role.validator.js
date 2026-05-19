@@ -1,5 +1,6 @@
 const { body } = require("express-validator");
 const MESSAGES = require("../constants/messages");
+const mongoose = require("mongoose");
 
 const createRoleValidator = [
   body("name")

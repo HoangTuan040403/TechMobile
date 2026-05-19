@@ -1,10 +1,18 @@
 const roleRepository = require("../repositories/role.repository");
+const permissionRepository = require("../repositories/permission.repository");
 const MESSAGES = require("../constants/messages");
 const { createError } = require("../utils/error.util");
 
 const createRole = async ({ name, description, permissions }) => {
   const existingName = await roleRepository.findByName(name);
   if (existingName) throw createError(MESSAGES.ROLE.NAME_ALREADY_EXISTS, 409);
+
+  if (permissions && permissions.length > 0) {
+    const validPermissions = await permissionRepository.findByIds(permissions);
+    if (validPermissions.length !== permissions.length) {
+      throw createError(MESSAGES.PERMISSION.INVALID_IDS, 404);
+    }
+  }
 
   const role = await roleRepository.create({
     name,

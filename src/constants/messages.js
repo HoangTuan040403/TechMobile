@@ -84,6 +84,8 @@ module.exports = {
   ROLE: {
     NAME_ALREADY_EXISTS: "Role name already exists",
     NOT_FOUND: "Role not found",
-    CREATED_SUCCESS: "Role created successfully"
+    CREATED_SUCCESS: "Role created successfully",
+    DELETED_SUCCESS: "Role deleted successfully",
+    HAS_USERS: "Role has users, cannot delete"
   }
 };

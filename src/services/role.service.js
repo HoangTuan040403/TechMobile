@@ -1,5 +1,6 @@
 const roleRepository = require("../repositories/role.repository");
 const permissionRepository = require("../repositories/permission.repository");
+const userRepository = require("../repositories/user.repository");
 const MESSAGES = require("../constants/messages");
 const { createError } = require("../utils/error.util");
 
@@ -71,4 +72,14 @@ const updateRole = async (id, { name, description, permissions, isActive }) => {
   return await roleRepository.updateByIdAndReturn(id, updatePayload);
 };
 
-module.exports = { createRole, getRoles, getRoleById, updateRole };
+const deleteRole = async (id) => {
+  const role = await roleRepository.findById(id);
+  if (!role) throw createError(MESSAGES.ROLE.NOT_FOUND, 404);
+
+  const hasUsers = await userRepository.findOne({ role: id });
+  if (hasUsers) throw createError(MESSAGES.ROLE.HAS_USERS, 400);
+
+  await roleRepository.softDeleteById(id);
+};
+
+module.exports = { createRole, getRoles, getRoleById, updateRole, deleteRole };

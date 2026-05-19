@@ -52,16 +52,6 @@ class CategoryRepository extends BaseRepository {
       .select("_id name slug parent_id ancestors image updatedAt")
       .lean();
   }
-
-  async softDeleteById(id) {
-    return await this.model
-      .findOneAndUpdate(
-        { _id: id, deletedAt: null },
-        { deletedAt: new Date() },
-        { new: true }
-      )
-      .lean();
-  }
 }
 
 module.exports = new CategoryRepository();

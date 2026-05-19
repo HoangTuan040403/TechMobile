@@ -27,6 +27,16 @@ class BaseRepository {
   async deleteById(id) {
     return await this.model.findByIdAndDelete(id);
   }
+
+  async softDeleteById(id) {
+    return await this.model
+      .findOneAndUpdate(
+        { _id: id, deletedAt: null },
+        { deletedAt: new Date() },
+        { new: true }
+      )
+      .lean();
+  }
 }
 
 module.exports = BaseRepository;

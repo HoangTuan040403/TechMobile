@@ -57,4 +57,11 @@ const updatePermission = async (id, { name, description, module, isActive }) => 
   return await permissionRepository.updateByIdAndReturn(id, updatePayload);
 };
 
-module.exports = { createPermission, getPermissions, getPermissionById, updatePermission };
+const deletePermission = async (id) => {
+  const permission = await permissionRepository.findById(id);
+  if (!permission) throw createError(MESSAGES.PERMISSION.NOT_FOUND, 404);
+
+  await permissionRepository.softDeleteById(id);
+};
+
+module.exports = { createPermission, getPermissions, getPermissionById, updatePermission, deletePermission };

@@ -51,6 +51,13 @@ module.exports = {
     PERMISSION_MODULE_MUST_BE_STRING: "Module must be a string",
     PERMISSION_ID_INVALID: "Invalid ID format",
     PERMISSION_IS_ACTIVE_MUST_BE_BOOLEAN: "isActive must be a boolean",
+
+    // Role
+    ROLE_NAME_REQUIRED: "Name is required",
+    ROLE_NAME_MUST_BE_STRING: "Name must be a string",
+    ROLE_DESCRIPTION_MUST_BE_STRING: "Description must be a string",
+    ROLE_PERMISSIONS_MUST_BE_ARRAY: "Permissions must be an array",
+    ROLE_PERMISSION_ID_INVALID: "Each permission must be a valid ObjectId",
   },
   UPLOAD: {
     INVALID_FILE_TYPE: "Only jpeg, png, webp image files are accepted",
@@ -69,6 +76,12 @@ module.exports = {
   PERMISSION: {
     NAME_ALREADY_EXISTS: "Permission name already exists",
     NOT_FOUND: "Permission not found",
-    DELETED_SUCCESS: "Permission deleted successfully"
+    DELETED_SUCCESS: "Permission deleted successfully",
+    INVALID_IDS: "One or more permission IDs are invalid"
+  },
+  ROLE: {
+    NAME_ALREADY_EXISTS: "Role name already exists",
+    NOT_FOUND: "Role not found",
+    CREATED_SUCCESS: "Role created successfully"
   }
 };

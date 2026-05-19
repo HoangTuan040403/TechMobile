@@ -53,6 +53,10 @@ class PermissionRepository extends BaseRepository {
       .select("_id name description module isActive updatedAt")
       .lean();
   }
+
+  async findByIds(ids) {
+    return await this.model.find({ _id: { $in: ids } }).lean();
+  }
 }
 
 module.exports = new PermissionRepository();

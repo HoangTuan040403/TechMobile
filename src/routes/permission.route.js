@@ -313,4 +313,46 @@ router.get("/:id", authenticate, authorize("admin"), getPermissionByIdValidator,
  */
 router.patch("/:id", authenticate, authorize("admin"), updatePermissionValidator, validate, PermissionController.updatePermission);
 
+/**
+ * @swagger
+ * /api/permissions/{id}:
+ *   delete:
+ *     summary: Delete a permission by ID (Admin only)
+ *     tags: [Permission]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Permission ID
+ *     responses:
+ *       200:
+ *         description: Permission deleted successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   example: OK
+ *                 message:
+ *                   type: string
+ *                   example: "Permission deleted successfully"
+ *       400:
+ *         description: Invalid ID format
+ *       401:
+ *         description: Unauthorized
+ *       403:
+ *         description: Forbidden - Admins only
+ *       404:
+ *         description: Permission not found
+ *       500:
+ *         description: Internal server error
+ */
+router.delete("/:id", authenticate, authorize("admin"), getPermissionByIdValidator, validate, PermissionController.deletePermission);
+
 module.exports = router;

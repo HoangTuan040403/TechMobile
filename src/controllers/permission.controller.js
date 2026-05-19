@@ -1,5 +1,6 @@
 const asyncHandler = require("../utils/asyncHandler.util");
 const PermissionService = require("../services/permission.service");
+const MESSAGES = require("../constants/messages");
 
 const createPermission = asyncHandler(async (req, res) => {
   const result = await PermissionService.createPermission(req.body);
@@ -21,4 +22,9 @@ const updatePermission = asyncHandler(async (req, res) => {
   return res.status(200).json({ status: "OK", data: result });
 });
 
-module.exports = { createPermission, getPermissions, getPermissionById, updatePermission };
+const deletePermission = asyncHandler(async (req, res) => {
+  await PermissionService.deletePermission(req.params.id);
+  return res.status(200).json({ status: "OK", message: MESSAGES.PERMISSION.DELETED_SUCCESS });
+});
+
+module.exports = { createPermission, getPermissions, getPermissionById, updatePermission, deletePermission };

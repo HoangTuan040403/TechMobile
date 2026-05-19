@@ -30,4 +30,14 @@ const createRole = async ({ name, description, permissions }) => {
   };
 };
 
-module.exports = { createRole };
+const getRoles = async (query) => {
+  const page = parseInt(query.page) || 1;
+  const limit = parseInt(query.limit) || 10;
+  const search = query.search || "";
+
+  const { data, pagination } = await roleRepository.findAllRoles({ page, limit, search });
+
+  return { roles: data, pagination };
+};
+
+module.exports = { createRole, getRoles };

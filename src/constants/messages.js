@@ -21,50 +21,69 @@ module.exports = {
     WRONG_PASSWORD: "Current password is incorrect",
     CHANGE_PASSWORD_SUCCESS: "Password changed successfully",
   },
+
   VALIDATION: {
-    NAME_REQUIRED: "Name is required",
-    EMAIL_REQUIRED: "Email is required",
-    EMAIL_INVALID: "Invalid email format",
-    PASSWORD_REQUIRED: "Password is required",
-    PASSWORD_MIN_LENGTH: "Password must be at least 6 characters",
-    PHONE_INVALID: "Invalid phone number",
-    CURRENT_PASSWORD_REQUIRED: "Current password is required",
-    NEW_PASSWORD_REQUIRED: "New password is required",
-    CONFIRM_PASSWORD_REQUIRED: "Confirm password is required",
-    PASSWORDS_NOT_MATCH: "Passwords do not match",
-
-    // Category
-    CATEGORY_NAME_REQUIRED: "Name is required",
-    CATEGORY_NAME_MUST_BE_STRING: "Name must be a string",
-    CATEGORY_SLUG_MUST_BE_STRING: "Slug must be a string",
-    CATEGORY_SLUG_INVALID: "Slug must be a valid slug (lowercase, hyphens only)",
-    CATEGORY_PARENT_ID_INVALID: "parent_id must be a valid MongoDB ObjectId",
-    CATEGORY_ID_REQUIRED: "Category ID is required",
-    CATEGORY_ID_INVALID: "Invalid category ID format",
-    CATEGORY_AT_LEAST_ONE_FIELD: "At least one field must be provided",
-
-    // Permission
-    PERMISSION_NAME_REQUIRED: "Name is required",
-    PERMISSION_NAME_MUST_BE_STRING: "Name must be a string",
-    PERMISSION_DESCRIPTION_MUST_BE_STRING: "Description must be a string",
-    PERMISSION_MODULE_REQUIRED: "Module is required",
-    PERMISSION_MODULE_MUST_BE_STRING: "Module must be a string",
-    PERMISSION_ID_INVALID: "Invalid ID format",
-    PERMISSION_IS_ACTIVE_MUST_BE_BOOLEAN: "isActive must be a boolean",
-
-    // Role
-    ROLE_NAME_REQUIRED: "Name is required",
-    ROLE_NAME_MUST_BE_STRING: "Name must be a string",
-    ROLE_DESCRIPTION_MUST_BE_STRING: "Description must be a string",
-    ROLE_PERMISSIONS_MUST_BE_ARRAY: "Permissions must be an array",
-    ROLE_PERMISSION_ID_INVALID: "Each permission must be a valid ObjectId",
-    ROLE_ID_INVALID: "Invalid ID format",
-    ROLE_IS_ACTIVE_MUST_BE_BOOLEAN: "isActive must be a boolean",
+    AUTH: {
+      NAME_REQUIRED: "Name is required",
+      EMAIL_REQUIRED: "Email is required",
+      EMAIL_INVALID: "Invalid email format",
+      PASSWORD_REQUIRED: "Password is required",
+      PASSWORD_MIN_LENGTH: "Password must be at least 6 characters",
+      PHONE_INVALID: "Invalid phone number",
+      ADDRESS_INVALID: "Invalid address",
+      CURRENT_PASSWORD_REQUIRED: "Current password is required",
+      NEW_PASSWORD_REQUIRED: "New password is required",
+      CONFIRM_PASSWORD_REQUIRED: "Confirm password is required",
+      PASSWORDS_NOT_MATCH: "Passwords do not match"
+    },
+    CATEGORY: {
+      NAME_REQUIRED: "Name is required",
+      NAME_MUST_BE_STRING: "Name must be a string",
+      SLUG_MUST_BE_STRING: "Slug must be a string",
+      SLUG_INVALID: "Slug must be a valid slug (lowercase, hyphens only)",
+      PARENT_ID_INVALID: "parent_id must be a valid MongoDB ObjectId",
+      ID_REQUIRED: "Category ID is required",
+      ID_INVALID: "Invalid category ID format",
+      AT_LEAST_ONE_FIELD: "At least one field must be provided"
+    },
+    PERMISSION: {
+      NAME_REQUIRED: "Name is required",
+      NAME_MUST_BE_STRING: "Name must be a string",
+      DESCRIPTION_MUST_BE_STRING: "Description must be a string",
+      MODULE_REQUIRED: "Module is required",
+      MODULE_MUST_BE_STRING: "Module must be a string",
+      ID_INVALID: "Invalid ID format",
+      IS_ACTIVE_MUST_BE_BOOLEAN: "isActive must be a boolean"
+    },
+    ROLE: {
+      NAME_REQUIRED: "Name is required",
+      NAME_MUST_BE_STRING: "Name must be a string",
+      DESCRIPTION_MUST_BE_STRING: "Description must be a string",
+      PERMISSIONS_MUST_BE_ARRAY: "Permissions must be an array",
+      PERMISSION_ID_INVALID: "Each permission must be a valid ObjectId",
+      ID_INVALID: "Invalid ID format",
+      ID_REQUIRED: "Role ID is required",
+      IS_ACTIVE_MUST_BE_BOOLEAN: "isActive must be a boolean"
+    },
+    PRODUCT: {
+      NAME_REQUIRED: "Name is required",
+      NAME_MUST_BE_STRING: "Name must be a string",
+      PRICE_REQUIRED: "Price is required",
+      PRICE_MUST_BE_NUMBER: "Price must be a number",
+      PRICE_MUST_BE_POSITIVE: "Price must be greater than 0",
+      STOCK_MUST_BE_NUMBER: "Stock must be a non-negative integer",
+      DESCRIPTION_MUST_BE_STRING: "Description must be a string",
+      CATEGORY_ID_INVALID: "category_id must be a valid MongoDB ObjectId",
+      SPECS_MUST_BE_OBJECT: "Specs must be an object",
+      ID_INVALID: "Invalid product ID format"
+    }
   },
+
   UPLOAD: {
     INVALID_FILE_TYPE: "Only jpeg, png, webp image files are accepted",
     FILE_TOO_LARGE: "File size must not exceed 5MB"
   },
+
   CATEGORY: {
     NAME_ALREADY_EXISTS: "Category name already exists",
     SLUG_ALREADY_EXISTS: "Slug already exists",
@@ -75,17 +94,24 @@ module.exports = {
     DELETED_SUCCESS: "Category deleted successfully",
     HAS_CHILDREN: "Category has children, cannot delete"
   },
+
   PERMISSION: {
     NAME_ALREADY_EXISTS: "Permission name already exists",
     NOT_FOUND: "Permission not found",
     DELETED_SUCCESS: "Permission deleted successfully",
     INVALID_IDS: "One or more permission IDs are invalid"
   },
+
   ROLE: {
     NAME_ALREADY_EXISTS: "Role name already exists",
     NOT_FOUND: "Role not found",
     CREATED_SUCCESS: "Role created successfully",
     DELETED_SUCCESS: "Role deleted successfully",
     HAS_USERS: "Role has users, cannot delete"
+  },
+
+  PRODUCT: {
+    NAME_ALREADY_EXISTS: "Product name already exists",
+    NOT_FOUND: "Product not found",
   }
 };

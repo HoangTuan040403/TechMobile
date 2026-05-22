@@ -6,4 +6,9 @@ const createProduct = asyncHandler(async (req, res) => {
   return res.status(201).json({ status: "OK", data: result });
 });
 
-module.exports = { createProduct };
+const getProducts = asyncHandler(async (req, res) => {
+  const result = await ProductService.getProducts(req.query);
+  return res.status(200).json({ status: "OK", data: result });
+});
+
+module.exports = { createProduct, getProducts };

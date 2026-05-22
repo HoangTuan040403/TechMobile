@@ -36,4 +36,29 @@ const createProduct = async ({ name, price, discount, stock, description, catego
   };
 };
 
-module.exports = { createProduct };
+const getProducts = async (query) => {
+  const page = parseInt(query.page) || 1;
+  const limit = parseInt(query.limit) || 10;
+  const search = query.search || "";
+  const category_id = query.category_id || undefined;
+
+  const { data, pagination } = await productRepository.findAllProducts({ page, limit, search, category_id });
+
+  return {
+    products: data.map((p) => ({
+      _id: p._id,
+      name: p.name,
+      price: p.price,
+      discount: p.discount,
+      price_after_discount: p.price * (1 - p.discount / 100),
+      stock: p.stock,
+      category_id: p.category_id,
+      specs: p.specs,
+      createdAt: p.createdAt
+    })),
+    pagination
+  };
+};
+
+
+module.exports = { createProduct, getProducts };

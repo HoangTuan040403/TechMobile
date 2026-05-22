@@ -90,4 +90,11 @@ const updateProduct = async (id, { name, price, discount, stock, description, ca
   return formatProductDetail(updated);
 };
 
-module.exports = { createProduct, getProducts, getProductById, updateProduct };
+const deleteProduct = async (id) => {
+  const product = await productRepository.findById(id);
+  if (!product) throw createError(MESSAGES.PRODUCT.NOT_FOUND, 404);
+
+  await productRepository.softDeleteById(id);
+};
+
+module.exports = { createProduct, getProducts, getProductById, updateProduct, deleteProduct };

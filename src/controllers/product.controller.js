@@ -1,5 +1,6 @@
 const asyncHandler = require("../utils/asyncHandler.util");
 const ProductService = require("../services/product.service");
+const MESSAGES = require("../constants/messages");
 
 const createProduct = asyncHandler(async (req, res) => {
   const result = await ProductService.createProduct(req.body);
@@ -21,4 +22,9 @@ const updateProduct = asyncHandler(async (req, res) => {
   return res.status(200).json({ status: "OK", data: result });
 });
 
-module.exports = { createProduct, getProducts, getProductById, updateProduct };
+const deleteProduct = asyncHandler(async (req, res) => {
+  await ProductService.deleteProduct(req.params.id);
+  return res.status(200).json({ status: "OK", message: MESSAGES.PRODUCT.DELETED_SUCCESS });
+});
+
+module.exports = { createProduct, getProducts, getProductById, updateProduct, deleteProduct };

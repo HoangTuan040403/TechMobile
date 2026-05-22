@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const ProductController = require("../controllers/product.controller");
-const { createProductValidator } = require("../validator/product.validator");
+const { createProductValidator, getProductByIdValidator } = require("../validator/product.validator");
 const { validate } = require("../middlewares/validate.middleware");
 const { authenticate, authorize } = require("../middlewares/auth.middleware");
 
@@ -197,5 +197,75 @@ router.post("/", authenticate, authorize("admin"), createProductValidator, valid
  *         description: Internal server error
  */
 router.get("/", ProductController.getProducts);
+
+/**
+ * @swagger
+ * /api/products/{id}:
+ *   get:
+ *     summary: Get a product by ID
+ *     tags: [Product]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Product ID
+ *     responses:
+ *       200:
+ *         description: Product retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   example: OK
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     _id:
+ *                       type: string
+ *                     name:
+ *                       type: string
+ *                       example: "iPhone 15 Pro Max"
+ *                     price:
+ *                       type: number
+ *                       example: 29990000
+ *                     discount:
+ *                       type: number
+ *                       nullable: true
+ *                       example: 10
+ *                     price_after_discount:
+ *                       type: number
+ *                       example: 26991000
+ *                     stock:
+ *                       type: integer
+ *                       example: 100
+ *                     description:
+ *                       type: string
+ *                     category_id:
+ *                       type: object
+ *                       properties:
+ *                         _id:
+ *                           type: string
+ *                         name:
+ *                           type: string
+ *                         slug:
+ *                           type: string
+ *                     specs:
+ *                       type: object
+ *                     createdAt:
+ *                       type: string
+ *                       format: date-time
+ *       400:
+ *         description: Invalid ID format
+ *       404:
+ *         description: Product not found
+ *       500:
+ *         description: Internal server error
+ */
+router.get("/:id", getProductByIdValidator, validate, ProductController.getProductById);
 
 module.exports = router;

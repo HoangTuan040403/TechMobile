@@ -30,6 +30,14 @@ class ProductRepository extends BaseRepository {
       select: "_id name price discount stock category_id specs createdAt"
     });
   }
+
+  async findById(id) {
+    return await this.model
+      .findById(id)
+      .select("_id name price discount stock description category_id specs createdAt")
+      .populate("category_id", "_id name slug")
+      .lean();
+  }
 }
 
 module.exports = new ProductRepository();

@@ -11,4 +11,9 @@ const getProducts = asyncHandler(async (req, res) => {
   return res.status(200).json({ status: "OK", data: result });
 });
 
-module.exports = { createProduct, getProducts };
+const getProductById = asyncHandler(async (req, res) => {
+  const result = await ProductService.getProductById(req.params.id);
+  return res.status(200).json({ status: "OK", data: result });
+});
+
+module.exports = { createProduct, getProducts, getProductById };

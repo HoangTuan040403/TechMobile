@@ -75,7 +75,9 @@ module.exports = {
       DESCRIPTION_MUST_BE_STRING: "Description must be a string",
       CATEGORY_ID_INVALID: "category_id must be a valid MongoDB ObjectId",
       SPECS_MUST_BE_OBJECT: "Specs must be an object",
-      ID_INVALID: "Invalid product ID format"
+      ID_INVALID: "Invalid product ID format",
+      DISCOUNT_MUST_BE_NUMBER: "Discount must be a number",
+      DISCOUNT_INVALID: "Discount must be between 0 and 100"
     }
   },
 

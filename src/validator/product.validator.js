@@ -12,6 +12,11 @@ const createProductValidator = [
     .isNumeric().withMessage(MESSAGES.VALIDATION.PRODUCT.PRICE_MUST_BE_NUMBER)
     .custom((value) => value > 0).withMessage(MESSAGES.VALIDATION.PRODUCT.PRICE_MUST_BE_POSITIVE),
 
+  body("discount")
+    .optional()
+    .isNumeric().withMessage(MESSAGES.VALIDATION.PRODUCT.DISCOUNT_MUST_BE_NUMBER)
+    .custom((value) => value >= 0 && value <= 100).withMessage(MESSAGES.VALIDATION.PRODUCT.DISCOUNT_INVALID),
+
   body("stock")
     .optional()
     .isInt({ min: 0 }).withMessage(MESSAGES.VALIDATION.PRODUCT.STOCK_MUST_BE_NUMBER),
@@ -36,4 +41,41 @@ const getProductByIdValidator = [
     .withMessage(MESSAGES.VALIDATION.PRODUCT.ID_INVALID)
 ];
 
-module.exports = { createProductValidator, getProductByIdValidator };
+const updateProductValidator = [
+  param("id")
+    .custom((value) => mongoose.Types.ObjectId.isValid(value))
+    .withMessage(MESSAGES.VALIDATION.PRODUCT.ID_INVALID),
+
+  body("name")
+    .optional()
+    .isString().withMessage(MESSAGES.VALIDATION.PRODUCT.NAME_MUST_BE_STRING),
+
+  body("price")
+    .optional()
+    .isNumeric().withMessage(MESSAGES.VALIDATION.PRODUCT.PRICE_MUST_BE_NUMBER)
+    .custom((value) => value > 0).withMessage(MESSAGES.VALIDATION.PRODUCT.PRICE_MUST_BE_POSITIVE),
+
+  body("discount")
+    .optional()
+    .isNumeric().withMessage(MESSAGES.VALIDATION.PRODUCT.DISCOUNT_MUST_BE_NUMBER)
+    .custom((value) => value >= 0 && value <= 100).withMessage(MESSAGES.VALIDATION.PRODUCT.DISCOUNT_INVALID),
+
+  body("stock")
+    .optional()
+    .isInt({ min: 0 }).withMessage(MESSAGES.VALIDATION.PRODUCT.STOCK_MUST_BE_NUMBER),
+
+  body("description")
+    .optional()
+    .isString().withMessage(MESSAGES.VALIDATION.PRODUCT.DESCRIPTION_MUST_BE_STRING),
+
+  body("category_id")
+    .optional()
+    .custom((value) => value === null || mongoose.Types.ObjectId.isValid(value))
+    .withMessage(MESSAGES.VALIDATION.PRODUCT.CATEGORY_ID_INVALID),
+
+  body("specs")
+    .optional()
+    .isObject().withMessage(MESSAGES.VALIDATION.PRODUCT.SPECS_MUST_BE_OBJECT)
+];
+
+module.exports = { createProductValidator, getProductByIdValidator, updateProductValidator };

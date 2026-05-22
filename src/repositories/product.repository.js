@@ -38,6 +38,21 @@ class ProductRepository extends BaseRepository {
       .populate("category_id", "_id name slug")
       .lean();
   }
+
+  async findByNameExcludeId(name, excludeId) {
+    return await this.model.findOne({ name, _id: { $ne: excludeId } });
+  }
+
+  async updateByIdAndReturn(id, data) {
+    return await this.model
+      .findOneAndUpdate(
+        { _id: id, deletedAt: null },
+        data,
+        { new: true, runValidators: true }
+      )
+      .select("_id name price discount stock description category_id specs updatedAt")
+      .lean();
+  }
 }
 
 module.exports = new ProductRepository();

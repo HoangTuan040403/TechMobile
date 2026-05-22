@@ -63,4 +63,31 @@ const getProductById = async (id) => {
   return formatProductDetail(product);
 };
 
-module.exports = { createProduct, getProducts, getProductById };
+const updateProduct = async (id, { name, price, discount, stock, description, category_id, specs }) => {
+  const existing = await productRepository.findById(id);
+  if (!existing) throw createError(MESSAGES.PRODUCT.NOT_FOUND, 404);
+
+  if (name !== undefined && name !== existing.name) {
+    const duplicateName = await productRepository.findByNameExcludeId(name, id);
+    if (duplicateName) throw createError(MESSAGES.PRODUCT.NAME_ALREADY_EXISTS, 409);
+  }
+
+  if (category_id !== undefined && category_id !== null) {
+    const category = await categoryRepository.findById(category_id);
+    if (!category) throw createError(MESSAGES.CATEGORY.NOT_FOUND, 404);
+  }
+
+  const updatePayload = {};
+  if (name !== undefined) updatePayload.name = name;
+  if (price !== undefined) updatePayload.price = price;
+  if (discount !== undefined) updatePayload.discount = discount;
+  if (stock !== undefined) updatePayload.stock = stock;
+  if (description !== undefined) updatePayload.description = description;
+  if (category_id !== undefined) updatePayload.category_id = category_id || null;
+  if (specs !== undefined) updatePayload.specs = specs;
+
+  const updated = await productRepository.updateByIdAndReturn(id, updatePayload);
+  return formatProductDetail(updated);
+};
+
+module.exports = { createProduct, getProducts, getProductById, updateProduct };

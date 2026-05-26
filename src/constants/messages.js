@@ -116,5 +116,9 @@ module.exports = {
     NAME_ALREADY_EXISTS: "Product name already exists",
     NOT_FOUND: "Product not found",
     DELETED_SUCCESS: "Product deleted successfully"
+  },
+
+  PRODUCT_IMAGE: {
+    NOT_FOUND: "Product image not found",
   }
 };

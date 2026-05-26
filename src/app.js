@@ -9,6 +9,7 @@ const categoryRoute = require("./routes/category.route");
 const permissionRoute = require("./routes/permission.route");
 const roleRoute = require("./routes/role.route");
 const productRoute = require("./routes/product.route");
+const productImageRoute = require("./routes/product-image.route");
 
 const app = express();
 
@@ -23,6 +24,7 @@ app.use("/api/categories", categoryRoute);
 app.use("/api/permissions", permissionRoute);
 app.use("/api/roles", roleRoute);
 app.use("/api/products", productRoute);
+app.use("/api/products/:id/images", productImageRoute);
 
 app.get("/", (req, res) => {
   res.send("Hello World!");

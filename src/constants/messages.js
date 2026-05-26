@@ -125,5 +125,6 @@ module.exports = {
 
   PRODUCT_IMAGE: {
     NOT_FOUND: "Product image not found",
+    DELETED_SUCCESS: "Product image deleted successfully"
   }
 };

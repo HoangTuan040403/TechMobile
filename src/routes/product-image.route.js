@@ -91,4 +91,59 @@ const upload = require("../middlewares/upload.middleware");
  */
 router.post("/", authenticate, authorize("admin"), upload.array("images", 10), productIdValidator, validate, ProductImageController.uploadProductImages);
 
+/**
+ * @swagger
+ * /api/products/{id}/images:
+ *   get:
+ *     summary: Get all images of a product
+ *     tags: [ProductImage]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Product ID
+ *     responses:
+ *       200:
+ *         description: Images retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   example: OK
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       _id:
+ *                         type: string
+ *                       url:
+ *                         type: string
+ *                         example: "https://res.cloudinary.com/..."
+ *                       public_id:
+ *                         type: string
+ *                         example: "products/abc123"
+ *                       is_thumbnail:
+ *                         type: boolean
+ *                         example: false
+ *                       order:
+ *                         type: integer
+ *                         example: 0
+ *                       createdAt:
+ *                         type: string
+ *                         format: date-time
+ *       400:
+ *         description: Invalid ID format
+ *       404:
+ *         description: Product not found
+ *       500:
+ *         description: Internal server error
+ */
+router.get("/", productIdValidator, validate, ProductImageController.getProductImages);
+
 module.exports = router;

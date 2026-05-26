@@ -226,4 +226,52 @@ router.get("/", productIdValidator, validate, ProductImageController.getProductI
  */
 router.patch("/:imageId", authenticate, authorize("admin"), updateProductImageValidator, validate, ProductImageController.updateProductImage);
 
+/**
+ * @swagger
+ * /api/products/{id}/images/{imageId}:
+ *   delete:
+ *     summary: Delete a product image (Admin only)
+ *     tags: [ProductImage]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Product ID
+ *       - in: path
+ *         name: imageId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Image ID
+ *     responses:
+ *       200:
+ *         description: Image deleted successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   example: OK
+ *                 message:
+ *                   type: string
+ *                   example: "Product image deleted successfully"
+ *       400:
+ *         description: Invalid ID format
+ *       401:
+ *         description: Unauthorized
+ *       403:
+ *         description: Forbidden - Admins only
+ *       404:
+ *         description: Product or image not found
+ *       500:
+ *         description: Internal server error
+ */
+router.delete("/:imageId", authenticate, authorize("admin"), updateProductImageValidator, validate, ProductImageController.deleteProductImage);
+
 module.exports = router;

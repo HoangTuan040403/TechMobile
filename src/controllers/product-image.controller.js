@@ -1,5 +1,6 @@
 const asyncHandler = require("../utils/asyncHandler.util");
 const ProductImageService = require("../services/product-image.service");
+const MESSAGES = require("../constants/messages");
 
 const uploadProductImages = asyncHandler(async (req, res) => {
   const result = await ProductImageService.uploadProductImages(req.params.id, req.files);
@@ -16,4 +17,9 @@ const updateProductImage = asyncHandler(async (req, res) => {
   return res.status(200).json({ status: "OK", data: result });
 });
 
-module.exports = { uploadProductImages, getProductImages, updateProductImage };
+const deleteProductImage = asyncHandler(async (req, res) => {
+  await ProductImageService.deleteProductImage(req.params.id, req.params.imageId);
+  return res.status(200).json({ status: "OK", message: MESSAGES.PRODUCT_IMAGE.DELETED_SUCCESS });
+});
+
+module.exports = { uploadProductImages, getProductImages, updateProductImage, deleteProductImage };

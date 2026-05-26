@@ -2,7 +2,7 @@ const productImageRepository = require("../repositories/product-image.repository
 const productRepository = require("../repositories/product.repository");
 const MESSAGES = require("../constants/messages");
 const { createError } = require("../utils/error.util");
-const { uploadToCloudinary } = require("../utils/cloudinary.util");
+const { uploadToCloudinary, deleteFromCloudinary } = require("../utils/cloudinary.util");
 
 const formatImage = (img) => ({
   _id: img._id,
@@ -64,4 +64,15 @@ const updateProductImage = async (product_id, image_id, { is_thumbnail, order })
   return formatImage(updated);
 };
 
-module.exports = { uploadProductImages, getProductImages, updateProductImage };
+const deleteProductImage = async (product_id, image_id) => {
+  const product = await productRepository.findById(product_id);
+  if (!product) throw createError(MESSAGES.PRODUCT.NOT_FOUND, 404);
+
+  const image = await productImageRepository.findById(image_id);
+  if (!image) throw createError(MESSAGES.PRODUCT_IMAGE.NOT_FOUND, 404);
+
+  await deleteFromCloudinary(image.public_id);
+  await productImageRepository.deleteById(image_id);
+};
+
+module.exports = { uploadProductImages, getProductImages, updateProductImage, deleteProductImage };

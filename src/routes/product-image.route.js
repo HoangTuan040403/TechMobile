@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router({ mergeParams: true });
 const ProductImageController = require("../controllers/product-image.controller");
-const { productIdValidator } = require("../validator/product-image.validator");
+const { productIdValidator, updateProductImageValidator } = require("../validator/product-image.validator");
 const { validate } = require("../middlewares/validate.middleware");
 const { authenticate, authorize } = require("../middlewares/auth.middleware");
 const upload = require("../middlewares/upload.middleware");
@@ -145,5 +145,85 @@ router.post("/", authenticate, authorize("admin"), upload.array("images", 10), p
  *         description: Internal server error
  */
 router.get("/", productIdValidator, validate, ProductImageController.getProductImages);
+
+/**
+ * @swagger
+ * /api/products/{id}/images/{imageId}:
+ *   patch:
+ *     summary: Update a product image (Admin only)
+ *     tags: [ProductImage]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Product ID
+ *       - in: path
+ *         name: imageId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Image ID
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               is_thumbnail:
+ *                 type: boolean
+ *                 example: true
+ *               order:
+ *                 type: integer
+ *                 example: 0
+ *     responses:
+ *       200:
+ *         description: Image updated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   example: OK
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     _id:
+ *                       type: string
+ *                     url:
+ *                       type: string
+ *                       example: "https://res.cloudinary.com/..."
+ *                     public_id:
+ *                       type: string
+ *                       example: "products/abc123"
+ *                     is_thumbnail:
+ *                       type: boolean
+ *                       example: true
+ *                     order:
+ *                       type: integer
+ *                       example: 0
+ *                     updatedAt:
+ *                       type: string
+ *                       format: date-time
+ *       400:
+ *         description: Invalid ID format
+ *       401:
+ *         description: Unauthorized
+ *       403:
+ *         description: Forbidden - Admins only
+ *       404:
+ *         description: Product or image not found
+ *       422:
+ *         description: Validation error
+ *       500:
+ *         description: Internal server error
+ */
+router.patch("/:imageId", authenticate, authorize("admin"), updateProductImageValidator, validate, ProductImageController.updateProductImage);
 
 module.exports = router;

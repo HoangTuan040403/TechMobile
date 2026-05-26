@@ -11,4 +11,9 @@ const getProductImages = asyncHandler(async (req, res) => {
   return res.status(200).json({ status: "OK", data: result });
 });
 
-module.exports = { uploadProductImages, getProductImages };
+const updateProductImage = asyncHandler(async (req, res) => {
+  const result = await ProductImageService.updateProductImage(req.params.id, req.params.imageId, req.body);
+  return res.status(200).json({ status: "OK", data: result });
+});
+
+module.exports = { uploadProductImages, getProductImages, updateProductImage };

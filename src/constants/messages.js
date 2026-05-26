@@ -78,6 +78,11 @@ module.exports = {
       ID_INVALID: "Invalid product ID format",
       DISCOUNT_MUST_BE_NUMBER: "Discount must be a number",
       DISCOUNT_INVALID: "Discount must be between 0 and 100"
+    },
+    PRODUCT_IMAGE: {
+      IMAGE_ID_INVALID: "Invalid image ID format",
+      IS_THUMBNAIL_MUST_BE_BOOLEAN: "is_thumbnail must be a boolean",
+      ORDER_MUST_BE_NUMBER: "Order must be a non-negative integer"
     }
   },
 

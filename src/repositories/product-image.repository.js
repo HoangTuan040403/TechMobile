@@ -20,6 +20,24 @@ class ProductImageRepository extends BaseRepository {
       .select("_id url public_id is_thumbnail order product_id createdAt")
       .lean();
   }
+
+  async updateByIdAndReturn(id, data) {
+    return await this.model
+      .findOneAndUpdate(
+        { _id: id, deletedAt: null },
+        data,
+        { new: true, runValidators: true }
+      )
+      .select("_id url public_id is_thumbnail order updatedAt")
+      .lean();
+  }
+
+  async clearThumbnail(product_id) {
+    return await this.model.updateMany(
+      { product_id, deletedAt: null },
+      { is_thumbnail: false }
+    );
+  }
 }
 
 module.exports = new ProductImageRepository();

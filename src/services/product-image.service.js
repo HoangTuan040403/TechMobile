@@ -44,4 +44,24 @@ const getProductImages = async (product_id) => {
   return images.map(formatImage);
 };
 
-module.exports = { uploadProductImages, getProductImages };
+const updateProductImage = async (product_id, image_id, { is_thumbnail, order }) => {
+  const product = await productRepository.findById(product_id);
+  if (!product) throw createError(MESSAGES.PRODUCT.NOT_FOUND, 404);
+
+  const image = await productImageRepository.findById(image_id);
+  if (!image) throw createError(MESSAGES.PRODUCT_IMAGE.NOT_FOUND, 404);
+
+  const updatePayload = {};
+
+  if (is_thumbnail === true) {
+    await productImageRepository.clearThumbnail(product_id);
+    updatePayload.is_thumbnail = true;
+  }
+
+  if (order !== undefined) updatePayload.order = order;
+
+  const updated = await productImageRepository.updateByIdAndReturn(image_id, updatePayload);
+  return formatImage(updated);
+};
+
+module.exports = { uploadProductImages, getProductImages, updateProductImage };

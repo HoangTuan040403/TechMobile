@@ -4,6 +4,15 @@ const MESSAGES = require("../constants/messages");
 const { createError } = require("../utils/error.util");
 const { uploadToCloudinary } = require("../utils/cloudinary.util");
 
+const formatImage = (img) => ({
+  _id: img._id,
+  url: img.url,
+  public_id: img.public_id,
+  is_thumbnail: img.is_thumbnail,
+  order: img.order,
+  createdAt: img.createdAt
+});
+
 const uploadProductImages = async (product_id, files) => {
   const product = await productRepository.findById(product_id);
   if (!product) throw createError(MESSAGES.PRODUCT.NOT_FOUND, 404);
@@ -24,14 +33,15 @@ const uploadProductImages = async (product_id, files) => {
     })
   );
 
-  return uploaded.map((img) => ({
-    _id: img._id,
-    url: img.url,
-    public_id: img.public_id,
-    is_thumbnail: img.is_thumbnail,
-    order: img.order,
-    createdAt: img.createdAt
-  }));
+  return uploaded.map(formatImage);
 };
 
-module.exports = { uploadProductImages };
+const getProductImages = async (product_id) => {
+  const product = await productRepository.findById(product_id);
+  if (!product) throw createError(MESSAGES.PRODUCT.NOT_FOUND, 404);
+
+  const images = await productImageRepository.findByProductId(product_id);
+  return images.map(formatImage);
+};
+
+module.exports = { uploadProductImages, getProductImages };

@@ -16,6 +16,10 @@ class CartItemRepository extends BaseRepository {
       .populate("product_id", "_id name price discount specs")
       .lean();
   }
+
+  async deleteByCartId(cart_id) {
+    return await this.model.deleteMany({ cart_id });
+  }
 }
 
 module.exports = new CartItemRepository();

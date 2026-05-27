@@ -22,4 +22,9 @@ const deleteCartItem = asyncHandler(async (req, res) => {
   return res.status(200).json({ status: "OK", message: MESSAGES.CART.ITEM_DELETED });
 });
 
-module.exports = { addToCart, getCart, updateCartItem, deleteCartItem };
+const clearCart = asyncHandler(async (req, res) => {
+  await CartService.clearCart(req.user._id);
+  return res.status(200).json({ status: "OK", message: MESSAGES.CART.CLEARED });
+});
+
+module.exports = { addToCart, getCart, updateCartItem, deleteCartItem, clearCart };

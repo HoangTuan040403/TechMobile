@@ -7,4 +7,9 @@ const addToCart = asyncHandler(async (req, res) => {
   return res.status(200).json({ status: "OK", message: MESSAGES.CART.ITEM_ADDED });
 });
 
-module.exports = { addToCart };
+const getCart = asyncHandler(async (req, res) => {
+  const result = await CartService.getCart(req.user._id);
+  return res.status(200).json({ status: "OK", data: result });
+});
+
+module.exports = { addToCart, getCart };

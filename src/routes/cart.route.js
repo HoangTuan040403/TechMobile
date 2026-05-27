@@ -62,4 +62,68 @@ const { authenticate } = require("../middlewares/auth.middleware");
  */
 router.post("/", authenticate, addToCartValidator, validate, CartController.addToCart);
 
+/**
+ * @swagger
+ * /api/cart:
+ *   get:
+ *     summary: Get current user's cart
+ *     tags: [Cart]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Cart retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   example: OK
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     items:
+ *                       type: array
+ *                       items:
+ *                         type: object
+ *                         properties:
+ *                           _id:
+ *                             type: string
+ *                           product:
+ *                             type: object
+ *                             properties:
+ *                               _id:
+ *                                 type: string
+ *                               name:
+ *                                 type: string
+ *                                 example: "iPhone 15 Pro Max"
+ *                               price:
+ *                                 type: number
+ *                                 example: 29990000
+ *                               discount:
+ *                                 type: number
+ *                                 example: 10
+ *                               price_after_discount:
+ *                                 type: number
+ *                                 example: 26991000
+ *                               specs:
+ *                                 type: object
+ *                           quantity:
+ *                             type: integer
+ *                             example: 1
+ *                           subtotal:
+ *                             type: number
+ *                             example: 26991000
+ *                     total:
+ *                       type: number
+ *                       example: 26991000
+ *       401:
+ *         description: Unauthorized
+ *       500:
+ *         description: Internal server error
+ */
+router.get("/", authenticate, CartController.getCart);
+
 module.exports = router;

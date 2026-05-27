@@ -27,4 +27,34 @@ const addToCart = async (user_id, { product_id, quantity }) => {
   }
 };
 
-module.exports = { addToCart };
+const getCart = async (user_id) => {
+  const cart = await cartRepository.findByUserId(user_id);
+  if (!cart) return { items: [], total: 0 };
+
+  const items = await cartItemRepository.findByCartId(cart._id);
+
+  const formattedItems = items.map((item) => {
+    const discount = item.product_id.discount || 0;
+    const price_after_discount = item.product_id.price * (1 - discount / 100);
+
+    return {
+      _id: item._id,
+      product: {
+        _id: item.product_id._id,
+        name: item.product_id.name,
+        price: item.product_id.price,
+        discount,
+        price_after_discount,
+        specs: item.product_id.specs
+      },
+      quantity: item.quantity,
+      subtotal: price_after_discount * item.quantity
+    };
+  });
+
+  const total = formattedItems.reduce((sum, item) => sum + item.subtotal, 0);
+
+  return { items: formattedItems, total };
+};
+
+module.exports = { addToCart, getCart };

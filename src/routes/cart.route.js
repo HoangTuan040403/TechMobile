@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const CartController = require("../controllers/cart.controller");
-const { addToCartValidator, updateCartItemValidator } = require("../validator/cart.validator");
+const { addToCartValidator, updateCartItemValidator, cartItemIdValidator } = require("../validator/cart.validator");
 const { validate } = require("../middlewares/validate.middleware");
 const { authenticate } = require("../middlewares/auth.middleware");
 
@@ -179,5 +179,43 @@ router.get("/", authenticate, CartController.getCart);
  *         description: Internal server error
  */
 router.patch("/:itemId", authenticate, updateCartItemValidator, validate, CartController.updateCartItem);
+
+/**
+ * @swagger
+ * /api/cart/{itemId}:
+ *   delete:
+ *     summary: Remove an item from cart
+ *     tags: [Cart]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: itemId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Cart Item ID
+ *     responses:
+ *       200:
+ *         description: Cart item deleted successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   example: OK
+ *                 message:
+ *                   type: string
+ *                   example: "Cart item deleted successfully"
+ *       401:
+ *         description: Unauthorized
+ *       404:
+ *         description: Cart or item not found
+ *       500:
+ *         description: Internal server error
+ */
+router.delete("/:itemId", authenticate, cartItemIdValidator, validate, CartController.deleteCartItem);
 
 module.exports = router;

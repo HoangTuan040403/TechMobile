@@ -23,4 +23,10 @@ const updateCartItemValidator = [
     .isInt({ min: 1 }).withMessage(MESSAGES.VALIDATION.CART.QUANTITY_MUST_BE_NUMBER)
 ];
 
-module.exports = { addToCartValidator, updateCartItemValidator };
+const cartItemIdValidator = [
+  param("itemId")
+    .custom((value) => mongoose.Types.ObjectId.isValid(value))
+    .withMessage(MESSAGES.VALIDATION.CART.ITEM_ID_INVALID)
+];
+
+module.exports = { addToCartValidator, updateCartItemValidator, cartItemIdValidator };

@@ -76,4 +76,18 @@ const updateCartItem = async (user_id, item_id, { quantity }) => {
   await cartItemRepository.updateById(item_id, { quantity });
 };
 
-module.exports = { addToCart, getCart, updateCartItem };
+const deleteCartItem = async (user_id, item_id) => {
+  const cart = await cartRepository.findByUserId(user_id);
+  if (!cart) throw createError(MESSAGES.CART.NOT_FOUND, 404);
+
+  const item = await cartItemRepository.findById(item_id);
+  if (!item) throw createError(MESSAGES.CART.ITEM_NOT_FOUND, 404);
+
+  if (item.cart_id.toString() !== cart._id.toString()) {
+    throw createError(MESSAGES.CART.ITEM_NOT_FOUND, 404);
+  }
+
+  await cartItemRepository.deleteById(item_id);
+};
+
+module.exports = { addToCart, getCart, updateCartItem, deleteCartItem };

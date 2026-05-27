@@ -90,4 +90,11 @@ const deleteCartItem = async (user_id, item_id) => {
   await cartItemRepository.deleteById(item_id);
 };
 
-module.exports = { addToCart, getCart, updateCartItem, deleteCartItem };
+const clearCart = async (user_id) => {
+  const cart = await cartRepository.findByUserId(user_id);
+  if (!cart) throw createError(MESSAGES.CART.NOT_FOUND, 404);
+
+  await cartItemRepository.deleteByCartId(cart._id);
+};
+
+module.exports = { addToCart, getCart, updateCartItem, deleteCartItem, clearCart };

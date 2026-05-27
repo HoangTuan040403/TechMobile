@@ -218,4 +218,35 @@ router.patch("/:itemId", authenticate, updateCartItemValidator, validate, CartCo
  */
 router.delete("/:itemId", authenticate, cartItemIdValidator, validate, CartController.deleteCartItem);
 
+/**
+ * @swagger
+ * /api/cart:
+ *   delete:
+ *     summary: Clear all items in cart
+ *     tags: [Cart]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Cart cleared successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   example: OK
+ *                 message:
+ *                   type: string
+ *                   example: "Cart cleared successfully"
+ *       401:
+ *         description: Unauthorized
+ *       404:
+ *         description: Cart not found
+ *       500:
+ *         description: Internal server error
+ */
+router.delete("/", authenticate, CartController.clearCart);
+
 module.exports = router;

@@ -83,6 +83,11 @@ module.exports = {
       IMAGE_ID_INVALID: "Invalid image ID format",
       IS_THUMBNAIL_MUST_BE_BOOLEAN: "is_thumbnail must be a boolean",
       ORDER_MUST_BE_NUMBER: "Order must be a non-negative integer"
+    },
+    CART: {
+      PRODUCT_ID_REQUIRED: "Product ID is required",
+      PRODUCT_ID_INVALID: "Product ID must be a valid MongoDB ObjectId",
+      QUANTITY_MUST_BE_NUMBER: "Quantity must be a positive integer"
     }
   },
 
@@ -126,5 +131,13 @@ module.exports = {
   PRODUCT_IMAGE: {
     NOT_FOUND: "Product image not found",
     DELETED_SUCCESS: "Product image deleted successfully"
+  },
+
+  CART: {
+    NOT_FOUND: "Cart not found",
+    ITEM_NOT_FOUND: "Cart item not found",
+    ITEM_ADDED: "Item added to cart successfully",
+    OUT_OF_STOCK: "Product is out of stock",
+    INSUFFICIENT_STOCK: "Insufficient stock"
   }
 };

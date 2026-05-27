@@ -138,6 +138,7 @@ module.exports = {
     ITEM_NOT_FOUND: "Cart item not found",
     ITEM_ADDED: "Item added to cart successfully",
     OUT_OF_STOCK: "Product is out of stock",
-    INSUFFICIENT_STOCK: "Insufficient stock"
+    INSUFFICIENT_STOCK: "Insufficient stock",
+    ITEM_UPDATED: "Cart item updated successfully"
   }
 };

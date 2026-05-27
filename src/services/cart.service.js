@@ -57,4 +57,23 @@ const getCart = async (user_id) => {
   return { items: formattedItems, total };
 };
 
-module.exports = { addToCart, getCart };
+const updateCartItem = async (user_id, item_id, { quantity }) => {
+  const cart = await cartRepository.findByUserId(user_id);
+  if (!cart) throw createError(MESSAGES.CART.NOT_FOUND, 404);
+
+  const item = await cartItemRepository.findById(item_id);
+  if (!item) throw createError(MESSAGES.CART.ITEM_NOT_FOUND, 404);
+
+  if (item.cart_id.toString() !== cart._id.toString()) {
+    throw createError(MESSAGES.CART.ITEM_NOT_FOUND, 404);
+  }
+
+  const product = await productRepository.findById(item.product_id);
+  if (!product) throw createError(MESSAGES.PRODUCT.NOT_FOUND, 404);
+
+  if (product.stock < quantity) throw createError(MESSAGES.CART.INSUFFICIENT_STOCK, 400);
+
+  await cartItemRepository.updateById(item_id, { quantity });
+};
+
+module.exports = { addToCart, getCart, updateCartItem };

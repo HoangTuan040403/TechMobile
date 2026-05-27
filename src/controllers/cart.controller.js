@@ -12,4 +12,9 @@ const getCart = asyncHandler(async (req, res) => {
   return res.status(200).json({ status: "OK", data: result });
 });
 
-module.exports = { addToCart, getCart };
+const updateCartItem = asyncHandler(async (req, res) => {
+  await CartService.updateCartItem(req.user._id, req.params.itemId, req.body);
+  return res.status(200).json({ status: "OK", message: MESSAGES.CART.ITEM_UPDATED });
+});
+
+module.exports = { addToCart, getCart, updateCartItem };

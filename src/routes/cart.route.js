@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const CartController = require("../controllers/cart.controller");
-const { addToCartValidator } = require("../validator/cart.validator");
+const { addToCartValidator, updateCartItemValidator } = require("../validator/cart.validator");
 const { validate } = require("../middlewares/validate.middleware");
 const { authenticate } = require("../middlewares/auth.middleware");
 
@@ -125,5 +125,59 @@ router.post("/", authenticate, addToCartValidator, validate, CartController.addT
  *         description: Internal server error
  */
 router.get("/", authenticate, CartController.getCart);
+
+/**
+ * @swagger
+ * /api/cart/{itemId}:
+ *   patch:
+ *     summary: Update cart item quantity
+ *     tags: [Cart]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: itemId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Cart Item ID
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - quantity
+ *             properties:
+ *               quantity:
+ *                 type: integer
+ *                 example: 2
+ *     responses:
+ *       200:
+ *         description: Cart item updated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   example: OK
+ *                 message:
+ *                   type: string
+ *                   example: "Cart item updated successfully"
+ *       400:
+ *         description: Insufficient stock
+ *       401:
+ *         description: Unauthorized
+ *       404:
+ *         description: Cart or item not found
+ *       422:
+ *         description: Validation error
+ *       500:
+ *         description: Internal server error
+ */
+router.patch("/:itemId", authenticate, updateCartItemValidator, validate, CartController.updateCartItem);
 
 module.exports = router;

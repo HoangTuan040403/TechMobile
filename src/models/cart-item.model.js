@@ -15,9 +15,12 @@ const cartItemSchema = new mongoose.Schema({
 
   quantity: {
     type: Number,
-    default: 1
+    default: 1,
+    min: 1
   }
-});
+},
+  { timestamps: true }
+);
 
 cartItemSchema.index({ cart_id: 1, product_id: 1 }, { unique: true });
 

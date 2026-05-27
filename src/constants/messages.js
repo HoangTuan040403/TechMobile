@@ -87,7 +87,8 @@ module.exports = {
     CART: {
       PRODUCT_ID_REQUIRED: "Product ID is required",
       PRODUCT_ID_INVALID: "Product ID must be a valid MongoDB ObjectId",
-      QUANTITY_MUST_BE_NUMBER: "Quantity must be a positive integer"
+      QUANTITY_MUST_BE_NUMBER: "Quantity must be a positive integer",
+      ITEM_ID_INVALID: "Invalid cart item ID format"
     }
   },
 
@@ -139,6 +140,7 @@ module.exports = {
     ITEM_ADDED: "Item added to cart successfully",
     OUT_OF_STOCK: "Product is out of stock",
     INSUFFICIENT_STOCK: "Insufficient stock",
-    ITEM_UPDATED: "Cart item updated successfully"
+    ITEM_UPDATED: "Cart item updated successfully",
+    ITEM_DELETED: "Cart item deleted successfully"
   }
 };

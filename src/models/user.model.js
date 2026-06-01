@@ -30,11 +30,6 @@ const userSchema = new mongoose.Schema(
       match: [/^[0-9]{9,11}$/, "Invalid phone number"]
     },
 
-    address: {
-      type: String,
-      trim: true
-    },
-
     role: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Role",

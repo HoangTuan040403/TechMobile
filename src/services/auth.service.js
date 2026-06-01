@@ -8,7 +8,7 @@ const { parseExpiry } = require("../utils/time.util");
 const { sendResetPasswordEmail, sendVerifyEmail } = require("../utils/email.util");
 
 const register = async (userData) => {
-  const { name, email, password, phone, address } = userData;
+  const { name, email, password, phone } = userData;
 
   const existed = await userRepository.findByEmail(email);
   if (existed) throw createError(MESSAGES.AUTH.EMAIL_ALREADY_IN_USE, 400);
@@ -17,7 +17,7 @@ const register = async (userData) => {
   if (!defaultRole) throw createError(MESSAGES.AUTH.DEFAULT_ROLE_NOT_FOUND, 500);
 
   const user = await userRepository.create({
-    name, email, password, phone, address,
+    name, email, password, phone,
     role: defaultRole._id
   });
 
@@ -122,7 +122,7 @@ const refreshToken = async (token) => {
 };
 
 const getMe = async (userId) => {
-  const user = await userRepository.findById(userId);
+  const user = await userRepository.findByIdWithRole(userId);
   if (!user) throw createError(MESSAGES.AUTH.USER_NOT_FOUND, 404);
 
   return {
@@ -131,7 +131,6 @@ const getMe = async (userId) => {
     email: user.email,
     role: user.role,
     phone: user.phone,
-    address: user.address,
     isActive: user.isActive
   };
 };

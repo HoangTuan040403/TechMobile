@@ -41,9 +41,6 @@ const { authenticate } = require("../middlewares/auth.middleware");
  *               phone:
  *                 type: string
  *                 example: "0987654321"
- *               address:
- *                 type: string
- *                 example: "123 Nguyen Hue, HCM"
  *     responses:
  *       201:
  *         description: User registered successfully. A verification email has been sent.

@@ -15,7 +15,7 @@ const { authenticate, authorize } = require("../middlewares/auth.middleware");
 /**
  * @swagger
  * /api/users/me:
- *   put:
+ *   patch:
  *     summary: Update current user profile
  *     tags: [User]
  *     security:
@@ -33,9 +33,6 @@ const { authenticate, authorize } = require("../middlewares/auth.middleware");
  *               phone:
  *                 type: string
  *                 example: "0987654321"
- *               address:
- *                 type: string
- *                 example: "123 Nguyen Hue, HCM"
  *     responses:
  *       200:
  *         description: Profile updated successfully
@@ -62,12 +59,15 @@ const { authenticate, authorize } = require("../middlewares/auth.middleware");
  *                     phone:
  *                       type: string
  *                       example: "0987654321"
- *                     address:
- *                       type: string
- *                       example: "123 Nguyen Hue, HCM"
  *                     role:
- *                       type: string
- *                       example: 64f1b2c3d4e5f6a7b8c9d0e2
+ *                       type: object
+ *                       properties:
+ *                         _id:
+ *                           type: string
+ *                           example: 64f1b2c3d4e5f6a7b8c9d0e2
+ *                         name:
+ *                           type: string
+ *                           example: "user"
  *                     isActive:
  *                       type: boolean
  *                       example: true
@@ -91,7 +91,7 @@ const { authenticate, authorize } = require("../middlewares/auth.middleware");
  *       500:
  *         description: Internal server error
  */
-router.put("/me", authenticate, updateMeValidator, validate, UserController.updateMe);
+router.patch("/me", authenticate, updateMeValidator, validate, UserController.updateMe);
 
 /**
  * @swagger

@@ -3,23 +3,24 @@ const MESSAGES = require("../constants/messages");
 const { createError } = require("../utils/error.util");
 
 const updateMe = async (userId, updateData) => {
-  const { name, phone, address } = updateData;
+  const { name, phone } = updateData;
 
   const user = await userRepository.findById(userId);
   if (!user) throw createError(MESSAGES.AUTH.USER_NOT_FOUND, 404);
 
-  const updated = await userRepository.updateById(
+  await userRepository.updateById(
     userId,
-    { name, phone, address },
+    { name, phone },
     { runValidators: true }
   );
+
+  const updated = await userRepository.findByIdWithRole(userId);
 
   return {
     _id: updated._id,
     name: updated.name,
     email: updated.email,
     phone: updated.phone,
-    address: updated.address,
     role: updated.role,
     isActive: updated.isActive
   };
@@ -54,7 +55,6 @@ const getUsers = async (query) => {
       name: u.name,
       email: u.email,
       phone: u.phone,
-      address: u.address,
       role: u.role,
       isActive: u.isActive,
       createdAt: u.createdAt
@@ -72,7 +72,6 @@ const getUserById = async (id) => {
     name: user.name,
     email: user.email,
     phone: user.phone,
-    address: user.address,
     role: user.role,
     isActive: user.isActive,
     createdAt: user.createdAt

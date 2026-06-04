@@ -89,6 +89,16 @@ module.exports = {
       PRODUCT_ID_INVALID: "Product ID must be a valid MongoDB ObjectId",
       QUANTITY_MUST_BE_NUMBER: "Quantity must be a positive integer",
       ITEM_ID_INVALID: "Invalid cart item ID format"
+    },
+    ADDRESS: {
+      FULL_NAME_REQUIRED: "Full name is required",
+      FULL_NAME_MUST_BE_STRING: "Full name must be a string",
+      PHONE_REQUIRED: "Phone is required",
+      PHONE_INVALID: "Invalid phone number",
+      ADDRESS_REQUIRED: "Address is required",
+      ADDRESS_MUST_BE_STRING: "Address must be a string",
+      IS_DEFAULT_MUST_BE_BOOLEAN: "is_default must be a boolean",
+      ID_INVALID: "Invalid address ID format"
     }
   },
 
@@ -143,5 +153,9 @@ module.exports = {
     ITEM_UPDATED: "Cart item updated successfully",
     ITEM_DELETED: "Cart item deleted successfully",
     CLEARED: "Cart cleared successfully"
+  },
+
+  ADDRESS: {
+    NOT_FOUND: "Address not found",
   }
 };

@@ -11,4 +11,9 @@ const getAddresses = asyncHandler(async (req, res) => {
     return res.status(200).json({ status: "OK", data: result });
 });
 
-module.exports = { createAddress, getAddresses };
+const getAddressById = asyncHandler(async (req, res) => {
+    const result = await AddressService.getAddressById(req.user._id, req.params.id);
+    return res.status(200).json({ status: "OK", data: result });
+});
+
+module.exports = { createAddress, getAddresses, getAddressById };

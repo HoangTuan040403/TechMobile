@@ -157,5 +157,6 @@ module.exports = {
 
   ADDRESS: {
     NOT_FOUND: "Address not found",
+    DELETED_SUCCESS: "Address deleted successfully"
   }
 };

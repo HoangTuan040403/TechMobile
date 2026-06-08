@@ -69,4 +69,15 @@ const updateAddress = async (user_id, id, { full_name, phone, address, is_defaul
     return await addressRepository.updateByIdAndReturn(id, updatePayload);
 };
 
-module.exports = { createAddress, getAddresses, getAddressById, updateAddress };
+const deleteAddress = async (user_id, id) => {
+    const address = await addressRepository.findById(id);
+    if (!address) throw createError(MESSAGES.ADDRESS.NOT_FOUND, 404);
+
+    if (address.user_id.toString() !== user_id.toString()) {
+        throw createError(MESSAGES.ADDRESS.NOT_FOUND, 404);
+    }
+
+    await addressRepository.softDeleteById(id);
+};
+
+module.exports = { createAddress, getAddresses, getAddressById, updateAddress, deleteAddress };

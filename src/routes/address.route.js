@@ -267,4 +267,44 @@ router.get("/:id", authenticate, addressIdValidator, validate, AddressController
  */
 router.patch("/:id", authenticate, updateAddressValidator, validate, AddressController.updateAddress);
 
+/**
+ * @swagger
+ * /api/addresses/{id}:
+ *   delete:
+ *     summary: Delete an address
+ *     tags: [Address]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Address ID
+ *     responses:
+ *       200:
+ *         description: Address deleted successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   example: OK
+ *                 message:
+ *                   type: string
+ *                   example: "Address deleted successfully"
+ *       400:
+ *         description: Invalid ID format
+ *       401:
+ *         description: Unauthorized
+ *       404:
+ *         description: Address not found
+ *       500:
+ *         description: Internal server error
+ */
+router.delete("/:id", authenticate, addressIdValidator, validate, AddressController.deleteAddress);
+
 module.exports = router;

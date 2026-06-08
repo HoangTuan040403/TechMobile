@@ -31,21 +31,42 @@ const getAddresses = async (user_id) => {
 };
 
 const getAddressById = async (user_id, id) => {
-  const address = await addressRepository.findById(id);
-  if (!address) throw createError(MESSAGES.ADDRESS.NOT_FOUND, 404);
+    const address = await addressRepository.findById(id);
+    if (!address) throw createError(MESSAGES.ADDRESS.NOT_FOUND, 404);
 
-  if (address.user_id.toString() !== user_id.toString()) {
-    throw createError(MESSAGES.ADDRESS.NOT_FOUND, 404);
-  }
+    if (address.user_id.toString() !== user_id.toString()) {
+        throw createError(MESSAGES.ADDRESS.NOT_FOUND, 404);
+    }
 
-  return {
-    _id: address._id,
-    full_name: address.full_name,
-    phone: address.phone,
-    address: address.address,
-    is_default: address.is_default,
-    createdAt: address.createdAt
-  };
+    return {
+        _id: address._id,
+        full_name: address.full_name,
+        phone: address.phone,
+        address: address.address,
+        is_default: address.is_default,
+        createdAt: address.createdAt
+    };
 };
 
-module.exports = { createAddress, getAddresses, getAddressById };
+const updateAddress = async (user_id, id, { full_name, phone, address, is_default }) => {
+    const existing = await addressRepository.findById(id);
+    if (!existing) throw createError(MESSAGES.ADDRESS.NOT_FOUND, 404);
+
+    if (existing.user_id.toString() !== user_id.toString()) {
+        throw createError(MESSAGES.ADDRESS.NOT_FOUND, 404);
+    }
+
+    if (is_default === true) {
+        await addressRepository.clearDefault(user_id);
+    }
+
+    const updatePayload = {};
+    if (full_name !== undefined) updatePayload.full_name = full_name;
+    if (phone !== undefined) updatePayload.phone = phone;
+    if (address !== undefined) updatePayload.address = address;
+    if (is_default !== undefined) updatePayload.is_default = is_default;
+
+    return await addressRepository.updateByIdAndReturn(id, updatePayload);
+};
+
+module.exports = { createAddress, getAddresses, getAddressById, updateAddress };

@@ -26,6 +26,17 @@ class AddressRepository extends BaseRepository {
             .select("_id user_id full_name phone address is_default createdAt")
             .lean();
     }
+
+    async updateByIdAndReturn(id, data) {
+        return await this.model
+            .findOneAndUpdate(
+                { _id: id, deletedAt: null },
+                data,
+                { new: true, runValidators: true }
+            )
+            .select("_id full_name phone address is_default updatedAt")
+            .lean();
+    }
 }
 
 module.exports = new AddressRepository();

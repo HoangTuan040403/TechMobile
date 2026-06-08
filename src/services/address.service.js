@@ -30,4 +30,22 @@ const getAddresses = async (user_id) => {
     return addresses;
 };
 
-module.exports = { createAddress, getAddresses };
+const getAddressById = async (user_id, id) => {
+  const address = await addressRepository.findById(id);
+  if (!address) throw createError(MESSAGES.ADDRESS.NOT_FOUND, 404);
+
+  if (address.user_id.toString() !== user_id.toString()) {
+    throw createError(MESSAGES.ADDRESS.NOT_FOUND, 404);
+  }
+
+  return {
+    _id: address._id,
+    full_name: address.full_name,
+    phone: address.phone,
+    address: address.address,
+    is_default: address.is_default,
+    createdAt: address.createdAt
+  };
+};
+
+module.exports = { createAddress, getAddresses, getAddressById };

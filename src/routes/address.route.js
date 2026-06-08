@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const AddressController = require("../controllers/address.controller");
-const { createAddressValidator } = require("../validator/address.validator");
+const { createAddressValidator, addressIdValidator } = require("../validator/address.validator");
 const { validate } = require("../middlewares/validate.middleware");
 const { authenticate } = require("../middlewares/auth.middleware");
 
@@ -131,5 +131,62 @@ router.post("/", authenticate, createAddressValidator, validate, AddressControll
  *         description: Internal server error
  */
 router.get("/", authenticate, AddressController.getAddresses);
+
+/**
+ * @swagger
+ * /api/addresses/{id}:
+ *   get:
+ *     summary: Get an address by ID
+ *     tags: [Address]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Address ID
+ *     responses:
+ *       200:
+ *         description: Address retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   example: OK
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     _id:
+ *                       type: string
+ *                     full_name:
+ *                       type: string
+ *                       example: "Nguyen Van A"
+ *                     phone:
+ *                       type: string
+ *                       example: "0987654321"
+ *                     address:
+ *                       type: string
+ *                       example: "123 Nguyen Hue, Ho Chi Minh City"
+ *                     is_default:
+ *                       type: boolean
+ *                       example: false
+ *                     createdAt:
+ *                       type: string
+ *                       format: date-time
+ *       400:
+ *         description: Invalid ID format
+ *       401:
+ *         description: Unauthorized
+ *       404:
+ *         description: Address not found
+ *       500:
+ *         description: Internal server error
+ */
+router.get("/:id", authenticate, addressIdValidator, validate, AddressController.getAddressById);
 
 module.exports = router;

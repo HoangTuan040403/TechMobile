@@ -19,6 +19,13 @@ class AddressRepository extends BaseRepository {
             .select("_id full_name phone address is_default createdAt")
             .lean();
     }
+
+    async findById(id) {
+        return await this.model
+            .findById(id)
+            .select("_id user_id full_name phone address is_default createdAt")
+            .lean();
+    }
 }
 
 module.exports = new AddressRepository();

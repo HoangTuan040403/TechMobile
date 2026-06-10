@@ -7,20 +7,6 @@ const createProductValidator = [
     .notEmpty().withMessage(MESSAGES.VALIDATION.PRODUCT.NAME_REQUIRED)
     .isString().withMessage(MESSAGES.VALIDATION.PRODUCT.NAME_MUST_BE_STRING),
 
-  body("price")
-    .notEmpty().withMessage(MESSAGES.VALIDATION.PRODUCT.PRICE_REQUIRED)
-    .isNumeric().withMessage(MESSAGES.VALIDATION.PRODUCT.PRICE_MUST_BE_NUMBER)
-    .custom((value) => value > 0).withMessage(MESSAGES.VALIDATION.PRODUCT.PRICE_MUST_BE_POSITIVE),
-
-  body("discount")
-    .optional()
-    .isNumeric().withMessage(MESSAGES.VALIDATION.PRODUCT.DISCOUNT_MUST_BE_NUMBER)
-    .custom((value) => value >= 0 && value <= 100).withMessage(MESSAGES.VALIDATION.PRODUCT.DISCOUNT_INVALID),
-
-  body("stock")
-    .optional()
-    .isInt({ min: 0 }).withMessage(MESSAGES.VALIDATION.PRODUCT.STOCK_MUST_BE_NUMBER),
-
   body("description")
     .optional()
     .isString().withMessage(MESSAGES.VALIDATION.PRODUCT.DESCRIPTION_MUST_BE_STRING),
@@ -49,20 +35,6 @@ const updateProductValidator = [
   body("name")
     .optional()
     .isString().withMessage(MESSAGES.VALIDATION.PRODUCT.NAME_MUST_BE_STRING),
-
-  body("price")
-    .optional()
-    .isNumeric().withMessage(MESSAGES.VALIDATION.PRODUCT.PRICE_MUST_BE_NUMBER)
-    .custom((value) => value > 0).withMessage(MESSAGES.VALIDATION.PRODUCT.PRICE_MUST_BE_POSITIVE),
-
-  body("discount")
-    .optional()
-    .isNumeric().withMessage(MESSAGES.VALIDATION.PRODUCT.DISCOUNT_MUST_BE_NUMBER)
-    .custom((value) => value >= 0 && value <= 100).withMessage(MESSAGES.VALIDATION.PRODUCT.DISCOUNT_INVALID),
-
-  body("stock")
-    .optional()
-    .isInt({ min: 0 }).withMessage(MESSAGES.VALIDATION.PRODUCT.STOCK_MUST_BE_NUMBER),
 
   body("description")
     .optional()

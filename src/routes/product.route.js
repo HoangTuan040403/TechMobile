@@ -28,21 +28,10 @@ const { authenticate, authorize } = require("../middlewares/auth.middleware");
  *             type: object
  *             required:
  *               - name
- *               - price
  *             properties:
  *               name:
  *                 type: string
  *                 example: "iPhone 15 Pro Max"
- *               price:
- *                 type: number
- *                 example: 29990000
- *               discount:
- *                 type: number
- *                 nullable: true
- *                 example: 10
- *               stock:
- *                 type: integer
- *                 example: 100
  *               description:
  *                 type: string
  *                 example: "Tính năng nổi bật"
@@ -71,18 +60,6 @@ const { authenticate, authorize } = require("../middlewares/auth.middleware");
  *                     name:
  *                       type: string
  *                       example: "iPhone 15 Pro Max"
- *                     price:
- *                       type: number
- *                       example: 29990000
- *                     discount:
- *                       type: number
- *                       example: 10
- *                     price_after_discount:
- *                       type: number
- *                       example: 26991000
- *                     stock:
- *                       type: integer
- *                       example: 100
  *                     description:
  *                       type: string
  *                     category_id:
@@ -158,19 +135,6 @@ router.post("/", authenticate, authorize("admin"), createProductValidator, valid
  *                           name:
  *                             type: string
  *                             example: "iPhone 15 Pro Max"
- *                           price:
- *                             type: number
- *                             example: 29990000
- *                           discount:
- *                             type: number
- *                             nullable: true
- *                             example: 10
- *                           price_after_discount:
- *                             type: number
- *                             example: 26991000
- *                           stock:
- *                             type: integer
- *                             example: 100
  *                           category_id:
  *                             type: string
  *                           specs:
@@ -230,19 +194,6 @@ router.get("/", ProductController.getProducts);
  *                     name:
  *                       type: string
  *                       example: "iPhone 15 Pro Max"
- *                     price:
- *                       type: number
- *                       example: 29990000
- *                     discount:
- *                       type: number
- *                       nullable: true
- *                       example: 10
- *                     price_after_discount:
- *                       type: number
- *                       example: 26991000
- *                     stock:
- *                       type: integer
- *                       example: 100
  *                     description:
  *                       type: string
  *                     category_id:
@@ -293,16 +244,6 @@ router.get("/:id", getProductByIdValidator, validate, ProductController.getProdu
  *               name:
  *                 type: string
  *                 example: "iPhone 15 Pro Max"
- *               price:
- *                 type: number
- *                 example: 29990000
- *               discount:
- *                 type: number
- *                 nullable: true
- *                 example: 10
- *               stock:
- *                 type: integer
- *                 example: 100
  *               description:
  *                 type: string
  *               category_id:
@@ -331,19 +272,6 @@ router.get("/:id", getProductByIdValidator, validate, ProductController.getProdu
  *                     name:
  *                       type: string
  *                       example: "iPhone 15 Pro Max"
- *                     price:
- *                       type: number
- *                       example: 29990000
- *                     discount:
- *                       type: number
- *                       nullable: true
- *                       example: 10
- *                     price_after_discount:
- *                       type: number
- *                       example: 26991000
- *                     stock:
- *                       type: integer
- *                       example: 100
  *                     description:
  *                       type: string
  *                     category_id:

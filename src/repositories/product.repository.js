@@ -27,14 +27,14 @@ class ProductRepository extends BaseRepository {
       query,
       page,
       limit,
-      select: "_id name price discount stock category_id specs createdAt"
+      select: "_id name category_id specs createdAt"
     });
   }
 
   async findById(id) {
     return await this.model
       .findById(id)
-      .select("_id name price discount stock description category_id specs createdAt")
+      .select("_id name description category_id specs createdAt")
       .populate("category_id", "_id name slug")
       .lean();
   }
@@ -50,7 +50,7 @@ class ProductRepository extends BaseRepository {
         data,
         { new: true, runValidators: true }
       )
-      .select("_id name price discount stock description category_id specs updatedAt")
+      .select("_id name description category_id specs updatedAt")
       .lean();
   }
 }

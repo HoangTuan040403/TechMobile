@@ -6,10 +6,6 @@ const { createError } = require("../utils/error.util");
 const formatProduct = (product) => ({
   _id: product._id,
   name: product.name,
-  price: product.price,
-  discount: product.discount,
-  price_after_discount: product.price * (1 - product.discount / 100),
-  stock: product.stock,
   category_id: product.category_id,
   specs: product.specs,
   createdAt: product.createdAt
@@ -20,7 +16,7 @@ const formatProductDetail = (product) => ({
   description: product.description
 });
 
-const createProduct = async ({ name, price, discount, stock, description, category_id, specs }) => {
+const createProduct = async ({ name, description, category_id, specs }) => {
   const existingName = await productRepository.findByName(name);
   if (existingName) throw createError(MESSAGES.PRODUCT.NAME_ALREADY_EXISTS, 409);
 
@@ -31,9 +27,6 @@ const createProduct = async ({ name, price, discount, stock, description, catego
 
   const product = await productRepository.create({
     name,
-    price,
-    discount: discount || 0,
-    stock: stock || 0,
     description,
     category_id: category_id || null,
     specs: specs || {}
@@ -63,7 +56,7 @@ const getProductById = async (id) => {
   return formatProductDetail(product);
 };
 
-const updateProduct = async (id, { name, price, discount, stock, description, category_id, specs }) => {
+const updateProduct = async (id, { name, description, category_id, specs }) => {
   const existing = await productRepository.findById(id);
   if (!existing) throw createError(MESSAGES.PRODUCT.NOT_FOUND, 404);
 
@@ -79,9 +72,6 @@ const updateProduct = async (id, { name, price, discount, stock, description, ca
 
   const updatePayload = {};
   if (name !== undefined) updatePayload.name = name;
-  if (price !== undefined) updatePayload.price = price;
-  if (discount !== undefined) updatePayload.discount = discount;
-  if (stock !== undefined) updatePayload.stock = stock;
   if (description !== undefined) updatePayload.description = description;
   if (category_id !== undefined) updatePayload.category_id = category_id || null;
   if (specs !== undefined) updatePayload.specs = specs;

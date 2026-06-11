@@ -12,6 +12,7 @@ const productRoute = require("./routes/product.route");
 const productImageRoute = require("./routes/product-image.route");
 const cartRoute = require("./routes/cart.route");
 const addressRoute = require("./routes/address.route");
+const productVariantRoute = require("./routes/product-variant.route");
 
 const app = express();
 
@@ -29,6 +30,7 @@ app.use("/api/products", productRoute);
 app.use("/api/products/:id/images", productImageRoute);
 app.use("/api/cart", cartRoute);
 app.use("/api/addresses", addressRoute);
+app.use("/api/products/:id/variants", productVariantRoute);
 
 app.get("/", (req, res) => {
   res.send("Hello World!");

@@ -99,6 +99,19 @@ module.exports = {
       ADDRESS_MUST_BE_STRING: "Address must be a string",
       IS_DEFAULT_MUST_BE_BOOLEAN: "is_default must be a boolean",
       ID_INVALID: "Invalid address ID format"
+    },
+    PRODUCT_VARIANT: {
+      ATTRIBUTES_MUST_BE_ARRAY: "Attributes must be an array",
+      ATTRIBUTE_KEY_REQUIRED: "Attribute key is required",
+      ATTRIBUTE_VALUE_REQUIRED: "Attribute value is required",
+      PRICE_REQUIRED: "Price is required",
+      PRICE_MUST_BE_NUMBER: "Price must be a number",
+      PRICE_MUST_BE_POSITIVE: "Price must be greater than 0",
+      DISCOUNT_MUST_BE_NUMBER: "Discount must be a number",
+      DISCOUNT_INVALID: "Discount must be between 0 and 100",
+      STOCK_MUST_BE_NUMBER: "Stock must be a non-negative integer",
+      SKU_MUST_BE_STRING: "SKU must be a string",
+      ID_INVALID: "Invalid variant ID format"
     }
   },
 
@@ -158,5 +171,10 @@ module.exports = {
   ADDRESS: {
     NOT_FOUND: "Address not found",
     DELETED_SUCCESS: "Address deleted successfully"
+  },
+
+  PRODUCT_VARIANT: {
+    NOT_FOUND: "Product variant not found",
+    DELETED_SUCCESS: "Product variant deleted successfully"
   }
 };

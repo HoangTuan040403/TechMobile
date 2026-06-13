@@ -10,6 +10,7 @@ const productVariantSchema = new mongoose.Schema(
 
     attributes: [
       {
+        _id: false,
         key: { type: String, required: true },
         value: { type: String, required: true }
       }
@@ -34,9 +35,7 @@ const productVariantSchema = new mongoose.Schema(
     },
 
     sku: {
-      type: String,
-      unique: true,
-      sparse: true
+      type: String
     },
 
     deletedAt: {
@@ -48,6 +47,7 @@ const productVariantSchema = new mongoose.Schema(
 );
 
 productVariantSchema.index({ product_id: 1 });
+productVariantSchema.index({ sku: 1 }, { unique: true, sparse: true });
 productVariantSchema.index({ deletedAt: 1 });
 
 productVariantSchema.pre(/^find/, function (next) {

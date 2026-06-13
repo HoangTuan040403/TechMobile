@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router({ mergeParams: true });
 const ProductVariantController = require("../controllers/product-variant.controller");
-const { createProductVariantValidator, productIdValidator } = require("../validator/product-variant.validator");
+const { createProductVariantValidator, productIdValidator, variantIdValidator } = require("../validator/product-variant.validator");
 const { validate } = require("../middlewares/validate.middleware");
 const { authenticate, authorize } = require("../middlewares/auth.middleware");
 
@@ -193,5 +193,79 @@ router.post("/", authenticate, authorize("admin"), createProductVariantValidator
  *         description: Internal server error
  */
 router.get("/", productIdValidator, validate, ProductVariantController.getProductVariants);
+
+/**
+ * @swagger
+ * /api/products/{id}/variants/{variantId}:
+ *   get:
+ *     summary: Get a variant by ID
+ *     tags: [ProductVariant]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Product ID
+ *       - in: path
+ *         name: variantId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Variant ID
+ *     responses:
+ *       200:
+ *         description: Variant retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   example: OK
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     _id:
+ *                       type: string
+ *                     attributes:
+ *                       type: array
+ *                       items:
+ *                         type: object
+ *                         properties:
+ *                           key:
+ *                             type: string
+ *                             example: "color"
+ *                           value:
+ *                             type: string
+ *                             example: "Titan Đen"
+ *                     price:
+ *                       type: number
+ *                       example: 29990000
+ *                     discount:
+ *                       type: number
+ *                       nullable: true
+ *                       example: 10
+ *                     price_after_discount:
+ *                       type: number
+ *                       example: 26991000
+ *                     stock:
+ *                       type: integer
+ *                       example: 100
+ *                     sku:
+ *                       type: string
+ *                       nullable: true
+ *                     createdAt:
+ *                       type: string
+ *                       format: date-time
+ *       400:
+ *         description: Invalid ID format
+ *       404:
+ *         description: Product or variant not found
+ *       500:
+ *         description: Internal server error
+ */
+router.get("/:variantId", variantIdValidator, validate, ProductVariantController.getProductVariantById);
 
 module.exports = router;

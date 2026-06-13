@@ -11,4 +11,9 @@ const getProductVariants = asyncHandler(async (req, res) => {
   return res.status(200).json({ status: "OK", data: result });
 });
 
-module.exports = { createProductVariant, getProductVariants };
+const getProductVariantById = asyncHandler(async (req, res) => {
+  const result = await ProductVariantService.getProductVariantById(req.params.id, req.params.variantId);
+  return res.status(200).json({ status: "OK", data: result });
+});
+
+module.exports = { createProductVariant, getProductVariants, getProductVariantById };

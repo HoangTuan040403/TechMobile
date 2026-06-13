@@ -42,4 +42,10 @@ const createProductVariantValidator = [
     .isString().withMessage(MESSAGES.VALIDATION.PRODUCT_VARIANT.SKU_MUST_BE_STRING)
 ];
 
-module.exports = { productIdValidator, createProductVariantValidator };
+const variantIdValidator = [
+  param("variantId")
+    .custom((value) => mongoose.Types.ObjectId.isValid(value))
+    .withMessage(MESSAGES.VALIDATION.PRODUCT_VARIANT.ID_INVALID)
+];
+
+module.exports = { productIdValidator, createProductVariantValidator, variantIdValidator };

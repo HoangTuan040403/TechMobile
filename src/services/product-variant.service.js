@@ -24,7 +24,7 @@ const createProductVariant = async (product_id, { attributes, price, discount, s
     price,
     discount: discount || 0,
     stock: stock || 0,
-    sku: sku || null
+    ...(sku && { sku })
   });
 
   return {
@@ -41,4 +41,18 @@ const getProductVariants = async (product_id) => {
   return variants.map(formatVariant);
 };
 
-module.exports = { createProductVariant, getProductVariants };
+const getProductVariantById = async (product_id, variant_id) => {
+  const product = await productRepository.findById(product_id);
+  if (!product) throw createError(MESSAGES.PRODUCT.NOT_FOUND, 404);
+
+  const variant = await productVariantRepository.findById(variant_id);
+  if (!variant) throw createError(MESSAGES.PRODUCT_VARIANT.NOT_FOUND, 404);
+
+  if (variant.product_id.toString() !== product_id.toString()) {
+    throw createError(MESSAGES.PRODUCT_VARIANT.NOT_FOUND, 404);
+  }
+
+  return formatVariant(variant);
+};
+
+module.exports = { createProductVariant, getProductVariants, getProductVariantById };

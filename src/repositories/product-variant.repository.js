@@ -12,6 +12,13 @@ class ProductVariantRepository extends BaseRepository {
       .select("_id product_id attributes price discount stock sku createdAt")
       .lean();
   }
+
+  async findById(id) {
+    return await this.model
+      .findById(id)
+      .select("_id product_id attributes price discount stock sku createdAt")
+      .lean();
+  }
 }
 
 module.exports = new ProductVariantRepository();

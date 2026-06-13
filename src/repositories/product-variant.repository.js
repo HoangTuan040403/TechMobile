@@ -19,6 +19,17 @@ class ProductVariantRepository extends BaseRepository {
       .select("_id product_id attributes price discount stock sku createdAt")
       .lean();
   }
+
+  async updateByIdAndReturn(id, data) {
+    return await this.model
+      .findOneAndUpdate(
+        { _id: id, deletedAt: null },
+        data,
+        { new: true, runValidators: true }
+      )
+      .select("_id product_id attributes price discount stock sku updatedAt")
+      .lean();
+  }
 }
 
 module.exports = new ProductVariantRepository();

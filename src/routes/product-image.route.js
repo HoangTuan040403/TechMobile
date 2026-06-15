@@ -43,6 +43,11 @@ const upload = require("../middlewares/upload.middleware");
  *                   type: string
  *                   format: binary
  *                 description: Image files (jpeg, png, webp - max 5MB each)
+ *               variant_id:
+ *                 type: string
+ *                 nullable: true
+ *                 example: "64f1b2c3d4e5f6a7b8c9d0e1"
+ *                 description: Variant ID, null for product general images
  *     responses:
  *       201:
  *         description: Images uploaded successfully
@@ -61,6 +66,9 @@ const upload = require("../middlewares/upload.middleware");
  *                     properties:
  *                       _id:
  *                         type: string
+ *                       variant_id:
+ *                         type: string
+ *                         nullable: true
  *                       url:
  *                         type: string
  *                         example: "https://res.cloudinary.com/..."
@@ -104,6 +112,11 @@ router.post("/", authenticate, authorize("admin"), upload.array("images", 10), p
  *         schema:
  *           type: string
  *         description: Product ID
+ *       - in: query
+ *         name: variant_id
+ *         schema:
+ *           type: string
+ *         description: Filter by variant ID
  *     responses:
  *       200:
  *         description: Images retrieved successfully
@@ -122,6 +135,9 @@ router.post("/", authenticate, authorize("admin"), upload.array("images", 10), p
  *                     properties:
  *                       _id:
  *                         type: string
+ *                       variant_id:
+ *                         type: string
+ *                         nullable: true
  *                       url:
  *                         type: string
  *                         example: "https://res.cloudinary.com/..."
@@ -196,6 +212,9 @@ router.get("/", productIdValidator, validate, ProductImageController.getProductI
  *                   properties:
  *                     _id:
  *                       type: string
+ *                     variant_id:
+ *                       type: string
+ *                       nullable: true
  *                     url:
  *                       type: string
  *                       example: "https://res.cloudinary.com/..."

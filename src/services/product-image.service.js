@@ -6,6 +6,7 @@ const { uploadToCloudinary, deleteFromCloudinary } = require("../utils/cloudinar
 
 const formatImage = (img) => ({
   _id: img._id,
+  variant_id: img.variant_id,
   url: img.url,
   public_id: img.public_id,
   is_thumbnail: img.is_thumbnail,
@@ -13,21 +14,29 @@ const formatImage = (img) => ({
   createdAt: img.createdAt
 });
 
-const uploadProductImages = async (product_id, files) => {
+const uploadProductImages = async (product_id, files, variant_id) => {
   const product = await productRepository.findById(product_id);
   if (!product) throw createError(MESSAGES.PRODUCT.NOT_FOUND, 404);
 
   const existingImages = await productImageRepository.findByProductId(product_id);
-  const nextOrder = existingImages.length;
+  
+  const variantImages = existingImages.filter((img) => {
+    const imgVariantId = img.variant_id?.toString() ?? null;
+    const inputVariantId = variant_id ?? null;
+    return imgVariantId === inputVariantId;
+  });
+
+  const nextOrder = variantImages.length;
 
   const uploaded = await Promise.all(
     files.map(async (file, index) => {
       const { url, public_id } = await uploadToCloudinary(file, "products");
       return productImageRepository.create({
         product_id,
+        variant_id: variant_id || null,
         url,
         public_id,
-        is_thumbnail: existingImages.length === 0 && index === 0,
+        is_thumbnail: variantImages.length === 0 && index === 0,
         order: nextOrder + index
       });
     })
@@ -36,11 +45,16 @@ const uploadProductImages = async (product_id, files) => {
   return uploaded.map(formatImage);
 };
 
-const getProductImages = async (product_id) => {
+const getProductImages = async (product_id, variant_id) => {
   const product = await productRepository.findById(product_id);
   if (!product) throw createError(MESSAGES.PRODUCT.NOT_FOUND, 404);
 
   const images = await productImageRepository.findByProductId(product_id);
+
+  if (variant_id) {
+    return images.filter((img) => img.variant_id?.toString() === variant_id).map(formatImage);
+  }
+
   return images.map(formatImage);
 };
 
@@ -54,7 +68,7 @@ const updateProductImage = async (product_id, image_id, { is_thumbnail, order })
   const updatePayload = {};
 
   if (is_thumbnail === true) {
-    await productImageRepository.clearThumbnail(product_id);
+    await productImageRepository.clearThumbnail(product_id, image.variant_id);
     updatePayload.is_thumbnail = true;
   }
 

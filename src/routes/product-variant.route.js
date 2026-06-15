@@ -380,4 +380,52 @@ router.get("/:variantId", variantIdValidator, validate, ProductVariantController
  */
 router.patch("/:variantId", authenticate, authorize("admin"), updateProductVariantValidator, validate, ProductVariantController.updateProductVariant);
 
+/**
+ * @swagger
+ * /api/products/{id}/variants/{variantId}:
+ *   delete:
+ *     summary: Delete a product variant (Admin only)
+ *     tags: [ProductVariant]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Product ID
+ *       - in: path
+ *         name: variantId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Variant ID
+ *     responses:
+ *       200:
+ *         description: Product variant deleted successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   example: OK
+ *                 message:
+ *                   type: string
+ *                   example: "Product variant deleted successfully"
+ *       400:
+ *         description: Invalid ID format
+ *       401:
+ *         description: Unauthorized
+ *       403:
+ *         description: Forbidden - Admins only
+ *       404:
+ *         description: Product or variant not found
+ *       500:
+ *         description: Internal server error
+ */
+router.delete("/:variantId", authenticate, authorize("admin"), variantIdValidator, validate, ProductVariantController.deleteProductVariant);
+
 module.exports = router;

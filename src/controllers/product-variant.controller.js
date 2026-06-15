@@ -1,5 +1,6 @@
 const asyncHandler = require("../utils/asyncHandler.util");
 const ProductVariantService = require("../services/product-variant.service");
+const MESSAGES = require("../constants/messages");
 
 const createProductVariant = asyncHandler(async (req, res) => {
   const result = await ProductVariantService.createProductVariant(req.params.id, req.body);
@@ -21,4 +22,9 @@ const updateProductVariant = asyncHandler(async (req, res) => {
   return res.status(200).json({ status: "OK", data: result });
 });
 
-module.exports = { createProductVariant, getProductVariants, getProductVariantById, updateProductVariant };
+const deleteProductVariant = asyncHandler(async (req, res) => {
+  await ProductVariantService.deleteProductVariant(req.params.id, req.params.variantId);
+  return res.status(200).json({ status: "OK", message: MESSAGES.PRODUCT_VARIANT.DELETED_SUCCESS });
+});
+
+module.exports = { createProductVariant, getProductVariants, getProductVariantById, updateProductVariant, deleteProductVariant };

@@ -77,4 +77,18 @@ const updateProductVariant = async (product_id, variant_id, { attributes, price,
   return formatVariant(updated);
 };
 
-module.exports = { createProductVariant, getProductVariants, getProductVariantById, updateProductVariant };
+const deleteProductVariant = async (product_id, variant_id) => {
+  const product = await productRepository.findById(product_id);
+  if (!product) throw createError(MESSAGES.PRODUCT.NOT_FOUND, 404);
+
+  const variant = await productVariantRepository.findById(variant_id);
+  if (!variant) throw createError(MESSAGES.PRODUCT_VARIANT.NOT_FOUND, 404);
+
+  if (variant.product_id.toString() !== product_id.toString()) {
+    throw createError(MESSAGES.PRODUCT_VARIANT.NOT_FOUND, 404);
+  }
+
+  await productVariantRepository.softDeleteById(variant_id);
+};
+
+module.exports = { createProductVariant, getProductVariants, getProductVariantById, updateProductVariant, deleteProductVariant };

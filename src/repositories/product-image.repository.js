@@ -9,7 +9,7 @@ class ProductImageRepository extends BaseRepository {
   async findByProductId(product_id) {
     return await this.model
       .find({ product_id })
-      .select("_id url public_id is_thumbnail order createdAt")
+      .select("_id variant_id url public_id is_thumbnail order createdAt")
       .sort({ order: 1 })
       .lean();
   }
@@ -17,7 +17,7 @@ class ProductImageRepository extends BaseRepository {
   async findById(id) {
     return await this.model
       .findById(id)
-      .select("_id url public_id is_thumbnail order product_id createdAt")
+      .select("_id variant_id url public_id is_thumbnail order product_id createdAt")
       .lean();
   }
 
@@ -28,13 +28,13 @@ class ProductImageRepository extends BaseRepository {
         data,
         { new: true, runValidators: true }
       )
-      .select("_id url public_id is_thumbnail order updatedAt")
+      .select("_id variant_id url public_id is_thumbnail order updatedAt")
       .lean();
   }
 
-  async clearThumbnail(product_id) {
+  async clearThumbnail(product_id, variant_id) {
     return await this.model.updateMany(
-      { product_id, deletedAt: null },
+      { product_id, variant_id: variant_id ?? null, deletedAt: null },
       { is_thumbnail: false }
     );
   }

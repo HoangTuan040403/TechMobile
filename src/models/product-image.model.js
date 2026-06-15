@@ -7,10 +7,18 @@ const productImageSchema = new mongoose.Schema(
       ref: "Product",
       required: true
     },
+
+    variant_id: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "ProductVariant",
+      default: null
+    },
+
     url: { type: String, required: true },
     public_id: { type: String, required: true },
     is_thumbnail: { type: Boolean, default: false },
     order: { type: Number, default: 0 },
+
     deletedAt: {
       type: Date,
       default: null
@@ -20,6 +28,7 @@ const productImageSchema = new mongoose.Schema(
 );
 
 productImageSchema.index({ product_id: 1 });
+productImageSchema.index({ variant_id: 1 });
 productImageSchema.index({ deletedAt: 1 });
 
 productImageSchema.pre(/^find/, function (next) {

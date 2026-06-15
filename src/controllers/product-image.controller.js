@@ -3,12 +3,13 @@ const ProductImageService = require("../services/product-image.service");
 const MESSAGES = require("../constants/messages");
 
 const uploadProductImages = asyncHandler(async (req, res) => {
-  const result = await ProductImageService.uploadProductImages(req.params.id, req.files);
+  const result = await ProductImageService.uploadProductImages(req.params.id, req.files, req.body.variant_id
+  );
   return res.status(201).json({ status: "OK", data: result });
 });
 
 const getProductImages = asyncHandler(async (req, res) => {
-  const result = await ProductImageService.getProductImages(req.params.id);
+  const result = await ProductImageService.getProductImages(req.params.id, req.query.variant_id);
   return res.status(200).json({ status: "OK", data: result });
 });
 

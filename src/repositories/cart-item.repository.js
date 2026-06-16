@@ -6,14 +6,15 @@ class CartItemRepository extends BaseRepository {
     super(CartItem);
   }
 
-  async findByCartIdAndProductId(cart_id, product_id) {
-    return await this.model.findOne({ cart_id, product_id });
+  async findByCartIdAndVariantId(cart_id, variant_id) {
+    return await this.model.findOne({ cart_id, variant_id });
   }
 
   async findByCartId(cart_id) {
     return await this.model
       .find({ cart_id })
-      .populate("product_id", "_id name price discount specs")
+      .populate("product_id", "_id name specs")
+      .populate("variant_id", "_id attributes price discount stock")
       .lean();
   }
 

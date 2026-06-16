@@ -16,7 +16,7 @@ const { authenticate } = require("../middlewares/auth.middleware");
  * @swagger
  * /api/cart:
  *   post:
- *     summary: Add a product to cart
+ *     summary: Add a product variant to cart
  *     tags: [Cart]
  *     security:
  *       - bearerAuth: []
@@ -28,10 +28,14 @@ const { authenticate } = require("../middlewares/auth.middleware");
  *             type: object
  *             required:
  *               - product_id
+ *               - variant_id
  *             properties:
  *               product_id:
  *                 type: string
  *                 example: "64f1b2c3d4e5f6a7b8c9d0e1"
+ *               variant_id:
+ *                 type: string
+ *                 example: "64f1b2c3d4e5f6a7b8c9d0e2"
  *               quantity:
  *                 type: integer
  *                 example: 1
@@ -54,7 +58,7 @@ const { authenticate } = require("../middlewares/auth.middleware");
  *       401:
  *         description: Unauthorized
  *       404:
- *         description: Product not found
+ *         description: Product or variant not found
  *       422:
  *         description: Validation error
  *       500:
@@ -99,6 +103,24 @@ router.post("/", authenticate, addToCartValidator, validate, CartController.addT
  *                               name:
  *                                 type: string
  *                                 example: "iPhone 15 Pro Max"
+ *                               specs:
+ *                                 type: object
+ *                           variant:
+ *                             type: object
+ *                             properties:
+ *                               _id:
+ *                                 type: string
+ *                               attributes:
+ *                                 type: array
+ *                                 items:
+ *                                   type: object
+ *                                   properties:
+ *                                     key:
+ *                                       type: string
+ *                                       example: "color"
+ *                                     value:
+ *                                       type: string
+ *                                       example: "Titan Đen"
  *                               price:
  *                                 type: number
  *                                 example: 29990000
@@ -108,8 +130,6 @@ router.post("/", authenticate, addToCartValidator, validate, CartController.addT
  *                               price_after_discount:
  *                                 type: number
  *                                 example: 26991000
- *                               specs:
- *                                 type: object
  *                           quantity:
  *                             type: integer
  *                             example: 1

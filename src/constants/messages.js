@@ -88,7 +88,9 @@ module.exports = {
       PRODUCT_ID_REQUIRED: "Product ID is required",
       PRODUCT_ID_INVALID: "Product ID must be a valid MongoDB ObjectId",
       QUANTITY_MUST_BE_NUMBER: "Quantity must be a positive integer",
-      ITEM_ID_INVALID: "Invalid cart item ID format"
+      ITEM_ID_INVALID: "Invalid cart item ID format",
+      VARIANT_ID_REQUIRED: "Variant ID is required",
+      VARIANT_ID_INVALID: "Variant ID must be a valid MongoDB ObjectId"
     },
     ADDRESS: {
       FULL_NAME_REQUIRED: "Full name is required",

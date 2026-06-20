@@ -8,6 +8,11 @@ const addToCartValidator = [
     .custom((value) => mongoose.Types.ObjectId.isValid(value))
     .withMessage(MESSAGES.VALIDATION.CART.PRODUCT_ID_INVALID),
 
+  body("variant_id")
+    .notEmpty().withMessage(MESSAGES.VALIDATION.CART.VARIANT_ID_REQUIRED)
+    .custom((value) => mongoose.Types.ObjectId.isValid(value))
+    .withMessage(MESSAGES.VALIDATION.CART.VARIANT_ID_INVALID),
+
   body("quantity")
     .optional()
     .isInt({ min: 1 }).withMessage(MESSAGES.VALIDATION.CART.QUANTITY_MUST_BE_NUMBER)

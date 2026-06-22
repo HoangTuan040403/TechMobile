@@ -114,6 +114,11 @@ module.exports = {
       STOCK_MUST_BE_NUMBER: "Stock must be a non-negative integer",
       SKU_MUST_BE_STRING: "SKU must be a string",
       ID_INVALID: "Invalid variant ID format"
+    },
+    ORDER: {
+      ADDRESS_ID_INVALID: "address_id must be a valid MongoDB ObjectId",
+      NOTE_MUST_BE_STRING: "Note must be a string",
+      ID_INVALID: "Invalid order ID format"
     }
   },
 
@@ -178,5 +183,14 @@ module.exports = {
   PRODUCT_VARIANT: {
     NOT_FOUND: "Product variant not found",
     DELETED_SUCCESS: "Product variant deleted successfully"
+  },
+
+  ORDER: {
+    NOT_FOUND: "Order not found",
+    CART_EMPTY: "Cart is empty",
+    CANCELLED_SUCCESS: "Order cancelled successfully",
+    CANNOT_CANCEL: "Only pending orders can be cancelled",
+    DELETED_SUCCESS: "Order deleted successfully",
+    TOO_MANY_REQUESTS: "Too many orders, please try again later"
   }
 };

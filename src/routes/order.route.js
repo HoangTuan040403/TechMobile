@@ -110,4 +110,87 @@ const { orderRateLimit } = require("../middlewares/rateLimiter.middleware");
  */
 router.post("/", authenticate, orderRateLimit, createOrderValidator, validate, OrderController.createOrder);
 
+/**
+ * @swagger
+ * /api/orders:
+ *   get:
+ *     summary: Get all orders of current user
+ *     tags: [Order]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *           default: 1
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *           default: 10
+ *       - in: query
+ *         name: status
+ *         schema:
+ *           type: string
+ *           enum: [pending, paid, shipped, completed, cancelled]
+ *         description: Filter by order status
+ *     responses:
+ *       200:
+ *         description: Orders retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   example: OK
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     orders:
+ *                       type: array
+ *                       items:
+ *                         type: object
+ *                         properties:
+ *                           _id:
+ *                             type: string
+ *                           total_price:
+ *                             type: number
+ *                             example: 26991000
+ *                           status:
+ *                             type: string
+ *                             example: "pending"
+ *                           shipping_address:
+ *                             type: string
+ *                             nullable: true
+ *                           note:
+ *                             type: string
+ *                             nullable: true
+ *                           createdAt:
+ *                             type: string
+ *                             format: date-time
+ *                     pagination:
+ *                       type: object
+ *                       properties:
+ *                         total:
+ *                           type: integer
+ *                           example: 10
+ *                         page:
+ *                           type: integer
+ *                           example: 1
+ *                         limit:
+ *                           type: integer
+ *                           example: 10
+ *                         totalPages:
+ *                           type: integer
+ *                           example: 1
+ *       401:
+ *         description: Unauthorized
+ *       500:
+ *         description: Internal server error
+ */
+router.get("/", authenticate, OrderController.getOrders);
+
 module.exports = router;

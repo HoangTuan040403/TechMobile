@@ -84,4 +84,14 @@ const createOrder = async (user_id, { address_id, note }) => {
   };
 };
 
-module.exports = { createOrder };
+const getOrders = async (user_id, query) => {
+  const page = parseInt(query.page) || 1;
+  const limit = parseInt(query.limit) || 10;
+  const status = query.status || undefined;
+
+  const { data, pagination } = await orderRepository.findAllByUserId({ user_id, page, limit, status });
+
+  return { orders: data, pagination };
+};
+
+module.exports = { createOrder, getOrders };

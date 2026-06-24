@@ -140,4 +140,15 @@ const cancelOrder = async (user_id, id) => {
   await orderRepository.updateById(id, { status: ORDER_STATUS.CANCELLED });
 };
 
-module.exports = { createOrder, getOrders, getOrderById, cancelOrder };
+const getAllOrders = async (query) => {
+  const page = parseInt(query.page) || 1;
+  const limit = parseInt(query.limit) || 10;
+  const status = query.status || undefined;
+  const user_id = query.user_id || undefined;
+
+  const { data, pagination } = await orderRepository.findAllOrders({ page, limit, status, user_id });
+
+  return { orders: data, pagination };
+};
+
+module.exports = { createOrder, getOrders, getOrderById, cancelOrder, getAllOrders };

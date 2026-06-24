@@ -118,7 +118,11 @@ module.exports = {
     ORDER: {
       ADDRESS_ID_INVALID: "address_id must be a valid MongoDB ObjectId",
       NOTE_MUST_BE_STRING: "Note must be a string",
-      ID_INVALID: "Invalid order ID format"
+      ID_INVALID: "Invalid order ID format",
+      STATUS_INVALID: "Invalid order status",
+      USER_ID_INVALID: "Invalid user ID format",
+      PAGE_MUST_BE_POSITIVE: "Page must be a positive integer",
+      LIMIT_INVALID: "Limit must be between 1 and 100"
     }
   },
 

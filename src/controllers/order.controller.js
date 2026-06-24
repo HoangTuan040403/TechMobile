@@ -22,4 +22,9 @@ const cancelOrder = asyncHandler(async (req, res) => {
   return res.status(200).json({ status: "OK", message: MESSAGES.ORDER.CANCELLED_SUCCESS });
 });
 
-module.exports = { createOrder, getOrders, getOrderById, cancelOrder };
+const getAllOrders = asyncHandler(async (req, res) => {
+  const result = await OrderService.getAllOrders(req.query);
+  return res.status(200).json({ status: "OK", data: result });
+});
+
+module.exports = { createOrder, getOrders, getOrderById, cancelOrder, getAllOrders };

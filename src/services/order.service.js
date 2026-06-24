@@ -94,4 +94,26 @@ const getOrders = async (user_id, query) => {
   return { orders: data, pagination };
 };
 
-module.exports = { createOrder, getOrders };
+const getOrderById = async (user_id, id) => {
+  const order = await orderRepository.findById(id);
+  if (!order) throw createError(MESSAGES.ORDER.NOT_FOUND, 404);
+
+  if (order.user_id.toString() !== user_id.toString()) {
+    throw createError(MESSAGES.ORDER.NOT_FOUND, 404);
+  }
+
+  const items = await orderItemRepository.findByOrderId(order._id);
+
+  return {
+    _id: order._id,
+    total_price: order.total_price,
+    status: order.status,
+    address_id: order.address_id,
+    shipping_address: order.shipping_address,
+    note: order.note,
+    items,
+    createdAt: order.createdAt
+  };
+};
+
+module.exports = { createOrder, getOrders, getOrderById };

@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const OrderController = require("../controllers/order.controller");
-const { createOrderValidator } = require("../validator/order.validator");
+const { createOrderValidator, orderIdValidator } = require("../validator/order.validator");
 const { validate } = require("../middlewares/validate.middleware");
 const { authenticate } = require("../middlewares/auth.middleware");
 const { orderRateLimit } = require("../middlewares/rateLimiter.middleware");
@@ -192,5 +192,94 @@ router.post("/", authenticate, orderRateLimit, createOrderValidator, validate, O
  *         description: Internal server error
  */
 router.get("/", authenticate, OrderController.getOrders);
+
+/**
+ * @swagger
+ * /api/orders/{id}:
+ *   get:
+ *     summary: Get an order by ID
+ *     tags: [Order]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Order ID
+ *     responses:
+ *       200:
+ *         description: Order retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   example: OK
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     _id:
+ *                       type: string
+ *                     total_price:
+ *                       type: number
+ *                       example: 26991000
+ *                     status:
+ *                       type: string
+ *                       example: "pending"
+ *                     address_id:
+ *                       type: string
+ *                       nullable: true
+ *                     shipping_address:
+ *                       type: string
+ *                       nullable: true
+ *                       example: "Nguyen Van A, 0987654321, 123 Nguyen Hue"
+ *                     note:
+ *                       type: string
+ *                       nullable: true
+ *                     items:
+ *                       type: array
+ *                       items:
+ *                         type: object
+ *                         properties:
+ *                           _id:
+ *                             type: string
+ *                           product_id:
+ *                             type: string
+ *                           variant_id:
+ *                             type: string
+ *                           product_name:
+ *                             type: string
+ *                           variant_attributes:
+ *                             type: array
+ *                             items:
+ *                               type: object
+ *                               properties:
+ *                                 key:
+ *                                   type: string
+ *                                 value:
+ *                                   type: string
+ *                           price:
+ *                             type: number
+ *                           quantity:
+ *                             type: integer
+ *                           subtotal:
+ *                             type: number
+ *                     createdAt:
+ *                       type: string
+ *                       format: date-time
+ *       400:
+ *         description: Invalid ID format
+ *       401:
+ *         description: Unauthorized
+ *       404:
+ *         description: Order not found
+ *       500:
+ *         description: Internal server error
+ */
+router.get("/:id", authenticate, orderIdValidator, validate, OrderController.getOrderById);
 
 module.exports = router;

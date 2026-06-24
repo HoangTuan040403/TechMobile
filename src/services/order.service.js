@@ -116,4 +116,28 @@ const getOrderById = async (user_id, id) => {
   };
 };
 
-module.exports = { createOrder, getOrders, getOrderById };
+const cancelOrder = async (user_id, id) => {
+  const order = await orderRepository.findById(id);
+  if (!order) throw createError(MESSAGES.ORDER.NOT_FOUND, 404);
+
+  if (order.user_id.toString() !== user_id.toString()) {
+    throw createError(MESSAGES.ORDER.NOT_FOUND, 404);
+  }
+
+  if (order.status !== ORDER_STATUS.PENDING) {
+    throw createError(MESSAGES.ORDER.CANNOT_CANCEL, 400);
+  }
+
+  const items = await orderItemRepository.findByOrderId(id);
+  await Promise.all(
+    items.map((item) =>
+      productVariantRepository.updateById(item.variant_id, {
+        $inc: { stock: item.quantity }
+      })
+    )
+  );
+
+  await orderRepository.updateById(id, { status: ORDER_STATUS.CANCELLED });
+};
+
+module.exports = { createOrder, getOrders, getOrderById, cancelOrder };

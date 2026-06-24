@@ -282,4 +282,44 @@ router.get("/", authenticate, OrderController.getOrders);
  */
 router.get("/:id", authenticate, orderIdValidator, validate, OrderController.getOrderById);
 
+/**
+ * @swagger
+ * /api/orders/{id}/cancel:
+ *   patch:
+ *     summary: Cancel an order
+ *     tags: [Order]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Order ID
+ *     responses:
+ *       200:
+ *         description: Order cancelled successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   example: OK
+ *                 message:
+ *                   type: string
+ *                   example: "Order cancelled successfully"
+ *       400:
+ *         description: Only pending orders can be cancelled
+ *       401:
+ *         description: Unauthorized
+ *       404:
+ *         description: Order not found
+ *       500:
+ *         description: Internal server error
+ */
+router.patch("/:id/cancel", authenticate, orderIdValidator, validate, OrderController.cancelOrder);
+
 module.exports = router;

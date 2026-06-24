@@ -14,6 +14,7 @@ const cartRoute = require("./routes/cart.route");
 const addressRoute = require("./routes/address.route");
 const productVariantRoute = require("./routes/product-variant.route");
 const orderRoute = require("./routes/order.route");
+const adminOrderRoute = require("./routes/admin.order.route");
 
 const app = express();
 
@@ -33,6 +34,7 @@ app.use("/api/cart", cartRoute);
 app.use("/api/addresses", addressRoute);
 app.use("/api/products/:id/variants", productVariantRoute);
 app.use("/api/orders", orderRoute);
+app.use("/api/admin/orders", adminOrderRoute);
 
 app.get("/", (req, res) => {
   res.send("Hello World!");

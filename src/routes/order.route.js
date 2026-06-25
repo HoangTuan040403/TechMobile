@@ -27,10 +27,11 @@ const { orderRateLimit } = require("../middlewares/rateLimiter.middleware");
  *         application/json:
  *           schema:
  *             type: object
+ *             required:
+ *               - address_id
  *             properties:
  *               address_id:
  *                 type: string
- *                 nullable: true
  *                 example: "64f1b2c3d4e5f6a7b8c9d0e1"
  *               note:
  *                 type: string
@@ -58,9 +59,11 @@ const { orderRateLimit } = require("../middlewares/rateLimiter.middleware");
  *                     status:
  *                       type: string
  *                       example: "pending"
+ *                     type:
+ *                       type: string
+ *                       example: "online"
  *                     address_id:
  *                       type: string
- *                       nullable: true
  *                     shipping_address:
  *                       type: string
  *                       nullable: true
@@ -230,6 +233,9 @@ router.get("/", authenticate, OrderController.getOrders);
  *                     status:
  *                       type: string
  *                       example: "pending"
+ *                     type:
+ *                       type: string
+ *                       example: "online"
  *                     address_id:
  *                       type: string
  *                       nullable: true

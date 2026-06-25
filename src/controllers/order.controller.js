@@ -27,4 +27,9 @@ const getAllOrders = asyncHandler(async (req, res) => {
   return res.status(200).json({ status: "OK", data: result });
 });
 
-module.exports = { createOrder, getOrders, getOrderById, cancelOrder, getAllOrders };
+const updateOrderStatus = asyncHandler(async (req, res) => {
+  await OrderService.updateOrderStatus(req.params.id, req.body);
+  return res.status(200).json({ status: "OK", message: MESSAGES.ORDER.STATUS_UPDATED });
+});
+
+module.exports = { createOrder, getOrders, getOrderById, cancelOrder, getAllOrders, updateOrderStatus };

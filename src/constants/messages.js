@@ -122,7 +122,8 @@ module.exports = {
       STATUS_INVALID: "Invalid order status",
       USER_ID_INVALID: "Invalid user ID format",
       PAGE_MUST_BE_POSITIVE: "Page must be a positive integer",
-      LIMIT_INVALID: "Limit must be between 1 and 100"
+      LIMIT_INVALID: "Limit must be between 1 and 100",
+      STATUS_REQUIRED: "Status is required"
     }
   },
 
@@ -195,6 +196,8 @@ module.exports = {
     CANCELLED_SUCCESS: "Order cancelled successfully",
     CANNOT_CANCEL: "Only pending orders can be cancelled",
     DELETED_SUCCESS: "Order deleted successfully",
-    TOO_MANY_REQUESTS: "Too many orders, please try again later"
+    TOO_MANY_REQUESTS: "Too many orders, please try again later",
+    STATUS_UPDATED: "Order status updated successfully",
+    INVALID_STATUS_TRANSITION: "Invalid order status transition"
   }
 };

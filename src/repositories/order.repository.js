@@ -10,7 +10,7 @@ class OrderRepository extends BaseRepository {
   async findById(id) {
     return await this.model
       .findById(id)
-      .select("_id user_id total_price status address_id shipping_address note createdAt")
+      .select("_id user_id total_price status type address_id shipping_address note createdAt")
       .lean();
   }
 
@@ -26,13 +26,6 @@ class OrderRepository extends BaseRepository {
       limit,
       select: "_id total_price status shipping_address createdAt"
     });
-  }
-
-  async findById(id) {
-    return await this.model
-      .findById(id)
-      .select("_id user_id total_price status address_id shipping_address note createdAt")
-      .lean();
   }
 
   async findAllOrders({ page, limit, status, user_id }) {

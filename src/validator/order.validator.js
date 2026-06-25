@@ -6,7 +6,7 @@ const { PAGINATION } = require("../constants/pagination.constant");
 
 const createOrderValidator = [
   body("address_id")
-    .optional()
+    .notEmpty().withMessage(MESSAGES.VALIDATION.ORDER.ADDRESS_ID_REQUIRED)
     .custom((value) => mongoose.Types.ObjectId.isValid(value))
     .withMessage(MESSAGES.VALIDATION.ORDER.ADDRESS_ID_INVALID),
 

@@ -123,7 +123,8 @@ module.exports = {
       USER_ID_INVALID: "Invalid user ID format",
       PAGE_MUST_BE_POSITIVE: "Page must be a positive integer",
       LIMIT_INVALID: "Limit must be between 1 and 100",
-      STATUS_REQUIRED: "Status is required"
+      STATUS_REQUIRED: "Status is required",
+      ADDRESS_ID_REQUIRED: "Address is required"
     }
   },
 

@@ -6,7 +6,19 @@ const productVariantRepository = require("../repositories/product-variant.reposi
 const addressRepository = require("../repositories/address.repository");
 const MESSAGES = require("../constants/messages");
 const { createError } = require("../utils/error.util");
-const { ORDER_STATUS, STATUS_TRANSITIONS } = require("../constants/order.constant");
+const { ORDER_STATUS, STATUS_TRANSITIONS, ORDER_TYPE } = require("../constants/order.constant");
+
+const formatOrder = (order, items) => ({
+  _id: order._id,
+  total_price: order.total_price,
+  status: order.status,
+  type: order.type,
+  address_id: order.address_id,
+  shipping_address: order.shipping_address,
+  note: order.note,
+  items,
+  createdAt: order.createdAt
+});
 
 const createOrder = async (user_id, { address_id, note }) => {
   const cart = await cartRepository.findByUserId(user_id);
@@ -53,6 +65,7 @@ const createOrder = async (user_id, { address_id, note }) => {
     user_id,
     total_price,
     status: ORDER_STATUS.PENDING,
+    type: ORDER_TYPE.ONLINE,
     address_id: address_id || null,
     shipping_address,
     note: note || null
@@ -72,16 +85,7 @@ const createOrder = async (user_id, { address_id, note }) => {
 
   await cartItemRepository.deleteByCartId(cart._id);
 
-  return {
-    _id: order._id,
-    total_price: order.total_price,
-    status: order.status,
-    address_id: order.address_id,
-    shipping_address: order.shipping_address,
-    note: order.note,
-    items: orderItems,
-    createdAt: order.createdAt
-  };
+  return formatOrder(order, orderItems);
 };
 
 const getOrders = async (user_id, query) => {
@@ -104,16 +108,7 @@ const getOrderById = async (user_id, id) => {
 
   const items = await orderItemRepository.findByOrderId(order._id);
 
-  return {
-    _id: order._id,
-    total_price: order.total_price,
-    status: order.status,
-    address_id: order.address_id,
-    shipping_address: order.shipping_address,
-    note: order.note,
-    items,
-    createdAt: order.createdAt
-  };
+  return formatOrder(order, items);
 };
 
 const cancelOrder = async (user_id, id) => {

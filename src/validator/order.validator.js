@@ -43,4 +43,15 @@ const getOrdersValidator = [
     .withMessage(MESSAGES.VALIDATION.ORDER.LIMIT_INVALID)
 ];
 
-module.exports = { createOrderValidator, orderIdValidator, getOrdersValidator };
+const updateOrderStatusValidator = [
+  param("id")
+    .custom((value) => mongoose.Types.ObjectId.isValid(value))
+    .withMessage(MESSAGES.VALIDATION.ORDER.ID_INVALID),
+
+  body("status")
+    .notEmpty().withMessage(MESSAGES.VALIDATION.ORDER.STATUS_REQUIRED)
+    .isIn(Object.values(ORDER_STATUS))
+    .withMessage(MESSAGES.VALIDATION.ORDER.STATUS_INVALID)
+];
+
+module.exports = { createOrderValidator, orderIdValidator, getOrdersValidator, updateOrderStatusValidator };

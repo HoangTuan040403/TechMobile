@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const { ORDER_STATUS } = require("../constants/order.constant");
+const { ORDER_STATUS, ORDER_TYPE } = require("../constants/order.constant");
 
 const orderSchema = new mongoose.Schema(
   {
@@ -34,6 +34,12 @@ const orderSchema = new mongoose.Schema(
     note: {
       type: String,
       default: null
+    },
+
+    type: {
+      type: String,
+      enum: Object.values(ORDER_TYPE),
+      default: ORDER_TYPE.ONLINE
     },
 
     deletedAt: {

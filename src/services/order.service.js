@@ -6,7 +6,7 @@ const productVariantRepository = require("../repositories/product-variant.reposi
 const addressRepository = require("../repositories/address.repository");
 const MESSAGES = require("../constants/messages");
 const { createError } = require("../utils/error.util");
-const { ORDER_STATUS } = require("../constants/order.constant");
+const { ORDER_STATUS, STATUS_TRANSITIONS } = require("../constants/order.constant");
 
 const createOrder = async (user_id, { address_id, note }) => {
   const cart = await cartRepository.findByUserId(user_id);
@@ -151,4 +151,16 @@ const getAllOrders = async (query) => {
   return { orders: data, pagination };
 };
 
-module.exports = { createOrder, getOrders, getOrderById, cancelOrder, getAllOrders };
+const updateOrderStatus = async (id, { status }) => {
+  const order = await orderRepository.findById(id);
+  if (!order) throw createError(MESSAGES.ORDER.NOT_FOUND, 404);
+
+  const allowedTransitions = STATUS_TRANSITIONS[order.type][order.status];
+  if (!allowedTransitions.includes(status)) {
+    throw createError(MESSAGES.ORDER.INVALID_STATUS_TRANSITION, 400);
+  }
+
+  await orderRepository.updateById(id, { status });
+};
+
+module.exports = { createOrder, getOrders, getOrderById, cancelOrder, getAllOrders, updateOrderStatus };

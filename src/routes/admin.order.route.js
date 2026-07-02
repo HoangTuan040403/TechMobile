@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const OrderController = require("../controllers/order.controller");
-const { orderIdValidator, getOrdersValidator, updateOrderStatusValidator } = require("../validator/order.validator");
+const { orderIdValidator, getOrdersValidator, updateOrderStatusValidator, createOrderByAdminValidator } = require("../validator/order.validator");
 const { validate } = require("../middlewares/validate.middleware");
 const { authenticate, authorize } = require("../middlewares/auth.middleware");
 
@@ -157,5 +157,133 @@ router.get("/", authenticate, authorize("admin"), getOrdersValidator, validate, 
  *         description: Internal server error
  */
 router.patch("/:id/status", authenticate, authorize("admin"), updateOrderStatusValidator, validate, OrderController.updateOrderStatus);
+
+/**
+ * @swagger
+ * /api/admin/orders:
+ *   post:
+ *     summary: Create a new instore order (Admin only)
+ *     tags: [AdminOrder]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - items
+ *             properties:
+ *               user_id:
+ *                 type: string
+ *                 nullable: true
+ *                 example: "64f1b2c3d4e5f6a7b8c9d0e1"
+ *               guest_name:
+ *                 type: string
+ *                 nullable: true
+ *                 example: "Nguyen Van A"
+ *               guest_phone:
+ *                 type: string
+ *                 nullable: true
+ *                 example: "0987654321"
+ *               note:
+ *                 type: string
+ *                 nullable: true
+ *                 example: "Khách mua tại cửa hàng"
+ *               items:
+ *                 type: array
+ *                 items:
+ *                   type: object
+ *                   required:
+ *                     - variant_id
+ *                     - quantity
+ *                   properties:
+ *                     variant_id:
+ *                       type: string
+ *                       example: "64f1b2c3d4e5f6a7b8c9d0e3"
+ *                     quantity:
+ *                       type: integer
+ *                       example: 1
+ *     responses:
+ *       201:
+ *         description: Order created successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   example: OK
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     _id:
+ *                       type: string
+ *                     user_id:
+ *                       type: string
+ *                       nullable: true
+ *                     guest_name:
+ *                       type: string
+ *                       nullable: true
+ *                     guest_phone:
+ *                       type: string
+ *                       nullable: true
+ *                     total_price:
+ *                       type: number
+ *                       example: 26991000
+ *                     status:
+ *                       type: string
+ *                       example: "pending"
+ *                     type:
+ *                       type: string
+ *                       example: "instore"
+ *                     note:
+ *                       type: string
+ *                       nullable: true
+ *                     items:
+ *                       type: array
+ *                       items:
+ *                         type: object
+ *                         properties:
+ *                           product_id:
+ *                             type: string
+ *                           variant_id:
+ *                             type: string
+ *                           product_name:
+ *                             type: string
+ *                           variant_attributes:
+ *                             type: array
+ *                             items:
+ *                               type: object
+ *                               properties:
+ *                                 key:
+ *                                   type: string
+ *                                 value:
+ *                                   type: string
+ *                           price:
+ *                             type: number
+ *                           quantity:
+ *                             type: integer
+ *                           subtotal:
+ *                             type: number
+ *                     createdAt:
+ *                       type: string
+ *                       format: date-time
+ *       400:
+ *         description: Insufficient stock
+ *       401:
+ *         description: Unauthorized
+ *       403:
+ *         description: Forbidden - Admins only
+ *       404:
+ *         description: User or variant not found
+ *       422:
+ *         description: Validation error
+ *       500:
+ *         description: Internal server error
+ */
+router.post("/", authenticate, authorize("admin"), createOrderByAdminValidator, validate, OrderController.createOrderByAdmin);
 
 module.exports = router;

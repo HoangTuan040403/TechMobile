@@ -6,7 +6,17 @@ const orderSchema = new mongoose.Schema(
     user_id: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
-      required: true
+      default: null
+    },
+
+    guest_name: {
+      type: String,
+      default: null
+    },
+
+    guest_phone: {
+      type: String,
+      default: null
     },
 
     total_price: {

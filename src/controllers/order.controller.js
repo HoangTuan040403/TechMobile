@@ -32,4 +32,9 @@ const updateOrderStatus = asyncHandler(async (req, res) => {
   return res.status(200).json({ status: "OK", message: MESSAGES.ORDER.STATUS_UPDATED });
 });
 
-module.exports = { createOrder, getOrders, getOrderById, cancelOrder, getAllOrders, updateOrderStatus };
+const createOrderByAdmin = asyncHandler(async (req, res) => {
+  const result = await OrderService.createOrderByAdmin(req.body);
+  return res.status(201).json({ status: "OK", data: result });
+});
+
+module.exports = { createOrder, getOrders, getOrderById, cancelOrder, getAllOrders, updateOrderStatus, createOrderByAdmin };

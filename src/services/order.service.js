@@ -3,6 +3,7 @@ const orderItemRepository = require("../repositories/order-item.repository");
 const cartRepository = require("../repositories/cart.repository");
 const cartItemRepository = require("../repositories/cart-item.repository");
 const productVariantRepository = require("../repositories/product-variant.repository");
+const userRepository = require("../repositories/user.repository");
 const addressRepository = require("../repositories/address.repository");
 const MESSAGES = require("../constants/messages");
 const { createError } = require("../utils/error.util");
@@ -158,4 +159,64 @@ const updateOrderStatus = async (id, { status }) => {
   await orderRepository.updateById(id, { status });
 };
 
-module.exports = { createOrder, getOrders, getOrderById, cancelOrder, getAllOrders, updateOrderStatus };
+const createOrderByAdmin = async ({ user_id, guest_name, guest_phone, note, items }) => {
+  if (user_id) {
+    const user = await userRepository.findById(user_id);
+    if (!user) throw createError(MESSAGES.AUTH.USER_NOT_FOUND, 404);
+  }
+
+  const orderItems = await Promise.all(
+    items.map(async (item) => {
+      const variant = await productVariantRepository.findByIdWithProduct(item.variant_id);
+      if (!variant) throw createError(MESSAGES.PRODUCT_VARIANT.NOT_FOUND, 404);
+      if (variant.stock < item.quantity) {
+        throw createError(MESSAGES.CART.INSUFFICIENT_STOCK, 400);
+      }
+
+      const discount = variant.discount || 0;
+      const price = Math.round(variant.price * (1 - discount / 100) / 1000) * 1000;
+
+      return {
+        product_id: variant.product_id._id,
+        variant_id: variant._id,
+        product_name: variant.product_id.name,
+        variant_attributes: variant.attributes,
+        price,
+        quantity: item.quantity,
+        subtotal: price * item.quantity
+      };
+    })
+  );
+
+  const total_price = orderItems.reduce((sum, item) => sum + item.subtotal, 0);
+
+  const order = await orderRepository.create({
+    user_id: user_id || null,
+    guest_name: guest_name || null,
+    guest_phone: guest_phone || null,
+    total_price,
+    status: ORDER_STATUS.PENDING,
+    type: ORDER_TYPE.INSTORE,
+    note: note || null
+  });
+
+  await orderItemRepository.createMany(
+    orderItems.map((item) => ({ ...item, order_id: order._id }))
+  );
+
+  await Promise.all(
+    items.map((item) =>
+      productVariantRepository.updateById(item.variant_id, {
+        $inc: { stock: -item.quantity }
+      })
+    )
+  );
+
+  return {
+    ...formatOrder(order, orderItems),
+    guest_name: order.guest_name,
+    guest_phone: order.guest_phone
+  };
+};
+
+module.exports = { createOrder, getOrders, getOrderById, cancelOrder, getAllOrders, updateOrderStatus, createOrderByAdmin };

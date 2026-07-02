@@ -124,7 +124,16 @@ module.exports = {
       PAGE_MUST_BE_POSITIVE: "Page must be a positive integer",
       LIMIT_INVALID: "Limit must be between 1 and 100",
       STATUS_REQUIRED: "Status is required",
-      ADDRESS_ID_REQUIRED: "Address is required"
+      ADDRESS_ID_REQUIRED: "Address is required",
+      GUEST_NAME_MUST_BE_STRING: "Guest name must be a string",
+      GUEST_PHONE_INVALID: "Invalid guest phone number",
+      USER_OR_GUEST_REQUIRED: "Either user_id or guest_name and guest_phone are required",
+      ITEMS_REQUIRED: "Items are required",
+      ITEMS_MUST_BE_ARRAY: "Items must be an array with at least 1 item",
+      VARIANT_ID_REQUIRED: "Variant ID is required",
+      VARIANT_ID_INVALID: "Invalid variant ID format",
+      QUANTITY_REQUIRED: "Quantity is required",
+      QUANTITY_INVALID: "Quantity must be a positive integer"
     }
   },
 

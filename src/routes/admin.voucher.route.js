@@ -132,4 +132,108 @@ const { authenticate, authorize } = require("../middlewares/auth.middleware");
  */
 router.post("/", authenticate, authorize("admin"), createVoucherValidator, validate, VoucherController.createVoucher);
 
+/**
+ * @swagger
+ * /api/admin/vouchers:
+ *   get:
+ *     summary: Get all vouchers (Admin only)
+ *     tags: [AdminVoucher]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *           default: 1
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *           default: 10
+ *       - in: query
+ *         name: search
+ *         schema:
+ *           type: string
+ *         description: Search by voucher code
+ *     responses:
+ *       200:
+ *         description: Vouchers retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   example: OK
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     vouchers:
+ *                       type: array
+ *                       items:
+ *                         type: object
+ *                         properties:
+ *                           _id:
+ *                             type: string
+ *                           code:
+ *                             type: string
+ *                             example: "SALE10"
+ *                           discount_type:
+ *                             type: string
+ *                             example: "percentage"
+ *                           discount_value:
+ *                             type: number
+ *                             example: 10
+ *                           max_discount:
+ *                             type: number
+ *                             nullable: true
+ *                             example: 100000
+ *                           min_order_value:
+ *                             type: number
+ *                             example: 500000
+ *                           max_uses:
+ *                             type: integer
+ *                             nullable: true
+ *                             example: 100
+ *                           used_count:
+ *                             type: integer
+ *                             example: 0
+ *                           start_date:
+ *                             type: string
+ *                             format: date-time
+ *                           end_date:
+ *                             type: string
+ *                             format: date-time
+ *                           isActive:
+ *                             type: boolean
+ *                             example: true
+ *                           createdAt:
+ *                             type: string
+ *                             format: date-time
+ *                     pagination:
+ *                       type: object
+ *                       properties:
+ *                         total:
+ *                           type: integer
+ *                           example: 20
+ *                         page:
+ *                           type: integer
+ *                           example: 1
+ *                         limit:
+ *                           type: integer
+ *                           example: 10
+ *                         totalPages:
+ *                           type: integer
+ *                           example: 2
+ *       401:
+ *         description: Unauthorized
+ *       403:
+ *         description: Forbidden - Admins only
+ *       500:
+ *         description: Internal server error
+ */
+router.get("/", authenticate, authorize("admin"), VoucherController.getVouchers);
+
 module.exports = router;

@@ -134,6 +134,27 @@ module.exports = {
       VARIANT_ID_INVALID: "Invalid variant ID format",
       QUANTITY_REQUIRED: "Quantity is required",
       QUANTITY_INVALID: "Quantity must be a positive integer"
+    },
+    VOUCHER: {
+      CODE_REQUIRED: "Code is required",
+      CODE_MUST_BE_STRING: "Code must be a string",
+      DISCOUNT_TYPE_REQUIRED: "Discount type is required",
+      DISCOUNT_TYPE_INVALID: "Discount type must be percentage or fixed",
+      DISCOUNT_VALUE_REQUIRED: "Discount value is required",
+      DISCOUNT_VALUE_MUST_BE_NUMBER: "Discount value must be a number",
+      DISCOUNT_VALUE_MUST_BE_POSITIVE: "Discount value must be greater than 0",
+      MAX_DISCOUNT_MUST_BE_NUMBER: "Max discount must be a number",
+      MAX_DISCOUNT_MUST_BE_POSITIVE: "Max discount must be greater than 0",
+      MIN_ORDER_VALUE_MUST_BE_NUMBER: "Min order value must be a number",
+      MIN_ORDER_VALUE_INVALID: "Min order value must be greater than or equal to 0",
+      MAX_USES_MUST_BE_NUMBER: "Max uses must be a positive integer",
+      MAX_USES_PER_USER_MUST_BE_NUMBER: "Max uses per user must be a positive integer",
+      START_DATE_REQUIRED: "Start date is required",
+      START_DATE_INVALID: "Invalid start date format",
+      END_DATE_REQUIRED: "End date is required",
+      END_DATE_INVALID: "Invalid end date format",
+      END_DATE_MUST_BE_AFTER_START_DATE: "End date must be after start date",
+      ID_INVALID: "Invalid voucher ID format"
     }
   },
 
@@ -209,5 +230,10 @@ module.exports = {
     TOO_MANY_REQUESTS: "Too many orders, please try again later",
     STATUS_UPDATED: "Order status updated successfully",
     INVALID_STATUS_TRANSITION: "Invalid order status transition"
+  },
+
+  VOUCHER: {
+    NOT_FOUND: "Voucher not found",
+    CODE_ALREADY_EXISTS: "Voucher code already exists",
   }
 };

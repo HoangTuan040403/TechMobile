@@ -42,4 +42,14 @@ const createVoucher = async ({ code, discount_type, discount_value, max_discount
   return formatVoucher(voucher);
 };
 
-module.exports = { createVoucher };
+const getVouchers = async (query) => {
+  const page = parseInt(query.page) || 1;
+  const limit = parseInt(query.limit) || 10;
+  const search = query.search || "";
+
+  const { data, pagination } = await voucherRepository.findAllVouchers({ page, limit, search });
+
+  return { vouchers: data, pagination };
+};
+
+module.exports = { createVoucher, getVouchers };

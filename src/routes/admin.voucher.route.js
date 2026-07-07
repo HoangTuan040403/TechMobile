@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const VoucherController = require("../controllers/voucher.controller");
-const { createVoucherValidator } = require("../validator/voucher.validator");
+const { createVoucherValidator, voucherIdValidator } = require("../validator/voucher.validator");
 const { validate } = require("../middlewares/validate.middleware");
 const { authenticate, authorize } = require("../middlewares/auth.middleware");
 
@@ -235,5 +235,87 @@ router.post("/", authenticate, authorize("admin"), createVoucherValidator, valid
  *         description: Internal server error
  */
 router.get("/", authenticate, authorize("admin"), VoucherController.getVouchers);
+
+/**
+ * @swagger
+ * /api/admin/vouchers/{id}:
+ *   get:
+ *     summary: Get a voucher by ID (Admin only)
+ *     tags: [AdminVoucher]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Voucher ID
+ *     responses:
+ *       200:
+ *         description: Voucher retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   example: OK
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     _id:
+ *                       type: string
+ *                     code:
+ *                       type: string
+ *                       example: "SALE10"
+ *                     discount_type:
+ *                       type: string
+ *                       example: "percentage"
+ *                     discount_value:
+ *                       type: number
+ *                       example: 10
+ *                     max_discount:
+ *                       type: number
+ *                       nullable: true
+ *                       example: 100000
+ *                     min_order_value:
+ *                       type: number
+ *                       example: 500000
+ *                     max_uses:
+ *                       type: integer
+ *                       nullable: true
+ *                       example: 100
+ *                     max_uses_per_user:
+ *                       type: integer
+ *                       example: 1
+ *                     used_count:
+ *                       type: integer
+ *                       example: 0
+ *                     start_date:
+ *                       type: string
+ *                       format: date-time
+ *                     end_date:
+ *                       type: string
+ *                       format: date-time
+ *                     isActive:
+ *                       type: boolean
+ *                       example: true
+ *                     createdAt:
+ *                       type: string
+ *                       format: date-time
+ *       400:
+ *         description: Invalid ID format
+ *       401:
+ *         description: Unauthorized
+ *       403:
+ *         description: Forbidden - Admins only
+ *       404:
+ *         description: Voucher not found
+ *       500:
+ *         description: Internal server error
+ */
+router.get("/:id", authenticate, authorize("admin"), voucherIdValidator, validate, VoucherController.getVoucherById);
 
 module.exports = router;

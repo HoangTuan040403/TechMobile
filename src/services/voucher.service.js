@@ -52,4 +52,10 @@ const getVouchers = async (query) => {
   return { vouchers: data, pagination };
 };
 
-module.exports = { createVoucher, getVouchers };
+const getVoucherById = async (id) => {
+  const voucher = await voucherRepository.findById(id);
+  if (!voucher) throw createError(MESSAGES.VOUCHER.NOT_FOUND, 404);
+  return formatVoucher(voucher);
+};
+
+module.exports = { createVoucher, getVouchers, getVoucherById };

@@ -239,5 +239,6 @@ module.exports = {
     CODE_ALREADY_EXISTS: "Voucher code already exists",
     MAX_DISCOUNT_NOT_ALLOWED: "Max discount is not allowed for fixed discount type",
     DISCOUNT_VALUE_INVALID: "Discount value must be between 1 and 100 for percentage type",
+    DELETED_SUCCESS: "Voucher deleted successfully"
   }
 };

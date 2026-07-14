@@ -33,6 +33,21 @@ class VoucherRepository extends BaseRepository {
       .select("_id code discount_type discount_value max_discount min_order_value max_uses max_uses_per_user used_count start_date end_date isActive createdAt")
       .lean();
   }
+
+  async findByCodeExcludeId(code, excludeId) {
+    return await this.model.findOne({ code, _id: { $ne: excludeId } });
+  }
+
+  async updateByIdAndReturn(id, data) {
+    return await this.model
+      .findOneAndUpdate(
+        { _id: id, deletedAt: null },
+        data,
+        { new: true, runValidators: true }
+      )
+      .select("_id code discount_type discount_value max_discount min_order_value max_uses max_uses_per_user used_count start_date end_date isActive updatedAt")
+      .lean();
+  }
 }
 
 module.exports = new VoucherRepository();

@@ -16,4 +16,9 @@ const getVoucherById = asyncHandler(async (req, res) => {
   return res.status(200).json({ status: "OK", data: result });
 });
 
-module.exports = { createVoucher, getVouchers, getVoucherById };
+const updateVoucher = asyncHandler(async (req, res) => {
+  const result = await VoucherService.updateVoucher(req.params.id, req.body);
+  return res.status(200).json({ status: "OK", data: result });
+});
+
+module.exports = { createVoucher, getVouchers, getVoucherById, updateVoucher };

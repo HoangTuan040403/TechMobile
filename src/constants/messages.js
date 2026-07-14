@@ -154,7 +154,9 @@ module.exports = {
       END_DATE_REQUIRED: "End date is required",
       END_DATE_INVALID: "Invalid end date format",
       END_DATE_MUST_BE_AFTER_START_DATE: "End date must be after start date",
-      ID_INVALID: "Invalid voucher ID format"
+      ID_INVALID: "Invalid voucher ID format",
+      IS_ACTIVE_MUST_BE_BOOLEAN: "isActive must be a boolean",
+      DISCOUNT_VALUE_INVALID: "Discount value must be between 1 and 100 for percentage type"
     }
   },
 
@@ -235,5 +237,7 @@ module.exports = {
   VOUCHER: {
     NOT_FOUND: "Voucher not found",
     CODE_ALREADY_EXISTS: "Voucher code already exists",
+    MAX_DISCOUNT_NOT_ALLOWED: "Max discount is not allowed for fixed discount type",
+    DISCOUNT_VALUE_INVALID: "Discount value must be between 1 and 100 for percentage type",
   }
 };

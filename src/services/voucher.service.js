@@ -107,4 +107,11 @@ const updateVoucher = async (id, { code, discount_type, discount_value, max_disc
   return formatVoucher(updated);
 };
 
-module.exports = { createVoucher, getVouchers, getVoucherById, updateVoucher };
+const deleteVoucher = async (id) => {
+  const voucher = await voucherRepository.findById(id);
+  if (!voucher) throw createError(MESSAGES.VOUCHER.NOT_FOUND, 404);
+
+  await voucherRepository.softDeleteById(id);
+};
+
+module.exports = { createVoucher, getVouchers, getVoucherById, updateVoucher, deleteVoucher };

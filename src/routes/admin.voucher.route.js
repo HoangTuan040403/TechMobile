@@ -444,4 +444,46 @@ router.get("/:id", authenticate, authorize("admin"), voucherIdValidator, validat
  */
 router.patch("/:id", authenticate, authorize("admin"), updateVoucherValidator, validate, VoucherController.updateVoucher);
 
+/**
+ * @swagger
+ * /api/admin/vouchers/{id}:
+ *   delete:
+ *     summary: Delete a voucher (Admin only)
+ *     tags: [AdminVoucher]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Voucher ID
+ *     responses:
+ *       200:
+ *         description: Voucher deleted successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   example: OK
+ *                 message:
+ *                   type: string
+ *                   example: "Voucher deleted successfully"
+ *       400:
+ *         description: Invalid ID format
+ *       401:
+ *         description: Unauthorized
+ *       403:
+ *         description: Forbidden - Admins only
+ *       404:
+ *         description: Voucher not found
+ *       500:
+ *         description: Internal server error
+ */
+router.delete("/:id", authenticate, authorize("admin"), voucherIdValidator, validate, VoucherController.deleteVoucher);
+
 module.exports = router;

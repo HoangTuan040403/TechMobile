@@ -1,5 +1,6 @@
 const asyncHandler = require("../utils/asyncHandler.util");
 const VoucherService = require("../services/voucher.service");
+const MESSAGES = require("../constants/messages");
 
 const createVoucher = asyncHandler(async (req, res) => {
   const result = await VoucherService.createVoucher(req.body);
@@ -21,4 +22,9 @@ const updateVoucher = asyncHandler(async (req, res) => {
   return res.status(200).json({ status: "OK", data: result });
 });
 
-module.exports = { createVoucher, getVouchers, getVoucherById, updateVoucher };
+const deleteVoucher = asyncHandler(async (req, res) => {
+  await VoucherService.deleteVoucher(req.params.id);
+  return res.status(200).json({ status: "OK", message: MESSAGES.VOUCHER.DELETED_SUCCESS });
+});
+
+module.exports = { createVoucher, getVouchers, getVoucherById, updateVoucher, deleteVoucher };

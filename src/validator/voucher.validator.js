@@ -118,4 +118,15 @@ const updateVoucherValidator = [
     .isBoolean().withMessage(MESSAGES.VALIDATION.VOUCHER.IS_ACTIVE_MUST_BE_BOOLEAN)
 ];
 
-module.exports = { createVoucherValidator, voucherIdValidator, updateVoucherValidator };
+const applyVoucherValidator = [
+  body("code")
+    .notEmpty().withMessage(MESSAGES.VALIDATION.VOUCHER.CODE_REQUIRED)
+    .isString().withMessage(MESSAGES.VALIDATION.VOUCHER.CODE_MUST_BE_STRING),
+
+  body("order_total")
+    .notEmpty().withMessage(MESSAGES.VALIDATION.VOUCHER.ORDER_TOTAL_REQUIRED)
+    .isNumeric().withMessage(MESSAGES.VALIDATION.VOUCHER.ORDER_TOTAL_MUST_BE_NUMBER)
+    .custom((value) => value > 0).withMessage(MESSAGES.VALIDATION.VOUCHER.ORDER_TOTAL_MUST_BE_POSITIVE)
+];
+
+module.exports = { createVoucherValidator, voucherIdValidator, updateVoucherValidator, applyVoucherValidator };

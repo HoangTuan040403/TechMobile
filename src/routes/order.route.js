@@ -37,6 +37,10 @@ const { orderRateLimit } = require("../middlewares/rateLimiter.middleware");
  *                 type: string
  *                 nullable: true
  *                 example: "Giao hàng giờ hành chính"
+ *               voucher_code:
+ *                 type: string
+ *                 nullable: true
+ *                 example: "SALE10"
  *     responses:
  *       201:
  *         description: Order created successfully
@@ -56,6 +60,15 @@ const { orderRateLimit } = require("../middlewares/rateLimiter.middleware");
  *                     total_price:
  *                       type: number
  *                       example: 26991000
+ *                     voucher_id:
+ *                       type: string
+ *                       nullable: true
+ *                     discount_amount:
+ *                       type: number
+ *                       example: 100000
+ *                     final_total:
+ *                       type: number
+ *                       example: 26891000
  *                     status:
  *                       type: string
  *                       example: "pending"
@@ -101,11 +114,11 @@ const { orderRateLimit } = require("../middlewares/rateLimiter.middleware");
  *                       type: string
  *                       format: date-time
  *       400:
- *         description: Cart is empty or insufficient stock
+ *         description: Cart is empty, insufficient stock or voucher invalid
  *       401:
  *         description: Unauthorized
  *       404:
- *         description: Address not found
+ *         description: Address or voucher not found
  *       422:
  *         description: Validation error
  *       500:

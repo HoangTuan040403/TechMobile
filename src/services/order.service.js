@@ -8,10 +8,16 @@ const addressRepository = require("../repositories/address.repository");
 const MESSAGES = require("../constants/messages");
 const { createError } = require("../utils/error.util");
 const { ORDER_STATUS, STATUS_TRANSITIONS, ORDER_TYPE } = require("../constants/order.constant");
+const voucherRepository = require("../repositories/voucher.repository");
+const voucherUsageRepository = require("../repositories/voucher-usage.repository");
+const { DISCOUNT_TYPE } = require("../constants/voucher.constant");
 
 const formatOrder = (order, items) => ({
   _id: order._id,
   total_price: order.total_price,
+  voucher_id: order.voucher_id,
+  discount_amount: order.discount_amount,
+  final_total: order.final_total,
   status: order.status,
   type: order.type,
   address_id: order.address_id,
@@ -21,7 +27,7 @@ const formatOrder = (order, items) => ({
   createdAt: order.createdAt
 });
 
-const createOrder = async (user_id, { address_id, note }) => {
+const createOrder = async (user_id, { address_id, note, voucher_code }) => {
   const cart = await cartRepository.findByUserId(user_id);
   if (!cart) throw createError(MESSAGES.ORDER.CART_EMPTY, 400);
 
@@ -62,9 +68,50 @@ const createOrder = async (user_id, { address_id, note }) => {
 
   const total_price = orderItems.reduce((sum, item) => sum + item.subtotal, 0);
 
+  let voucher = null;
+  let discount_amount = 0;
+
+  if (voucher_code) {
+    voucher = await voucherRepository.findByCode(voucher_code);
+    if (!voucher) throw createError(MESSAGES.VOUCHER.NOT_FOUND, 404);
+
+    if (!voucher.isActive) throw createError(MESSAGES.VOUCHER.INACTIVE, 400);
+
+    const now = new Date();
+    if (now < voucher.start_date) throw createError(MESSAGES.VOUCHER.NOT_STARTED, 400);
+    if (now > voucher.end_date) throw createError(MESSAGES.VOUCHER.EXPIRED, 400);
+
+    if (voucher.max_uses !== null && voucher.used_count >= voucher.max_uses) {
+      throw createError(MESSAGES.VOUCHER.MAX_USES_REACHED, 400);
+    }
+
+    if (total_price < voucher.min_order_value) {
+      throw createError(MESSAGES.VOUCHER.MIN_ORDER_VALUE_NOT_MET, 400);
+    }
+
+    const userUsageCount = await voucherUsageRepository.countByVoucherAndUser(voucher._id, user_id);
+    if (userUsageCount >= voucher.max_uses_per_user) {
+      throw createError(MESSAGES.VOUCHER.MAX_USES_PER_USER_REACHED, 400);
+    }
+
+    if (voucher.discount_type === DISCOUNT_TYPE.PERCENTAGE) {
+      discount_amount = Math.round(total_price * voucher.discount_value / 100 / 1000) * 1000;
+      if (voucher.max_discount !== null && discount_amount > voucher.max_discount) {
+        discount_amount = voucher.max_discount;
+      }
+    } else {
+      discount_amount = voucher.discount_value;
+    }
+  }
+
+  const final_total = total_price - discount_amount;
+
   const order = await orderRepository.create({
     user_id,
     total_price,
+    voucher_id: voucher ? voucher._id : null,
+    discount_amount,
+    final_total,
     status: ORDER_STATUS.PENDING,
     type: ORDER_TYPE.ONLINE,
     address_id: address_id || null,
@@ -83,6 +130,18 @@ const createOrder = async (user_id, { address_id, note }) => {
       })
     )
   );
+
+  if (voucher) {
+    await voucherUsageRepository.create({
+      voucher_id: voucher._id,
+      user_id,
+      order_id: order._id
+    });
+
+    await voucherRepository.updateById(voucher._id, {
+      $inc: { used_count: 1 }
+    });
+  }
 
   await cartItemRepository.deleteByCartId(cart._id);
 

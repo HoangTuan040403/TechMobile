@@ -1,4 +1,5 @@
 const voucherRepository = require("../repositories/voucher.repository");
+const voucherUsageRepository = require("../repositories/voucher-usage.repository");
 const MESSAGES = require("../constants/messages");
 const { createError } = require("../utils/error.util");
 const { DISCOUNT_TYPE } = require("../constants/voucher.constant");
@@ -114,4 +115,48 @@ const deleteVoucher = async (id) => {
   await voucherRepository.softDeleteById(id);
 };
 
-module.exports = { createVoucher, getVouchers, getVoucherById, updateVoucher, deleteVoucher };
+const applyVoucher = async (user_id, { code, order_total }) => {
+  const voucher = await voucherRepository.findByCode(code);
+  if (!voucher) throw createError(MESSAGES.VOUCHER.NOT_FOUND, 404);
+
+  if (!voucher.isActive) throw createError(MESSAGES.VOUCHER.INACTIVE, 400);
+
+  const now = new Date();
+  if (now < voucher.start_date) throw createError(MESSAGES.VOUCHER.NOT_STARTED, 400);
+  if (now > voucher.end_date) throw createError(MESSAGES.VOUCHER.EXPIRED, 400);
+
+  if (voucher.max_uses !== null && voucher.used_count >= voucher.max_uses) {
+    throw createError(MESSAGES.VOUCHER.MAX_USES_REACHED, 400);
+  }
+
+  if (order_total < voucher.min_order_value) {
+    throw createError(MESSAGES.VOUCHER.MIN_ORDER_VALUE_NOT_MET, 400);
+  }
+
+  const userUsageCount = await voucherUsageRepository.countByVoucherAndUser(voucher._id, user_id);
+  if (userUsageCount >= voucher.max_uses_per_user) {
+    throw createError(MESSAGES.VOUCHER.MAX_USES_PER_USER_REACHED, 400);
+  }
+
+  let discount_amount = 0;
+  if (voucher.discount_type === DISCOUNT_TYPE.PERCENTAGE) {
+    discount_amount = Math.round(order_total * voucher.discount_value / 100 / 1000) * 1000;
+    if (voucher.max_discount !== null && discount_amount > voucher.max_discount) {
+      discount_amount = voucher.max_discount;
+    }
+  } else {
+    discount_amount = voucher.discount_value;
+  }
+
+  const final_total = order_total - discount_amount;
+
+  return {
+    code: voucher.code,
+    discount_type: voucher.discount_type,
+    discount_value: voucher.discount_value,
+    discount_amount,
+    final_total
+  };
+};
+
+module.exports = { createVoucher, getVouchers, getVoucherById, updateVoucher, deleteVoucher, applyVoucher };

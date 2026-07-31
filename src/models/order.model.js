@@ -52,6 +52,22 @@ const orderSchema = new mongoose.Schema(
       default: ORDER_TYPE.ONLINE
     },
 
+    voucher_id: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Voucher",
+      default: null
+    },
+
+    discount_amount: {
+      type: Number,
+      default: 0
+    },
+
+    final_total: {
+      type: Number,
+      default: 0
+    },
+
     deletedAt: {
       type: Date,
       default: null

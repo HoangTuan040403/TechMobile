@@ -12,7 +12,11 @@ const createOrderValidator = [
 
   body("note")
     .optional()
-    .isString().withMessage(MESSAGES.VALIDATION.ORDER.NOTE_MUST_BE_STRING)
+    .isString().withMessage(MESSAGES.VALIDATION.ORDER.NOTE_MUST_BE_STRING),
+
+  body("voucher_code")
+    .optional()
+    .isString().withMessage(MESSAGES.VALIDATION.ORDER.VOUCHER_CODE_MUST_BE_STRING)
 ];
 
 const orderIdValidator = [

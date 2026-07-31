@@ -133,7 +133,8 @@ module.exports = {
       VARIANT_ID_REQUIRED: "Variant ID is required",
       VARIANT_ID_INVALID: "Invalid variant ID format",
       QUANTITY_REQUIRED: "Quantity is required",
-      QUANTITY_INVALID: "Quantity must be a positive integer"
+      QUANTITY_INVALID: "Quantity must be a positive integer",
+      VOUCHER_CODE_MUST_BE_STRING: "Voucher code must be a string"
     },
     VOUCHER: {
       CODE_REQUIRED: "Code is required",
@@ -156,7 +157,10 @@ module.exports = {
       END_DATE_MUST_BE_AFTER_START_DATE: "End date must be after start date",
       ID_INVALID: "Invalid voucher ID format",
       IS_ACTIVE_MUST_BE_BOOLEAN: "isActive must be a boolean",
-      DISCOUNT_VALUE_INVALID: "Discount value must be between 1 and 100 for percentage type"
+      DISCOUNT_VALUE_INVALID: "Discount value must be between 1 and 100 for percentage type",
+      ORDER_TOTAL_REQUIRED: "Order total is required",
+      ORDER_TOTAL_MUST_BE_NUMBER: "Order total must be a number",
+      ORDER_TOTAL_MUST_BE_POSITIVE: "Order total must be greater than 0"
     }
   },
 
@@ -239,6 +243,12 @@ module.exports = {
     CODE_ALREADY_EXISTS: "Voucher code already exists",
     MAX_DISCOUNT_NOT_ALLOWED: "Max discount is not allowed for fixed discount type",
     DISCOUNT_VALUE_INVALID: "Discount value must be between 1 and 100 for percentage type",
-    DELETED_SUCCESS: "Voucher deleted successfully"
+    DELETED_SUCCESS: "Voucher deleted successfully",
+    INACTIVE: "Voucher is inactive",
+    NOT_STARTED: "Voucher is not yet available",
+    EXPIRED: "Voucher has expired",
+    MAX_USES_REACHED: "Voucher has reached maximum uses",
+    MIN_ORDER_VALUE_NOT_MET: "Order total does not meet minimum order value",
+    MAX_USES_PER_USER_REACHED: "You have reached the maximum uses for this voucher"
   }
 };

@@ -16,6 +16,7 @@ const productVariantRoute = require("./routes/product-variant.route");
 const orderRoute = require("./routes/order.route");
 const adminOrderRoute = require("./routes/admin.order.route");
 const adminVoucherRoute = require("./routes/admin.voucher.route");
+const vocuerRoute = require("./routes/voucher.route");
 
 const app = express();
 
@@ -37,6 +38,7 @@ app.use("/api/products/:id/variants", productVariantRoute);
 app.use("/api/orders", orderRoute);
 app.use("/api/admin/orders", adminOrderRoute);
 app.use("/api/admin/vouchers", adminVoucherRoute);
+app.use("/api/vouchers", vocuerRoute);
 
 app.get("/", (req, res) => {
   res.send("Hello World!");

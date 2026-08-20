@@ -23,14 +23,15 @@ class CategoryRepository extends BaseRepository {
   async findAll() {
     return await this.model
       .find()
-      .select("_id name slug parent_id ancestors image")
+      .select("_id name slug parent_id ancestors image order")
+      .sort({ order: 1, createdAt: 1 })
       .lean();
   }
 
   async findById(id) {
     return await this.model
       .findById(id)
-      .select("_id name slug parent_id ancestors image")
+      .select("_id name slug parent_id ancestors image order")
       .lean();
   }
 
@@ -49,7 +50,7 @@ class CategoryRepository extends BaseRepository {
         data,
         { new: true, runValidators: true }
       )
-      .select("_id name slug parent_id ancestors image updatedAt")
+      .select("_id name slug parent_id ancestors image order updatedAt")
       .lean();
   }
 }

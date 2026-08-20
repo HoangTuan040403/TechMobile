@@ -40,6 +40,11 @@ const categorySchema = new mongoose.Schema(
       }
     ],
 
+    order: {
+      type: Number,
+      default: 0
+    },
+
     deletedAt: {
       type: Date,
       default: null
@@ -51,6 +56,7 @@ const categorySchema = new mongoose.Schema(
 categorySchema.index({ parent_id: 1 });
 categorySchema.index({ ancestors: 1 });
 categorySchema.index({ deletedAt: 1 });
+categorySchema.index({ order: 1 });
 
 categorySchema.pre(/^find/, function (next) {
   this.where({ deletedAt: null });

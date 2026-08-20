@@ -40,6 +40,9 @@ const upload = require("../middlewares/upload.middleware");
  *                 type: string
  *                 nullable: true
  *                 example: "64f1b2c3d4e5f6a7b8c9d0e1"
+ *               order:
+ *                 type: number
+ *                 example: 1
  *               image:
  *                 type: string
  *                 format: binary
@@ -73,6 +76,9 @@ const upload = require("../middlewares/upload.middleware");
  *                       type: array
  *                       items:
  *                         type: string
+ *                     order:
+ *                       type: number
+ *                       example: 1
  *                     image:
  *                       type: object
  *                       properties:
@@ -243,6 +249,9 @@ router.get("/:id", getCategoryByIdValidator, validate, CategoryController.getCat
  *                 type: string
  *                 nullable: true
  *                 example: "64f1b2c3d4e5f6a7b8c9d0e1"
+ *               order:
+ *                 type: number
+ *                 example: 1
  *               image:
  *                 type: string
  *                 format: binary
@@ -274,6 +283,9 @@ router.get("/:id", getCategoryByIdValidator, validate, CategoryController.getCat
  *                       type: array
  *                       items:
  *                         type: string
+ *                     order:
+ *                       type: number
+ *                       example: 1
  *                     image:
  *                       type: object
  *                       properties:

@@ -4,7 +4,7 @@ const { createError } = require("../utils/error.util");
 const { generateSlug } = require("../utils/slug.util");
 const { uploadToCloudinary, deleteFromCloudinary } = require("../utils/cloudinary.util");
 
-const createCategory = async ({ name, slug, parent_id }, file) => {
+const createCategory = async ({ name, slug, parent_id, order }, file) => {
   const existingName = await categoryRepository.findByName(name);
   if (existingName) throw createError(MESSAGES.CATEGORY.NAME_ALREADY_EXISTS, 409);
 
@@ -30,7 +30,8 @@ const createCategory = async ({ name, slug, parent_id }, file) => {
     slug: finalSlug,
     parent_id: parent_id || null,
     ancestors,
-    image
+    image,
+    order: order ?? 0
   });
 
   return {
@@ -40,6 +41,7 @@ const createCategory = async ({ name, slug, parent_id }, file) => {
     parent_id: category.parent_id,
     ancestors: category.ancestors,
     image: category.image,
+    order: category.order,
     createdAt: category.createdAt
   };
 };
@@ -54,7 +56,7 @@ const getCategoryById = async (id) => {
   return category;
 };
 
-const updateCategory = async (id, { name, slug, parent_id }, file) => {
+const updateCategory = async (id, { name, slug, parent_id, order }, file) => {
   const existing = await categoryRepository.findById(id);
   if (!existing) throw createError(MESSAGES.CATEGORY.NOT_FOUND, 404);
 
@@ -106,6 +108,7 @@ const updateCategory = async (id, { name, slug, parent_id }, file) => {
     updatePayload.parent_id = parent_id || null;
     if (newAncestors !== undefined) updatePayload.ancestors = newAncestors;
   }
+  if (order !== undefined) updatePayload.order = order;
 
   if (file) {
     if (existing.image?.public_id) {
